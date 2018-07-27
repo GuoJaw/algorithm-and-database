@@ -9,6 +9,7 @@ using namespace std;
 4.atoi:存在前后为空格（两头堵）
 5.字符串拷贝：strcpy和memcpy
 6.循环后移:考察API的使用
+7.strcat
 */
 void swap(char& a, char& b){
 	a ^= b;
@@ -115,6 +116,16 @@ void loopstep(char* src,int steps){
 	memcpy(buf, src + len, steps);
 	memcpy(src + steps, src, len);
 	memcpy(src, buf, steps);
+}
+//7.strcat
+char* mystrcat(char* dst, const char* src){
+	assert((dst != NULL) && (src != NULL));
+	char* tmp = dst;//备份
+	//查找dst的'\0'位置
+	while (*dst++ != '\0'); dst--;
+	//拼接
+	while ((*dst++ = *src++) != '\0');
+	return tmp;
 }
 
 void test01(){
