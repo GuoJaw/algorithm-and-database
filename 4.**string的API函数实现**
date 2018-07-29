@@ -30,17 +30,14 @@ void myReverse2(char* start, char* end){
 	}
 }
 //2.I am from shanghai-->shanghai from am I
-void myReverse3(char* src){
-	assert(src != NULL);
-	//字符串整个反转
-	myReverse1(src);
-
-	char* start = src;//记录start
-	while (*src++ != '\0'){ 
-		if (*src == ' ' || *src == '\0'){//查找到end的后继
-			char* end = src - 1;
-			myReverse2(start, end);
-			start = src + 1; //更新start
+void myReverse3(char* str){
+	assert(str != NULL);
+	myReverse1(str);//字符串整个反转
+	char* start = str;//记录start
+	while (*str++ != '\0'){ //寻找第一个空格
+		if (*str == ' ' || str == '\0'){
+			myReverse2(start, str - 1);
+			start = str + 1;//更新start
 		}
 	}
 }
