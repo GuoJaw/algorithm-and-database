@@ -1,0 +1,56 @@
+
+//排序
+
+#include<iostream>
+using namespace std;
+#define STRLEN(A) (sizeof((A))/sizeof((A[0])))
+void printA(int A[], int n){
+	for (int i = 0; i < n; i++)
+		cout << A[i] << "   ";
+	cout << endl;
+}
+
+//归并排序
+int merge(int A[], int L, int mid, int R){
+	int* help = new int[R - L + 1]; //辅助数组
+	int i = L;
+	int p1 = L, p2 = mid + 1;
+	int res = 0;;
+	while (p1 <= mid && p2 <= R){  
+		res += (A[p1] < A[p2]) ? A[p1] * (R - p2 + 1) : 0;//小和
+		help[i++] = A[p1] < A[p2] ? A[p1++] : A[p2++];
+	}
+	//两个必然有且只有一个越界
+	while (p1 <= mid){
+		help[i++] = A[p1++];
+	}
+	while (p2 <= R){
+		help[i++] = A[p2++];
+	}
+	//将排好序的help数组，拷贝给A
+	for (int i = L; i <= R; i++)
+		A[i] = help[i];
+	return res;
+}
+int merge_sort(int A[], int L, int R){ //思想:分而治之
+	if (L == R)
+		return 0;
+	int mid = (L + R) / 2; //=L+(R-L)/2=L+((R-L)>>1);
+	int lret = merge_sort(A, L, mid); //求左边排好序的小和
+	int rret = merge_sort(A, mid + 1, R);//求右边排好序的小和
+	int mret = merge(A, L, mid, R);//合并时求小和
+	return lret + rret + mret;
+	//return merge_sort(A, L, mid) + merge_sort(A, mid + 1, R) + merge(A, L, mid, R);
+}
+
+void test(){
+	int A[] = { 1,2,4,1,-1};
+	int len = sizeof(A) / sizeof(A[0])-1;
+	int ret = merge_sort(A, 0, len);
+	printf("数组的小和 = %d\n", ret);
+}
+
+int main(){
+	test();
+	system("pause");
+}
