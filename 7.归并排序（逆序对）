@@ -1,4 +1,4 @@
-//排序
+//归并排序：用--的形式给help辅助数组赋值
 
 #include<iostream>
 using namespace std;
