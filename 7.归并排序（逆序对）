@@ -1,0 +1,54 @@
+//排序
+
+#include<iostream>
+using namespace std;
+#define STRLEN(A) (sizeof((A))/sizeof((A[0])))
+void printA(int A[], int n){
+	for (int i = 0; i < n; i++)
+		cout << A[i] << "   ";
+	cout << endl;
+}
+
+//归并排序
+int merge(int A[], int L, int mid, int R){
+	int* help = new int[R - L + 1]; //辅助数组
+	int i = R;
+	int p1 = mid, p2 = R;
+	int res = 0;
+	//p1属于[L,mid]  p2属于[mid+1,R]
+	while (p1 >=L && p2 >= mid+1){
+		res += (A[p1] > A[p2]) ? (p2 - (mid + 1) + 1) : 0; //逆序对
+		help[i--] = (A[p1] > A[p2]) ? A[p1--] : A[p2--];
+	}
+	//两个必然有且只有一个越界
+	while (p1 >= L){
+		help[i--] = A[p1--];
+	}
+	while (p2 >=mid+1){
+		help[i--] = A[p2--];
+	}
+	//将help数组，拷贝会A
+	for (int i = L; i <= R; i++)
+		A[i] = help[i];
+
+	return res;
+}
+int merge_sort(int A[], int L, int R){ //思想:分而治之
+	if (L == R)
+		return 0;
+	int mid = (L + R) / 2; 
+	//      左边子数组的逆序对   +      右边子数组的逆序对      +  统计左右子数组间的逆序对
+	return merge_sort(A, L, mid) + merge_sort(A, mid + 1, R) + merge(A, L, mid, R);
+}
+
+void test(){
+	int A[] = { 10,2,5,6,4,1};
+	int len = sizeof(A) / sizeof(A[0]) - 1;	
+	int ret = merge_sort(A, 0, len); //求逆序对
+	printf("逆序对个数=%d\n", ret);
+}
+
+int main(){
+	test();
+	system("pause");
+}
