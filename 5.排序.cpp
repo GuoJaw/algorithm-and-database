@@ -78,7 +78,7 @@ void binary_insert_sort(int A[], int n){
 int partition(int A[], int l, int r){
 	int pivot = A[l]; //将第一个元素设为基准
 	while (l < r){
-		while (l < r&&pivot <= A[r]) 
+		while (l < r&&pivot <= A[r])
 			r--;
 		A[l] = A[r];
 
@@ -96,22 +96,51 @@ void quick_sort(int A[], int l, int r){
 		quick_sort(A, pivot + 1, r);
 	}
 }
+//归并排序
+void merge(int Arr[], int L, int mid, int R){
+	int* help = new int[R - L + 1]; //辅助数组
+	int i = L;
+	int p1 = L, p2 = mid + 1;
+	while (p1 <= mid && p2 <= R){ //谁小填谁
+		help[i++] = Arr[p1] < Arr[p2] ? Arr[p1++] : Arr[p2++];
+	}
+	//两个必然有且只有一个越界
+	while (p1 <= mid){
+		help[i++] = Arr[p1++];
+	}
+	while (p2 <= R){
+		help[i++] = Arr[p2++];
+	}
+	//将help数组，拷贝会Arr
+	for (int i = L; i <= R; i++)
+		Arr[i] = help[i];
+
+}
+void merge_sort(int Arr[], int L, int R){ //思想:分而治之
+	if (L < R){
+		int mid = (L + R) / 2; //int mid = L+(R-L)/2=L+((R-L)>>1);
+		merge_sort(Arr, L, mid);//先左边排好序:T(n/2)
+		merge_sort(Arr, mid + 1, R);//再右边排好序:T(n/2)
+		merge(Arr, L, mid, R);//将两个有序数组[L,mid][mid+1,R]合并:T(n)
+	}
+}
 
 void printA(int A[], int n){
 	for (int i = 0; i < n; i++)
 		cout << A[i] << "   ";
 	cout << endl;
 }
-void test01(){
-	int A[] = { 1, 2, 4, 3, 1, 7, 9, 8 };
+
+void test02(){//归并排序
+	int A[] = { -10, -2, 40, 3, 1, 17, 19, 81 };
 	int len = STRLEN(A);
-	select_sort(A, len);
+	merge_sort(A, 0, len-1);
 	printA(A, len);
 }
-void test02(){
+void test03(){//快速排序
 	int A[] = { 1, 2, 4, 3, 1, 7, 9, 8 };
 	int len = STRLEN(A);
-	quick_sort(A, 0, len-1);/*这里原文第三个参数要减1否则内存越界*/
+	quick_sort(A, 0, len-1); 
 	printA(A, len);
 }
 int main()
