@@ -38,7 +38,7 @@ void holanflag(int A[], int len){
 void test(){
 	int A[] = { 0,0,2,2,1,1,2,0,1 };
 	int len = sizeof(A) / sizeof(A[0]);
-	holanflag(A,len); //求逆序对
+	holanflag(A,len);  //荷兰国旗
 	printA(A, len);
 }
 
