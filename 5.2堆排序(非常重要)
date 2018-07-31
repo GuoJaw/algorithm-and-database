@@ -1,1 +1,60 @@
+//堆排序
 
+#include<iostream>
+using namespace std;
+
+void swap(int* data, int i, int j){ //交换数组中的两个元素
+	if (i == j) 
+		return;
+	data[i] ^= data[j];
+	data[j] ^= data[i];
+	data[i] ^= data[j];
+}
+/*堆排序(十分逆天的操作，用数组模拟完全二叉树的操作)
+	1.buildMaxHeap(A,n)建立大根堆(调整初始数组成大根堆数组):根节点从(n-1)/2到0
+	2.AdjustDown(A,k,n):总是向下调整,即i=i*2+1; 选取max(父节点/左孩子节点/右孩子节点)
+	3.heap_sort(A,n)
+
+空间复杂度:堆排序是就地排序,O(1)
+时间复杂度：
+	buildMaxHeap: lg1+lg2+...+lg(n-1) = lgN
+	AdjustDown: lgN
+	heap_sort: O(N*lgN)
+*/
+//k表示当前要调节的节点,n表示数组中有效元素的个数
+void AdjustDown(int A[], int k, int n){ //向下调整
+	for (int i = 2 * k + 1; i < n; i = i * 2 + 1){//（依次向下找左孩子i = i * 2 + 1，直到没有孩子i < n）
+		i = (i + 1<n && A[i]>A[i + 1]) ? i : i + 1; //如果右孩子存在；选取"左/右"中的较大者
+		if (A[k] > A[i]) //如果父节点>孩子节点，不用调整，直接break循环
+			break;
+		else{
+			swap(A, k, i); 
+			k = i; //更新父节点
+		}
+	}
+}
+//n表示数组中有效元素的个数
+void buildMaxHeap(int A[], int n){
+	//从最后一个父节点(n-1)/2开始调，调到第一个父节点0
+	for (int k = (n - 1) / 2; k >= 0; k--){
+		AdjustDown(A, k, n);
+	}
+}
+void heap_sort(int A[],int n){
+	buildMaxHeap(A, n); //1.建立大根堆
+	n--; 
+	while(n){ 
+		swap(A, 0, n); //2.将A[0]与A[最后一个有效元素]交换
+		AdjustDown(A, 0, --n); //3.重新调整
+	}
+}
+int main()
+{
+	int A[] = { 1,2,4,1,4,3,6,5,8 };
+	int n = sizeof(A) / sizeof(A[0]);
+	heap_sort(A, n);
+
+	for (int i = 0; i < n; i++)
+		cout << A[i] << "   ";
+	system("pause");
+}
