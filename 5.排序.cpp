@@ -1,18 +1,27 @@
 //排序
 
 #include<iostream>
+#include<time.h>
 using namespace std;
-#define STRLEN(A) (sizeof((A))/sizeof((A[0])))
-
-void swap(int& a, int& b){
-	a ^= b; b ^= a; a ^= b;
+void printA(int A[], int n){
+	for (int i = 0; i < n; i++)
+		cout << A[i] << "   ";
+	cout << endl;
 }
+void swap(int* data, int i, int j){ //交换数组中的两个元素
+	if (i == j) 
+		return;
+	data[i] ^= data[j];
+	data[j] ^= data[i];
+	data[i] ^= data[j];
+}
+
 void bubble_sort(int A[], int n){
 	for (int i = 0; i < n - 1; i++){//进行n-1趟
 		bool flag = false;//标记该趟是否发生了交换
 		for (int j = 0; j < n - 1 - i; j++){//每趟确定一个最大值末尾(终端)
 			if (A[j]>A[j + 1]){
-				swap(A[j], A[j + 1]);
+				swap(A, j, j + 1);
 				flag = true;
 			}
 		}
@@ -28,7 +37,7 @@ void select_sort(int A[], int n){
 				min = j;
 		}
 		if (min != i)//当min不等于初始的i，说明min发生变化-->交换
-			swap(A[min], A[i]);
+			swap(A, min, i);
 	}
 }
 int binary_search(int A[], int n, int key){//二分查找
@@ -78,6 +87,9 @@ void binary_insert_sort(int A[], int n){
 /*时间复杂度分析：
 	最差情况O(N*N)：有序
 	最好情况O(N*logN)：每次patition，基准都划分在中间
+空间复杂度：
+	最差情况O(N)：有序
+	最好情况O(logN)
 */
 int partition(int A[], int l, int r){
 	int pivot = A[l]; //将第一个元素设为基准
@@ -93,8 +105,21 @@ int partition(int A[], int l, int r){
 	A[l] = pivot;
 	return l;
 }
-void quick_sort(int A[], int l, int r){
+void quick_sort(int A[], int l, int r){ //快速排序
 	if (l < r){
+		int pivot = partition(A, l, r);
+		quick_sort(A, l, pivot - 1);
+		quick_sort(A, pivot + 1, r);
+	}
+}
+void rand_quick_sort(int A[], int l, int r){ //随机快速排序
+	if (l < r){
+		//随机获取基准下标
+		srand(time(NULL)); //1.获取[l,r]中的随机数k
+		int k = rand() % (r - l + 1) + l; 
+		swap(A, l, k); //2.将A[k]与A[l]交换
+
+		//快速排序
 		int pivot = partition(A, l, r);
 		quick_sort(A, l, pivot - 1);
 		quick_sort(A, pivot + 1, r);
@@ -129,22 +154,16 @@ void merge_sort(int Arr[], int L, int R){ //思想:分而治之
 	}
 }
 
-void printA(int A[], int n){
-	for (int i = 0; i < n; i++)
-		cout << A[i] << "   ";
-	cout << endl;
-}
-
-void test02(){//归并排序
+void test01(){//归并排序
 	int A[] = { -10, -2, 40, 3, 1, 17, 19, 81 };
-	int len = STRLEN(A);
-	merge_sort(A, 0, len-1);
+	int len = sizeof(A) / sizeof(A[0]);
+	merge_sort(A, 0, len - 1);
 	printA(A, len);
 }
-void test03(){//快速排序
-	int A[] = { 1, 2, 4, 3, 1, 7, 9, 8 };
-	int len = STRLEN(A);
-	quick_sort(A, 0, len-1); 
+void test02(){//随机快速排序
+	int A[] = { 1,3,5,6,2,4,9,10 };
+	int len = sizeof(A) / sizeof(A[0]);
+	rand_quick_sort(A, 0, len - 1);
 	printA(A, len);
 }
 int main()
