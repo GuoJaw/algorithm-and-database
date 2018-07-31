@@ -1,0 +1,50 @@
+#include<iostream>
+using namespace std;
+
+//用数组实现一个栈
+class MyStack{
+public:
+	MyStack(int size){
+		this->size = size;
+		A = new int[this->size];
+		this->top = -1; //表示暂时没有数据
+	}
+	bool isEmpty(){
+		return this->top == -1;
+	}
+	bool isFull(){
+		return this->top == this->size;
+	}
+
+	void push(int value){
+		if (this->isFull()){
+			printf("the stack is full");
+			return;
+		}
+		A[++this->top] = value;
+	}
+	void pop(){
+		if (this->isEmpty()){
+			printf("the stack is null");
+			return;
+		}
+		this->A[top--];
+	}
+	int* gettop(){
+		return this->isEmpty() ? NULL : &this->A[this->top];
+	}
+private:
+	int* A; 
+	int size; //栈的容量
+	int top; //栈顶元素
+};
+
+int main(){
+	MyStack s(10);
+	s.push(1);
+	s.push(2);
+	s.push(3);
+	s.pop();
+	cout << *s.gettop() << endl;
+	system("pause");
+}
