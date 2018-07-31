@@ -1,3 +1,7 @@
+
+
+// 荷兰国旗问题：不具有稳定性
+
 #include<iostream>
 using namespace std;
 
