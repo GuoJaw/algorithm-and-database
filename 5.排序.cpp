@@ -75,6 +75,10 @@ void binary_insert_sort(int A[], int n){
 	}
 }
 //快速排序
+/*时间复杂度分析：
+	最差情况O(N*N)：有序
+	最好情况O(N*logN)：每次patition，基准都划分在中间
+*/
 int partition(int A[], int l, int r){
 	int pivot = A[l]; //将第一个元素设为基准
 	while (l < r){
