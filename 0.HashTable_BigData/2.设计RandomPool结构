@@ -1,0 +1,78 @@
+题目：设计一种结构，在该结构中有如下三种功能
+      insert(key):将某个key加入到该结构，做到不重复插入
+      delete(key):将原本在结构中的某个key删除
+      getRandom():等概率随即返回结构中的任意一个key
+要求：insert/delete/getRandom方法的时间复杂度都是O(1)
+
+
+答案：
+    map1哈希表：原哈希表
+    map1哈希表：key是index
+
+#include<time.h>
+#include<iostream>
+#include<unordered_map>
+using namespace std;
+
+class RandomPool{
+public:
+	unordered_map<string, int> map1;
+	unordered_map<int, string> map2;
+	int size; //哈希表的实际存放的<key,value>对的个数
+public:
+	RandomPool(){ this->size = 0; }
+
+	void insert(string ch){
+		map1.insert(pair<string, int>(ch, size));
+		map2.insert(pair<int, string>(size, ch));
+		size++;
+	}
+	string getRandom(){
+		if (this->size == 0)
+			return NULL;
+
+		srand(time(NULL));
+		int index = rand() % size;  //[a,b] = a+rand()%(b-a)
+
+		return map2.find(index)->second;
+	}
+	//为防止删除元素后，出现"洞"——>先将末尾元素和待删除元素交换
+	//技巧: 由于key不能交换，使用小技巧替代"交换"
+	void remove(){
+		//1.等概率获取待删除的index
+		srand(time(NULL));
+		int index = rand() % size;  // map2的key:index
+		if (index == size - 1){//待删除元素是最后一个元素,不出现"洞"
+			map1.erase(--map1.end());
+			map2.erase(--map2.end());
+			size--;
+		}
+		else{//待删除元素不是最后一个元素，出现"洞"
+			unordered_map<int, string>::iterator iter2 = map2.find(index);
+			unordered_map<string, int>::iterator iter1 = map1.find(iter2->second);
+			int index_tmp = iter2->first;
+			string str_tmp = (--map2.end())->second;
+			//2.删除iter2/iter1，末尾元素
+			map2.erase(iter2); map2.erase(--map2.end());
+			map1.erase(iter1); map1.erase(--map1.end());
+			//3.将末尾元素插入
+			map1[str_tmp] = index_tmp;
+			map2[index_tmp] = str_tmp;
+			//元素个数--
+			size--;
+		}
+	}
+};
+
+int main(){
+	RandomPool pool;
+	pool.insert("I");
+	pool.insert("am");
+	pool.insert("china");
+	string ret = pool.getRandom();
+	pool.remove();
+}
+
+
+
+
