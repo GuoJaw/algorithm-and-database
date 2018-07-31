@@ -1,0 +1,38 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+
+void sortstackByStack(stack<int>& SData){
+	if (SData.empty())
+		return;
+
+	stack<int> SHelp; //辅助栈，始终是有序的
+
+	//将SData中的元素，根据"压入规则"，依次向SHelp中压入
+	while (!SData.empty()){
+		int cur = SData.top(); SData.pop();
+		while (!SHelp.empty() && cur > SHelp.top()){//将SHelp中的元素压入SData
+			int tmp = SHelp.top(); SHelp.pop();
+			SData.push(tmp);
+		}
+		SHelp.push(cur); //当[SHelp为空 || SData的栈顶元素 <= SHelp的栈顶元素]时
+	}
+	//将SHelp中的元素，导入SData
+	while (!SHelp.empty()){
+		int tmp = SHelp.top(); SHelp.pop();
+		SData.push(tmp);
+	}
+}
+
+void test(){
+	stack<int> S;
+	S.push(1);
+	S.push(5);
+	S.push(4);
+	S.push(3);
+	S.push(2);
+	sortstackByStack(S);
+}
+int main(){
+	test();
+}
