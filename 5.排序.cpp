@@ -83,7 +83,7 @@ void binary_insert_sort(int A[], int n){
 		A[l] = tmp;
 	}
 }
-//快速排序
+//快速排序：长期期望
 /*时间复杂度分析：
 	最差情况O(N*N)：有序
 	最好情况O(N*logN)：每次patition，基准都划分在中间
@@ -126,6 +126,11 @@ void rand_quick_sort(int A[], int l, int r){ //随机快速排序
 	}
 }
 //归并排序
+/*时间复杂度分析：T[n]  =  2T[n/2] + O(n)；
+	最好情况O(N*logN)
+空间复杂度：临时的数组
+	最差情况O(N)：有序
+*/
 void merge(int Arr[], int L, int mid, int R){
 	int* help = new int[R - L + 1]; //辅助数组
 	int i = L;
