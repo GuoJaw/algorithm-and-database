@@ -17,8 +17,8 @@ void swap(int* data, int i, int j){ //交换数组中的两个元素
 
 空间复杂度:堆排序是就地排序,O(1)
 时间复杂度：
-	buildMaxHeap: lg1+lg2+...+lg(n-1) = lgN
-	AdjustDown: lgN
+	buildMaxHeap: lg1+lg2+...+lg(n-1) = O(N)
+	AdjustDown: O(lgN)
 	heap_sort: O(N*lgN)
 */
 //k表示当前要调节的节点,n表示数组中有效元素的个数
