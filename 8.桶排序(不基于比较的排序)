@@ -3,6 +3,79 @@
 
 稳定：一个萝卜一个坑
 
-面试题：求一个有序数组，相邻两个数的最大差值
 
+【年年都考】
+面试题：求一个有序数组，求相邻两个数的最大差值（要求：时间复杂度O(N)，不基于比较的排序）
+
+代码：
+#include<iostream>
+#include<math.h>
+using namespace std;
+
+/*
+int bucket_sort(int A[], int N)
+解题思路：
+(1)创建N+1个桶,并初始化
+(2)求A数组的最小值和最大值:用于求bid = (A[i]-min)*N/(max-min)
+(3)将A[i]元素放入bucket_arr[bid]中，给
+		bucket_arr[bid].min
+		bucket_arr[bid].max
+		bucket_arr[bid].flag
+	赋值
+(4)遍历每个桶，求相邻非空桶的最大差值ret: lastMax  bucket_arr[i].min
+*/
+
+typedef struct bucket{
+	int min;
+	int max;
+	bool flag;
+}bucket;
+
+int bucket_sort(int A[], int N){
+	//1.N个数，创建N+1个桶；并初始化桶中的每一个元素
+	bucket* bucket_arr = (bucket*)malloc((N + 1)*sizeof(bucket));
+	for (int i = 0; i < N + 1; i++){
+		bucket_arr[i].min = INT_MAX;
+		bucket_arr[i].max = INT_MIN;
+		bucket_arr[i].flag = false;
+	}
+	//2.遍历A中的每一个数，求min和max:用于求桶号bid
+	int minNum = INT_MAX, maxNum = INT_MIN;
+	for (int i = 0; i < N; i++){ 
+		minNum = minNum>A[i] ? A[i] : minNum;
+		maxNum = maxNum<A[i] ? A[i] : maxNum;
+	}
+	if (minNum == maxNum)//如果最大值和最小值一样，那么最大差值为0
+		return 0;
+	
+	//3.将A[i]元素入桶，给bucket_arr[bid]赋值
+	for (int i = 0; i < N; i++){
+		int bid = (A[i] - minNum)*N / (maxNum - minNum);//根据A[i]算出桶号bid
+		//bucket_arr[bid]赋值
+		bucket_arr[bid].min = A[i]<bucket_arr[bid].min ? A[i] : bucket_arr[bid].min;
+		bucket_arr[bid].max = A[i]>bucket_arr[bid].max ? A[i] : bucket_arr[bid].max;
+		bucket_arr[bid].flag = true;
+	}
+	//4.求相邻元素的最大差值ret，即两个相邻非空桶的最大差值
+	int ret = 0;
+	int lastMax = bucket_arr[0].max; //第0号桶
+	for (int i = 1; i < N + 1; i++){ //从第1号桶开始遍历，直到第N号桶
+		if (bucket_arr[i].flag == true){//如果桶不是空
+			ret = (bucket_arr[i].min - lastMax)>ret ? (bucket_arr[i].min - lastMax) : ret;
+			lastMax = bucket_arr[i].max;
+		}
+	}
+	return ret;
+}
+
+void test(){
+	int A[] = { 1, 10, 5, 6, 7, 12 };
+	int n = sizeof(A) / sizeof(A[0]);
+	int ret = bucket_sort(A, n);
+	printf("相邻元素的最大差值=%d\n", ret);
+}
+int main(){
+	test();
+	system("pause");
+}
 
