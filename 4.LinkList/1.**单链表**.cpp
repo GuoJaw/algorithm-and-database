@@ -1,4 +1,5 @@
 
+
 #include<assert.h>
 #include<iostream>
 #include<stack>
@@ -11,7 +12,7 @@ using namespace std;
 3.判环；第一个入环节点
 4.两个有序链表的合并
 5.链表反转
-	链表局部反转
+链表局部反转
 6.链表排序***
 7.查找值为key的节点
 8.打印两个链表的公共部分:相等，c1/c2一起后移
@@ -20,12 +21,12 @@ using namespace std;
 11.复制rand指针的单链表
 12.删除无序单链表中重复的节点
 13.一种怪异的节点删除方式
-	不给定链表的head节点指针，只给node节点指针，要求在
+不给定链表的head节点指针，只给node节点指针，要求在
 O(1)时间复杂度内，删除node节点
 答案:
-	[1]将swap(node->data,node->next->data)交换
-	[2]删除node节点的后继
-	存在问题:node如果是最后一个节点,无法删除
+[1]将swap(node->data,node->next->data)交换
+[2]删除node节点的后继
+存在问题:node如果是最后一个节点,无法删除
 */
 typedef struct LinkNode{
 	struct LinkNode* next;
@@ -143,7 +144,7 @@ LinkNode* searchPre(LinkNode* head, LinkNode* node){ //查找node的前驱
 		return NULL;
 	LinkNode* cur = head->next;
 	LinkNode* pre = head;
-	while (cur!=NULL){
+	while (cur != NULL){
 		if (cur != node){
 			pre = cur;
 			cur = cur->next;
@@ -179,7 +180,7 @@ void reversePart(LinkNode*& head, LinkNode* from, LinkNode* to){
 //
 //}
 //7.查找
-LinkNode* searchData(LinkNode* head,int key){
+LinkNode* searchData(LinkNode* head, int key){
 	assert(head != NULL);
 	LinkNode* cur = head->next; //指向第一个节点
 	while (cur){
@@ -210,8 +211,8 @@ void printCommonPart(LinkNode* L1, LinkNode* L2){
 //(2)判断lastKth的三种情况
 //		=0:删除第一个元素  >0:直接返回head
 //		<0:while(++lastKth != 0) pre = pre->next; 查找前驱
-LinkNode* RemoveLastKthNode(LinkNode* head,int lastKth){
-	if (head==NULL || lastKth <= 0)
+LinkNode* RemoveLastKthNode(LinkNode* head, int lastKth){
+	if (head == NULL || lastKth <= 0)
 		return head;
 	//查找倒数第K个节点
 	LinkNode* cur = head->next; //第一个有效节点
@@ -226,7 +227,7 @@ LinkNode* RemoveLastKthNode(LinkNode* head,int lastKth){
 		head->next = head->next->next;
 		free(deleteNode);
 	}
-	else{ 
+	else{
 		LinkNode* pre = head->next; //当前节点
 		while (++lastKth != 0) //查找前驱 
 			pre = pre->next;
@@ -237,12 +238,13 @@ LinkNode* RemoveLastKthNode(LinkNode* head,int lastKth){
 	}
 	return head;
 }
-//10.判断链表是否为回文：空间复杂度O(N/2)
-bool isPlalindrome1(LinkNode* head){
+//10.判断链表是否为回文:O(N)  O(N/2)  O(1)
+//方法1：空间复杂度O(N)
+bool isPlalindrome1(LinkNode* head){ 
 	assert(head != NULL);
 	if (head->next == NULL)
 		return true;
-	
+
 	stack<LinkNode*> S;
 	LinkNode* cur = head->next;
 	while (cur != NULL){ //1.将链表的有效节点依次入栈
@@ -251,7 +253,7 @@ bool isPlalindrome1(LinkNode* head){
 	}
 	cur = head->next;//重置cur
 	while (!S.empty()){ //如果栈不空
-		LinkNode* topNode = S.top(); 
+		LinkNode* topNode = S.top();
 		//2.判断（获取栈顶元素==cur）
 		if (topNode->data != cur->data) //如果有一个不同，就不是回文
 			return false;
@@ -259,6 +261,38 @@ bool isPlalindrome1(LinkNode* head){
 	}
 	return true;
 }
+//方法2：空间复杂度O(N/2)
+bool isPlalindrome2(LinkNode* head){
+	assert(head != NULL);
+	if (head->next == NULL)
+		return true;
+	LinkNode* slow = head->next;
+	LinkNode* fast = head->next->next;
+	//1.寻找第中间节点slow
+	while (fast&&fast->next){
+		fast = fast->next->next;
+		slow = slow->next->next;
+	}
+	stack<int> S; //2.将链表的右半部分入栈
+	while (slow){
+		S.push(slow->data);
+		slow = slow->next;
+	}
+	fast = head->next; //fast指向head->next
+	//3.（将栈中元素）依次与（链表左半部分元素）比对
+	while (!S.empty()){
+		if (S.top() != fast->data)
+			return false;
+		S.pop(); fast = fast->next;//比对下一个元素
+	}
+	return true;
+}
+/*
+方法3：
+	1-->2-->3-->2-->1    1-->2-->2-->1
+	1-->2-->3<--2<--1    1-->2<--2<--1
+*/
+
 //11.复制rand指针的单链表
 // head-->1-->2-->3-->4-->null
 // head-->1-->1'-->2-->2'-->3-->3'-->4-->4'-->null
@@ -288,16 +322,16 @@ LinkNode* CopyRandLink(LinkNode* head){
 	cur = head->next;    LinkNode* ret = cur->next;
 	while (cur != NULL){
 		LinkNode* tmp = cur->next; //保存
-		cur = cur->next->next; 
+		cur = cur->next->next;
 		tmp->next = (cur == NULL) ? NULL : cur->next;//注意cur==NULL的情况
 	}
 	return ret;
 }
 //12.删除无序链表中重复的值1-->2-->3-->3-->4-->2-->1-->null
 /*方法1：类似于插入排序——时间复杂度O(N*N)，空间复杂度O(1)
-	首先检查第一个有效节点1；然后向后依次遍历值为1的节点，删除
-	检查第二个有效节点2；然后向后依次遍历值为2的节点，删除
-	...
+首先检查第一个有效节点1；然后向后依次遍历值为1的节点，删除
+检查第二个有效节点2；然后向后依次遍历值为2的节点，删除
+...
 */
 //方法2：哈希表——时间复杂度O(N),空间复杂度O(N)
 void RemoveRep(LinkNode*& head){
@@ -308,7 +342,7 @@ void RemoveRep(LinkNode*& head){
 
 	LinkNode* pre = head->next;
 	LinkNode* cur = head->next->next;
-	while (cur!=NULL){
+	while (cur != NULL){
 		unordered_set<int>::iterator iter = set.find(cur->data);
 		if (iter == set.end()) {//哈希表中没有,不删除（直接后移）
 			set.insert(cur->data); //cur->data插入哈希表
@@ -360,14 +394,14 @@ void test02(){  //环形单链表
 	LinkNode* node2 = (LinkNode*)malloc(sizeof(LinkNode));
 	LinkNode* node3 = (LinkNode*)malloc(sizeof(LinkNode));
 	LinkNode* node4 = (LinkNode*)malloc(sizeof(LinkNode));
-	head->next = node1; 
+	head->next = node1;
 	node1->next = node2; node1->data = 1;
 	node2->next = node3; node2->data = 2;
 	node3->next = node4; node3->data = 3;
 	node4->next = node3; node4->data = 4;
 
 	LinkNode* ret = isLoop(head);
-	if (ret!=NULL)
+	if (ret != NULL)
 		printf("%d\n", ret->data);
 
 	system("pause");
@@ -401,7 +435,8 @@ void test06(){ //链表局部反转
 }
 void test07(){
 	LinkNode* head = createLink();
-	bool ret = isPlalindrome1(head);
+	bool ret1 = isPlalindrome1(head);
+	bool ret2 = isPlalindrome2(head);
 }
 void test08(){  //复制带有rand指针的链表
 	LinkNode* head = (LinkNode*)malloc(sizeof(LinkNode));
@@ -423,12 +458,12 @@ void test09(){ //无序单链表的去重
 	RemoveRep(head);
 	travel(head);
 }
-void test10(){  
+void test10(){
 	LinkNode* head = createLink();
-	RemoveValue(head,10);
+	RemoveValue(head, 10);
 	travel(head);
 }
 
 int main(){
-	test10();
+	test07();
 }
