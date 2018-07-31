@@ -1,0 +1,43 @@
+/*
+QData.push: 1,2,3,4,5入队时，只push进入QData
+QData.pop():
+		(1)将QData中的1,2,3,4元素pop;再push到QHelp
+		(2)将QData中的最后一个元素保存，并pop
+		(3)将QData和QHelp交换内容
+*/
+
+#include<iostream>
+#include<queue>
+using namespace std;
+
+class myStack{
+private:
+	queue<int> QData;
+	queue<int> QHelp;
+public:
+	void push(int data){//入队列时，只QData进队
+		QData.push(data);
+	}
+	int pop(){//出队时
+		while (QData.size() > 1){
+			//1.将QData中的元素（除了最后一个元素外的其他元素）
+			int tmp = QData.front(); QData.pop();//从QData先pop
+			QHelp.push(tmp);//再push进入QHelp
+		}
+		//2.此时,QData.size=1 ---> 将QData中的最后一个元素保存，并pop
+		int ret = QData.front(); QData.pop(); 
+		//3.交换QData和QHelp的内容
+		QData.swap(QHelp);
+		return ret;
+	}
+};
+
+int main(){
+	myStack my;
+	my.push(1);
+	my.push(2);
+	int r1 = my.pop();
+	my.push(3);
+	my.push(4);
+	int r2 = my.pop();
+}
