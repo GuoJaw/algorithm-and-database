@@ -19,7 +19,7 @@ void swap(int* data, int i, int j){ //交换数组中的两个元素
 时间复杂度：
 	buildMaxHeap: lg1+lg2+...+lg(n-1) = O(N)
 	AdjustDown: O(lgN)
-	heap_sort: O(N*lgN)
+	heap_sort: N * AdjustDown = O(N*lgN)
 */
 //k表示当前要调节的节点,n表示数组中有效元素的个数
 void AdjustDown(int A[], int k, int n){ //向下调整
