@@ -7,7 +7,7 @@ public:
 	MyStack(int size){
 		this->size = size;
 		A = new int[this->size];
-		this->top = -1; //表示暂时没有数据
+		this->top = -1; //栈顶元素的下标
 	}
 	bool isEmpty(){
 		return this->top == -1;
@@ -28,7 +28,7 @@ public:
 			printf("the stack is null");
 			return;
 		}
-		this->A[top--];
+		this->top--;
 	}
 	int* gettop(){
 		return this->isEmpty() ? NULL : &this->A[this->top];
@@ -44,6 +44,7 @@ int main(){
 	s.push(1);
 	s.push(2);
 	s.push(3);
+	s.pop();
 	s.pop();
 	cout << *s.gettop() << endl;
 	system("pause");
