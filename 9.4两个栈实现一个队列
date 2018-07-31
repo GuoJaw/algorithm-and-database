@@ -1,0 +1,45 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+
+//push永远进SData栈；pop永远从SHelp栈中拿
+
+//1.如果SData向SHelp倒数据，必须一次性倒完
+//2.如果SHelp中有数据，SData一定不要往SHelp中倒数据
+class myQueue{
+private:
+	stack<int> SData;
+	stack<int> SHelp;
+public:
+	void push(int data){ //push永远进SData栈
+		SData.push(data);
+	}
+	int pop(){ //pop永远从SHelp栈中拿
+		if (!SHelp.empty()){
+			int ret = SHelp.top(); SHelp.pop();
+			return ret;			
+		}
+		else{
+			while (SData.size() > 1){
+				int tmp = SData.top(); SData.pop();
+				SHelp.push(tmp);
+			}
+			int tmp = SData.top(); SData.pop();
+			return tmp;
+		}
+
+	}
+};
+int main(){
+	myQueue Q;
+	Q.push(1);
+	Q.push(2);
+	Q.push(3);
+	int r1 = Q.pop(); // 1
+	Q.push(4);
+	Q.push(5);
+	int r2 = Q.pop();// 2
+	int r3 = Q.pop();// 3
+	int r4 = Q.pop();// 4
+	int r5 = Q.pop();// 5
+}
