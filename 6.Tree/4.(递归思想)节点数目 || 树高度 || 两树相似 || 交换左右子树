@@ -43,3 +43,15 @@ bool isSimilar(TreeNode* T1, TreeNode*T2){
 	else //T1和T2一个为空，一个为不空
 		return false;
 }
+//4.交换树的左右子树
+void swapTree(TreeNode* T){ //后序遍历思想
+	if (T == NULL)
+		return;
+	//1.先交换T的左右子树
+	swapTree(T->left);
+	swapTree(T->right);
+	//2.再交换T
+	TreeNode* tmp = T->left;
+	T->left = T->right;
+	T->right = tmp;
+}
