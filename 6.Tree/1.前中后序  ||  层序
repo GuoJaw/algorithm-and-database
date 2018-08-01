@@ -1,3 +1,6 @@
+（1）前序遍历创建二叉树
+（2）遍历：前，中，后，层
+
 #include<iostream>
 #include<stack>
 #include<queue>
