@@ -13,24 +13,38 @@ typedef struct TreeNode{
     (1)有右子树：x节点的后继节点是（右子树的最左节点）
     (2)无右子树：x节点的后继节点怎么找？
         答案：通过parent向上找，如果x->parent!=NULL &&
-            x是x->parent的左孩子，直接返回
+            x是x->parent的左孩子，直接返回x->parent
             x是x->parent的右孩子，继续向上找
-
-
+	    
 //查找一个节点的后继节点(中序遍历)
 TreeNode* searchNextNode(TreeNode* p){
 	if (p == NULL)
 		return NULL;
-	if (p->right){ //如果p有右孩子
-		//查找p右孩子的最左节点
-		p = p->right;
+	if (p->right){ //1.如果p有右孩子:查找p右孩子的最左节点
+		p = p->right; 
 		while (p->left)
 			p = p->left;
 		return p;
 	}
-	else{ //如果p没有右孩子
-		while (p->parent != NULL && p->parent->left != NULL)//如果p不是p->parent的左孩子
-			p = p->parent; //就一直向上查找
-		return p->parent;			
+	else{ //2.如果p没有右孩子
+		while (p->parent != NULL&&p->parent->left != p)//如果p不是p->parent的左孩子
+			p = p->parent; //向上查找
+		return p->parent;
 	}
+}
+
+
+void test01(){ //测试用例
+	TreeNode* n1 = (TreeNode*)malloc(sizeof(TreeNode));
+	TreeNode* n2 = (TreeNode*)malloc(sizeof(TreeNode));
+	TreeNode* n3 = (TreeNode*)malloc(sizeof(TreeNode));
+	TreeNode* n4 = (TreeNode*)malloc(sizeof(TreeNode));
+	n1->data = 1; n1->left = n2; n1->right = NULL; n1->parent = NULL;
+	n2->data = 2; n2->left = NULL; n2->right = n3; n2->parent = n1;
+	n3->data = 3; n3->left = NULL; n3->right = n4; n3->parent = n2;
+	n4->data = 4; n4->left = NULL; n4->right = NULL; n4->parent = n3;
+	TreeNode* ret = searchNextNode(n4);
+}
+int main(){
+	test01();
 }
