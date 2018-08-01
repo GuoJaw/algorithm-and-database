@@ -27,7 +27,7 @@ TreeNode* searchNextNode(TreeNode* p){
 		return p;
 	}
 	else{ //2.如果p没有右孩子
-		while (p->parent != NULL&&p->parent->left != p)//如果p不是p->parent的左孩子
+		while (p->parent != NULL&&p->parent->right == p)//如果p是p->parent的右孩子
 			p = p->parent; //向上查找
 		return p->parent;
 	}
