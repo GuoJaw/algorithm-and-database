@@ -1,4 +1,4 @@
-//返回先序遍历序列中,第K个节点
+//1.返回"先序遍历"序列中,第K个节点
 TreeNode* getKthByPre(TreeNode* T, int Kth){
 	if (Kth <= 0 || T == NULL)
 		return NULL;
