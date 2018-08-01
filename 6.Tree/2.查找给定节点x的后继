@@ -1,0 +1,36 @@
+
+typedef struct TreeNode{
+	int data;
+	struct TreeNode* parent;
+	struct TreeNode* left;
+	struct TreeNode* right;
+}TreeNode;
+
+解法一：遍历整棵树，查找给定节点的后继---->时间复杂度O(N)
+
+解法二：时间复杂度--->给定节点x到后继节点的长度
+  给定节点x
+    (1)有右子树：x节点的后继节点是（右子树的最左节点）
+    (2)无右子树：x节点的后继节点怎么找？
+        答案：通过parent向上找，如果x->parent!=NULL &&
+            x是x->parent的左孩子，直接返回
+            x是x->parent的右孩子，继续向上找
+
+
+//查找一个节点的后继节点(中序遍历)
+TreeNode* searchNextNode(TreeNode* p){
+	if (p == NULL)
+		return NULL;
+	if (p->right){ //如果p有右孩子
+		//查找p右孩子的最左节点
+		p = p->right;
+		while (p->left)
+			p = p->left;
+		return p;
+	}
+	else{ //如果p没有右孩子
+		while (p->parent != NULL && p->parent->left != NULL)//如果p不是p->parent的左孩子
+			p = p->parent; //就一直向上查找
+		return p->parent;			
+	}
+}
