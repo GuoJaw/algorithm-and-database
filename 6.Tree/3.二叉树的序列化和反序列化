@@ -5,10 +5,9 @@ TreeNode* createByPre(){
 	cin >> data;
 	if (data == 0) //输入值为0
 		return NULL;
-	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-	newNode->data = data;
-	newNode->left = createByPre();
-	newNode->right = createByPre();
+	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode)); newNode->data = data; //创建newNode
+	newNode->left = createByPre(); //递归创建newNode->left
+	newNode->right = createByPre();//递归创建newNode->right
 	return newNode;
 }
 
@@ -35,9 +34,9 @@ TreeNode* reconByPre(queue<string>& Q){
 	string tmp = Q.pop(); //出队
 	if (tmp == "#")
 		return NULL;
-	TreeNode* newNode = new TreeNode; newNode->data = string2int(tmp);
-	newNode->left = reconByPre(Q);
-	newNode->right = reconByPre(Q);
+	TreeNode* newNode = new TreeNode; newNode->data = string2int(tmp); //创建当前节点
+	newNode->left = reconByPre(Q); //创建当前节点的左孩子
+	newNode->right = reconByPre(Q);//创建当前节点的右孩子
 	return newNode;
 }
 TreeNode* ReconSerial(string str){
