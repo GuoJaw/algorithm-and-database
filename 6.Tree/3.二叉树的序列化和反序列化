@@ -5,32 +5,31 @@
 */
 
 
-//[1]先序遍历序列化:将二叉树保存成string形式
+//[1]先序遍历序列化: BTree--->string
 string serialByPre(TreeNode* T){
-	if (T==NULL)
+	if (T == NULL)
 		return "#!";
-	string str = T->data + "!";
-	str += serialByPre(T->left);
-	str += serialByPre(T->right);
+	string str = T->data + "!";   //序列化当前节点
+	str += serialByPre(T->left);  //序列化当前节点的左子树
+	str += serialByPre(T->right); //序列化当前节点的右子树
 	return str;
 }
 
 
-//[2]先序遍历反序列化:将string转换成二叉树
-TreeNode* reconPreOrder(queue<string>& Q){
-	string popStr = Q.pop(); //出队
-	if (popStr == "#")
+//[2]先序遍历反序列化: string--->BTree
+TreeNode* reconByPre(queue<string>& Q){
+	string tmp = Q.pop(); //出队
+	if (tmp == "#")
 		return NULL;
-	TreeNode* head = new TreeNode; head->data = string2int(popStr);
-	head->left = reconPreOrder(Q);
-	head->right = reconPreOrder(Q);
-	return head;
+	TreeNode* newNode = new TreeNode; newNode->data = string2int(tmp);
+	newNode->left = reconByPre(Q);
+	newNode->right = reconByPre(Q);
+	return newNode;
 }
-TreeNode* ReconSerialByPre(string preStr){
-	String[] values = preStr.split("!"); //将字符串按照!分割，分割结果存在values数组中 
+TreeNode* ReconSerial(string str){
+	string sArr[] = str.split("!");//将字符串按照!分割，分割结果存在sArr数组中 
 	queue<string> Q;
-	for (int i = 0; i < values.length; i++) //将values数组中的数全部进队
-		Q.push(values[i]);
-	
-	return reconPreOrder(Q);
+	for (int i = 0; i < sArr.length; i++)//将values数组中的数全部进队
+		Q.push(sArr[i]);
+	return reconByPre(Q); //调用先序反序列化函数
 }
