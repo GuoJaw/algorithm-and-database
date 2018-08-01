@@ -12,8 +12,9 @@ using namespace std;
 void infect(int (*A)[5], int i, int j, int M, int N){
 	if (i < 0 || j < 0 || i >= M || j >= N || A[i][j] != 1)
 		return;
-	//如果当前值有效，且等于1
-	A[i][j] = 2;
+	
+	A[i][j] = 2; //感染时，将值从1改成2
+	
 	//开始递归感染
 	infect(A, i + 1, j, M, N); //向右感染
 	infect(A, i - 1, j, M, N); //向左感染
