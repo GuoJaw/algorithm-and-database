@@ -1,4 +1,11 @@
+
 主要考察的知识点： 递归思想
+(1)列出可能性
+(2)整理出返回值的类型
+(3)整个递归过程按照同一个套路，得到子树的信息，整合子树的信息，加工出我的信息，向上返回
+	我会遍历每一个节点，考虑以每个节点为头的整棵树
+	左树和右树收集什么信息，是需要自己想的
+	接下来怎么写代码，完全套路的
 
 //1.1求节点总数
 int NodeCount(TreeNode* T){
@@ -44,14 +51,54 @@ bool isSimilar(TreeNode* T1, TreeNode*T2){
 		return false;
 }
 //4.交换树的左右子树
-void swapTree(TreeNode* T){ //后序遍历思想
+void swapTree(TreeNode* T){  
 	if (T == NULL)
 		return;
-	//1.先交换T的左右子树
-	swapTree(T->left);
-	swapTree(T->right);
-	//2.再交换T
+	//1.再交换T
 	TreeNode* tmp = T->left;
 	T->left = T->right;
 	T->right = tmp;
+	//2.先交换T的左右子树
+	swapTree(T->left);
+	swapTree(T->right);
+}
+
+/*5.判断是否是平衡二叉树
+	(1)每个节点都要收集两个信息:class ReturnValue
+		以该节点为根的树，是否为AVL树:bool flag
+		以该节点为根的树的高度:int height
+	(2)列出条件
+		if T是空
+		else
+			递归求T->left，判断是否是AVL
+			递归求T->right，判断是否是AVL
+			T->left和T->right都平衡
+				if 二者高度差>1:
+				return new ReturnValue(true,1+max(左H,右R))；
+*/
+class ReturnValue{
+public:
+	ReturnValue(bool flag, int height) :flag(flag), height(height){}
+public:
+	bool flag;
+	int height;
+};
+ReturnValue* process(TreeNode* T){
+	if (T == NULL)
+		return new ReturnValue(true, 0);
+	ReturnValue* Lret = process(T->left);
+	if (Lret->flag == false)
+		return new ReturnValue(false, -1);
+	ReturnValue* Rret = process(T->right);
+	if (Rret->flag == false)
+		return new ReturnValue(false, -1);
+
+	//左右子树都平衡
+	if (abs(Lret->height - Rret->height) > 1)
+		return new ReturnValue(false, -1);
+	return new ReturnValue(true, 
+		1 + (Lret->height > Rret->height ? Lret->height : Rret->height));
+}
+bool isAVL(TreeNode* T){
+	return process(T)->flag;
 }
