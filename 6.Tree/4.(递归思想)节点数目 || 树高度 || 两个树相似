@@ -33,3 +33,13 @@ int minHeight(TreeNode* T){
 		return 1 + l + r;
 	return 1 + (l < r ? l : r); //如果T的左右子树都不是NULL
 }
+//3.判断两棵树是否相似
+bool isSimilar(TreeNode* T1, TreeNode*T2){
+	if (T1 == NULL && T2 == NULL)//T1和T2都空
+		return true;
+	if (T1 != NULL && T2 != NULL){
+		return (isSimilar(T1->left, T2->left) && isSimilar(T1->right, T2->right));
+	}
+	else
+		return false;
+}
