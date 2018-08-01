@@ -1,0 +1,46 @@
+题目：求由数字1围成的岛的个数
+    1, 0, 0, 0, 0,
+		0, 1, 0, 0, 1,
+		0, 0, 1, 0, 1
+
+
+解法1：递归（感染）
+#include<iostream>
+using namespace std;
+
+//二维数组作为形参，必须指定第二维的大小
+void infect(int (*A)[5], int i, int j, int M, int N){
+	if (i < 0 || j < 0 || i >= M || j >= N || A[i][j] != 1)
+		return;
+	//如果当前值有效，且等于1
+	A[i][j] = 2;
+	//开始递归感染
+	infect(A, i + 1, j, M, N); //向右感染
+	infect(A, i - 1, j, M, N); //向左感染
+	infect(A, i, j + 1, M, N); //向下感染
+	infect(A, i, j - 1, M, N); //向上感染
+}
+int countIsLands(int (*A)[5],int M,int N){
+	int res = 0; //岛的个数
+	//从左到右，从上到下遍历每一个元素
+	for (int i = 0; i < M; i++){
+		for (int j = 0; j < N; j++){
+			if (A[i][j] == 1){ //如果当前元素为1
+				infect(A, i, j, M, N); //开始感染周围的元素全部变成2
+				res++;//感染完成后，res++
+			}
+		}
+	}
+	return res;//返回res
+}
+void test(){
+	int A[3][5] = {  //求1围成的岛的个数
+		1, 0, 0, 0, 0,
+		0, 1, 0, 0, 1,
+		0, 0, 1, 0, 1
+	};
+	int ret = countIsLands(A, 3, 5);
+}
+int main(){
+	test();
+}
