@@ -16,7 +16,7 @@ typedef struct TreeNode{
             x是x->parent的左孩子，直接返回x->parent
             x是x->parent的右孩子，继续向上找
 	    
-//查找一个节点的后继节点(中序遍历)
+//查找节点p的后继(中序遍历)
 TreeNode* searchNextNode(TreeNode* p){
 	if (p == NULL)
 		return NULL;
@@ -27,14 +27,30 @@ TreeNode* searchNextNode(TreeNode* p){
 		return p;
 	}
 	else{ //2.如果p没有右孩子
-		while (p->parent != NULL&&p->parent->right == p)//如果p是p->parent的右孩子
+		while (p->parent != NULL && p->parent->right == p)//如果p是p->parent的右孩子
 			p = p->parent; //向上查找
 		return p->parent;
 	}
 }
+//查找节点p的前驱(中序遍历)
+TreeNode* searchPreNode(TreeNode* p){
+	if (p == NULL)
+		return NULL;
+	if (p->left){ //如果有左孩子
+		//找左孩子的最右节点
+		p = p->left;
+		while (p->right)
+			p = p->right;
+		return p;
+	}
+	else{//如果p没有左孩子
+		while (p->parent != NULL && p->parent->left == p)
+			p = p->parent;
+		return p->parent;
+	}
+}
 
-
-void test01(){ //测试用例
+void test01(){
 	TreeNode* n1 = (TreeNode*)malloc(sizeof(TreeNode));
 	TreeNode* n2 = (TreeNode*)malloc(sizeof(TreeNode));
 	TreeNode* n3 = (TreeNode*)malloc(sizeof(TreeNode));
@@ -43,7 +59,8 @@ void test01(){ //测试用例
 	n2->data = 2; n2->left = NULL; n2->right = n3; n2->parent = n1;
 	n3->data = 3; n3->left = NULL; n3->right = n4; n3->parent = n2;
 	n4->data = 4; n4->left = NULL; n4->right = NULL; n4->parent = n3;
-	TreeNode* ret = searchNextNode(n4);
+	TreeNode* ret1 = searchNextNode(n4);
+	TreeNode* ret2 = searchPreNode(n4);
 }
 int main(){
 	test01();
