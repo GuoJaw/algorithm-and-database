@@ -1,0 +1,35 @@
+主要考察的知识点： 递归思想
+
+//1.1求节点总数
+int NodeCount(TreeNode* T){
+	if (T == NULL)
+		return 0;
+	return 1 + NodeCount(T->left) + NodeCount(T->right);
+}
+//1.2求叶子节点总数
+int leafCount(TreeNode* T){
+	if (T == NULL) //如果T为NULL
+		return 0;
+	else if (T->left == NULL && T->right == NULL)//如果T的左右子树都为NULL
+		return 1;
+	else//如果T至少有一个孩子
+		return leafCount(T->left) + leafCount(T->right);
+}
+//2.1树的高度
+int height(TreeNode* T){
+	if (T == NULL)
+		return 0;
+	int l = height(T->left);
+	int r = height(T->right);
+	return 1 + (l > r ? l : r);
+}
+//2.2树的最小深度
+int minHeight(TreeNode* T){
+	if (T == NULL) //如果T为NULL
+		return 0;
+	int l = minHeight(T->left);
+	int r = minHeight(T->right);
+	if (l == 0 || r == 0) //如果T的左右子树有一个为NULL
+		return 1 + l + r;
+	return 1 + (l < r ? l : r); //如果T的左右子树都不是NULL
+}
