@@ -52,11 +52,11 @@ public:
 			SizeMap->insert(pair<T, int>(node, 1));//初始时，node节点所在集合的size是1
 		}
 	}
-
+	
 	T findHead(T data){//查找data的"代表节点"
-		T father = (*DataMap)[data]; //1.查找data的父亲节点
+		T father = (*DataMap)[data]; //1.查找data的父亲节点 
 		if (data != father){//2.如果data不是"代表节点",递归查找data的father节点是不是"代表节点"
-			father = findHead(father);
+			father = findHead(father);  
 		}//递归查找后，必然能查找到"代表节点"，存放在father变量中
 
 		//3.（变扁平）：已知data和"代表节点father",则直接修改data的父节点为father
@@ -118,5 +118,11 @@ int main(){
 	int r3 = UF.getLen(3);
 }
 
+
+时间复杂度分析：
+	查询两个data是否在一个集合
+	合并两个data所在的集合
+	
+只要查询次数+合并次数=O(N)以及以上，那么单次操作，平均时间复杂度都是O(1).
 
 
