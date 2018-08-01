@@ -22,17 +22,101 @@
     (2)将两个集合合并：两个集合的代表节点合并（将短的集合"挂到"长的集合中）
 
 唯一的优化：（变扁平）
-    在查找某个节点data的"代表节点"时，查找到该代表节点之后，直接将data的父节点设置为代表节点。
+      在通过findHead函数查找data的“代表节点”时，顺便将节点变扁平
 
-举例说明：
-  此时有4个代表节点，分别是1',2',3',4'
-要求：
-(1)先将1'和2'合并，3'和4'合并
-    直接将2挂在1'的下面，2变成普通节点
-    直接将4挂在3'的下面，4变成普通节点
-(2)查询2和4是否在同一个集合
-    从节点2开始，依次向后遍历（遍历的同时，将节点变"扁平"），直到找到代表节点1'
-    从节点4开始，依次向后遍历（遍历的同时，将节点变"扁平"），直到找到代表节点3'
-    比较1'和3'是否是同一个节点：答案不是
-(3)将2和4所在的集合合并
-    将4的代表节点3'，直接挂在2的代表节点1'上
+代码实现分析：
+采用两个哈希表去实现并查集
+    DataMap：保存了当前值data和data的父节点
+    SizeMap：保存了当前值data和data所在集合的大小
+
+
+#include<iostream>
+#include<list>
+#include<unordered_map>
+using namespace std;
+
+template<class T>
+class UnionFind{
+private:
+	unordered_map<T, T>* DataMap; //key:data  value:data的父亲
+	unordered_map<T, int>* SizeMap; //key:data  value:data所在集合的size
+public:
+	UnionFind(list<T> nodeList){
+		DataMap = new unordered_map<T, T>;
+		SizeMap = new unordered_map<T, int>;
+
+		//将链表nodeList中的所有数据，全部放入并查集中
+		DataMap->clear(); SizeMap->clear();
+		for (auto node : nodeList){
+			DataMap->insert(pair<T, T>(node, node)); //初始时，node节点的faster是node
+			SizeMap->insert(pair<T, int>(node, 1));//初始时，node节点所在集合的size是1
+		}
+	}
+
+	T findHead(T data){//查找data的"代表节点"
+		T father = (*DataMap)[data]; //1.查找data的父亲节点
+		if (data != father){//2.如果data不是"代表节点",递归查找data的father节点是不是"代表节点"
+			father = findHead(father);
+		}//递归查找后，必然能查找到"代表节点"，存放在father变量中
+
+		//3.（变扁平）：已知data和"代表节点father",则直接修改data的父节点为father
+		(*DataMap)[data] = father;
+		//4.返回"代表节点"father
+		return father;
+	}
+	int getLen(T data){
+		int value = findHead(data); //求出data所在set的"代表节点"
+		return (*SizeMap)[value];  //返回"代表节点"的长度
+	}
+	bool isSameSet(T a, T b){
+		return findHead(a) == findHead(b);
+	}
+
+	void unionSet(T a, T b){
+		if (a == NULL || b == NULL)
+			return;
+		//合并之前，应先判断两个元素是否属于同一集合,通常使用findHead实现
+		T aHead = findHead(a); //a的代表节点
+		T bHead = findHead(b); //b的代表节点
+		if (aHead != bHead){//如果a和b不在一个集合
+			int aSize = (*SizeMap)[aHead]; //获取a的长度
+			int bSize = (*SizeMap)[bHead]; //获取b的长度
+			//根据a和b的大小，判断谁应该连接给谁
+			if (aSize >= bSize){
+				//将b节点所在集合的"代表节点bHead"挂到a节点所在集合的"代表节点aHead"上
+				//即:将bHead的父节点(*DataMap)[bHead]，设为aHead
+				(*DataMap)[bHead] = aHead;
+				(*SizeMap)[aHead] = aSize + 1;
+			}
+			else if (aSize < bSize){
+				(*DataMap)[aHead] = bHead;
+				(*SizeMap)[bHead] = bSize + 1;
+			}
+		}
+	}
+};
+
+int main(){
+	//初始时:并查集中的元素是不相交的，经过一系列的基本操作(Union)，最终合并成一个大的集合。
+	//m_list中的每个元素，都各自构成一个"代表节点"
+	//所有的"代表节点"，构成并查集
+	list<int> m_list1;
+	m_list1.push_back(1);
+	m_list1.push_back(2);
+	m_list1.push_back(3);
+	m_list1.push_back(4);
+
+	UnionFind<int> UF(m_list1);
+	int ret1 = UF.findHead(4);  //查找4所在的集合的"代表节点"
+	bool ret2 = UF.isSameSet(1, 2);//判断1和2所在的集合是否为同一个
+	UF.unionSet(1, 2);
+	UF.unionSet(2, 3);
+	UF.unionSet(2, 3);
+
+	int r1 = UF.getLen(1);
+	int r2 = UF.getLen(2);
+	int r3 = UF.getLen(3);
+}
+
+
+
