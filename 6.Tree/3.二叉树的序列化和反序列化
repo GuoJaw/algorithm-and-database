@@ -1,0 +1,36 @@
+
+/*
+	! 表示字符之间的分割符号
+	# 表示NULL
+*/
+
+
+//[1]先序遍历序列化:将二叉树保存成string形式
+string serialByPre(TreeNode* T){
+	if (T==NULL)
+		return "#!";
+	string str = T->data + "!";
+	str += serialByPre(T->left);
+	str += serialByPre(T->right);
+	return str;
+}
+
+
+//[2]先序遍历反序列化:将string转换成二叉树
+TreeNode* reconPreOrder(queue<string>& Q){
+	string popStr = Q.pop(); //出队
+	if (popStr == "#")
+		return NULL;
+	TreeNode* head = new TreeNode; head->data = string2int(popStr);
+	head->left = reconPreOrder(Q);
+	head->right = reconPreOrder(Q);
+	return head;
+}
+TreeNode* ReconSerialByPre(string preStr){
+	String[] values = preStr.split("!"); //将字符串按照!分割，分割结果存在values数组中 
+	queue<string> Q;
+	for (int i = 0; i < values.length; i++) //将values数组中的数全部进队
+		Q.push(values[i]);
+	
+	return reconPreOrder(Q);
+}
