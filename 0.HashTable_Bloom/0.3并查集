@@ -1,3 +1,7 @@
+
+并查集：是低频，但是不是冷门
+
+
 并查集：解决的两个问题
   (1)非常快的查询两个元素是否属于同一个集合: bool isSameSet(int data1,int data2);
         思路：先通过data1找到set1；然后在set1中查询是否存在data2
