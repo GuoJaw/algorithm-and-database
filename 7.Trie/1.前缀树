@@ -8,9 +8,9 @@
 
 使用abc, bce, abd，bef，be，be创建前缀树
 (1)遍历abc时，从T节点开始:
-    如果没有到达某个节点的路，就创建
-    如果有到达某个节点的路，就复用
-    到达字符串结尾时，将安插节点的data域++
+    如果没有到达某个节点的路，就创建,path++
+    如果有到达某个节点的路，就复用,path++
+    到达字符串结尾时，将end++
 (2)遍历bce时，从T节点开始
     过程同上
 (3)遍历abd时，从T节点开始
@@ -33,89 +33,105 @@
 【用途】
     假设前缀树中已经安插了N个字符串，给定一个字符串str，可以在前缀树中很方便的进
 行下面操作：
-(1)查存不存在某个前缀
-(2)如果存在，查包含该前缀的字符串的个数
-(3)查某个字符串在不在里面
+	(1)查找指定字符串出现的次数
+	(2)查找指定字符串作为前缀的次数
+上面的操作都是建立（插入字符串）基础上的
 
 #include<iostream>
 #include <string>
 using namespace std;
 
 #define MAX_NEXTS 26
-
+//前缀树节点
 class TrieNode{
 public:
-	TrieNode() :path(0), end(0){
-		memset(nexts, 0, MAX_NEXTS);
+	TrieNode():path(0),end(0){
+		memset(nexts, NULL, MAX_NEXTS);
 	}
 public:
-	int path;
-	int end;
-	TrieNode* nexts[MAX_NEXTS];
+	int path; //划过该节点字符串的数目
+	int end; //以该节点为结尾的字符串的个数
+	TrieNode* nexts[MAX_NEXTS]; //a~z表示的路径
 };
 
 class TrieTree{
 public:
-	TrieNode* root;
-public:
 	TrieTree(){
 		root = new TrieNode();
 	}
-	void insertStr(string str){
+	void insertStr(string str){ //将字符串str插入前缀树root中
 		if (str == "")
 			return;
+
 		TrieNode* cur = root;
-		for (int i = 0; i < str.length; i++){
-			int index = str[i] - 'a';
-			if (cur->nexts[index] == NULL){//如果不存在"路"
-				cur->nexts[index] = new TrieNode();//创建一个
-			}
-			//更新cur为"路"连接的节点
-			cur = cur->nexts[index];
-			//有一个字符串划过该节点，cur->path++
-			cur->path++;
+		for (int i = 0; i < str.length(); i++){ //依次遍历每个字符str[i]
+			int landIndex = str[i] - 'a';//寻找str[i]字母的插入路径landIndex
+			
+			if (cur->nexts[landIndex] == NULL) //如果插入路径指向的树节点是空，说明没有该路径
+				cur->nexts[landIndex] = new TrieNode(); //就创建新节点，插入到landIndex下
+
+			cur = cur->nexts[landIndex];
+			cur->path++; //又出现一个新的字符串划过该节点，因此path++
 		}
-		cur->end++; //到达字符串最后一个元素时，cur->end++
+		cur->end++; //当while循环结束后，cur指向的节点的end位置++
 	}
-	int searchCnt(string str){//查找字符串str出现的次数
+	//查询给定字符串str出现的次数:实际上是字符串达到末尾时，cur->end的大小
+	int getStrNum(string str){
 		if (str == "")
 			return 0;
 		TrieNode* cur = root;
-		for (int i = 0; i < str.length; i++){
-			int index = str[i] - 'a';
-			if (cur->nexts[index] == NULL)
+		for (int i = 0; i < str.length(); i++){
+			int landIndex = str[i] - 'a'; //计算str[i]的路径landIndex
+			if (cur->nexts[landIndex] == NULL) //如果路径指向的节点为NULL，说明str不存在，返回0
 				return 0;
-			cur = cur->nexts[index]; //后移
+			cur = cur->nexts[landIndex]; //cur后移
 		}
 		return cur->end;
 	}
-	int prefixCnt(string preStr){//查以preStr作为前缀的字符串的个数
-		if (preStr == "")
+	//查询以给定字符串prestr为前缀的字符串总数:实际上是字符串到达末尾时，cur->path的大小
+	int getPreNum(string str){
+		if (str == "")
 			return 0;
 		TrieNode* cur = root;
-		for (int i = 0; i < preStr.length; i++){
-			int index = preStr[i] - 'a';
-			if (cur->nexts[index] == NULL)
+		for (int i = 0; i < str.length(); i++){
+			int landIndex = str[i] - 'a'; //计算str[i]的路径landIndex
+			if (cur->nexts[landIndex] == NULL) //如果路径指向的节点为NULL，说明str不存在，返回0
 				return 0;
-			cur = cur->nexts[index]; //后移
+			cur = cur->nexts[landIndex]; //cur后移
 		}
 		return cur->path;
 	}
-	void deleteStr(string str){//在前缀树中删除str一次
-		int cnt = searchCnt(str);
-		if (cnt <= 0) //如果查询不到str: 直接返回
+	void deleteStr(string str){ //仅仅删除str一次（实际上删除的是每个str[i]的path）
+		if (getStrNum(str) == 0) //如果不存在str
 			return;
-		//如果查询到str: 在前缀树中删除str一次
-		TrieNode* cur = root;
-		for (int i = 0; i < str.length; i++){
-			int index = str[i] - 'a'; 
-			cur->nexts[index]->path--;
-			if (cur->nexts[index]->path == 0){
-				return;//C++需要手动释放内存空间
-			}
-			cur = cur->nexts[index];
-		}
-		cur->end--;
-	}
-};
 
+		TrieNode* cur = root;
+		for (int i = 0; i < str.length(); i++){ //遍历每一个str[i]
+			int landIndex = str[i] - 'a'; //求出查找路径landIndex
+			if (cur->nexts[landIndex]->path == 0){//如果经过(landIndex路径指向的节点)的path数等于0
+				//后面的直接返回，释放开辟的内存空间
+				return;
+			}
+			cur->nexts[landIndex]->path--;
+			cur = cur->nexts[landIndex];//后移
+		}
+		cur->end--;//因为删除了字符串str，因此cur的end值--
+	}
+public:
+	TrieNode* root;
+};
+int main(){
+	TrieTree* trie = new TrieTree();
+	trie->insertStr("abc");
+	trie->insertStr("abc");
+	trie->insertStr("abcf");
+	trie->insertStr("abcd");
+
+	int ret1 = trie->getStrNum("abc");
+	int ret2 = trie->getPreNum("abc");
+	
+	trie->deleteStr("abc");
+
+	int ret3 = trie->getStrNum("abc");
+	int ret4 = trie->getPreNum("abc");
+}
