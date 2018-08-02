@@ -1,4 +1,3 @@
-
 #include<iostream>
 using namespace std;
 
@@ -7,9 +6,10 @@ void swap(int& a, int& b){
 }
 void AdjustDown(int A[], int k, int N){
 	for (int i = k * 2 + 1; i < N; i = i * 2 + 1){
-		if (i + 1 < N && A[i] > A[i + 1])
-			i++;
-		if (A[k] <= A[i])
+		if (i + 1 < N && A[i] < A[i + 1]) //如果k存在右孩子，且 左孩子 < 右孩子
+			i++; //则选取右孩子节点
+
+		if (A[k] >= A[i]) //如果根k >= k的孩子节点，则已经是大根堆，不用调整，直接break
 			break;
 		else{
 			swap(A[k], A[i]);
