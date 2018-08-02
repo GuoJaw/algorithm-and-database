@@ -17,3 +17,33 @@ TreeNode* getKthByPre(TreeNode* T, int Kth){
 	}
 	return NULL;
 }
+//判断一棵树是否为搜索二叉树: isBST     
+[什么是搜索二叉树？中序遍历是递增的二叉树]
+
+
+
+/*判断一棵树是否为完全二叉树 [二叉树的层序遍历]
+获取对头元素
+*/
+bool isComplete(TreeNode* T){ //完全二叉树
+	if (T == NULL)
+		return true;
+	queue<TreeNode*> Q;
+	Q.push(T);
+
+	while (!Q.empty()){
+		TreeNode* p = Q.front(); Q.pop();
+		if (p == NULL){
+			while (!Q.empty()){
+				p = Q.front(); Q.pop();
+				if (p != NULL)
+					return false;
+			}
+		}
+		else{
+				Q.push(p->left);
+				Q.push(p->right);
+		}
+	}
+	return true;
+}
