@@ -1,13 +1,7 @@
+#include<time.h>
 #include<iostream>
 using namespace std;
 
-void swap(int* data, int i, int j){ //交换数组中的两个元素
-	if (i == j)
-		return;
-	data[i] ^= data[j];
-	data[j] ^= data[i];
-	data[i] ^= data[j];
-}
 /*堆排序(十分逆天的操作，用数组模拟完全二叉树的操作)
 1.buildMaxHeap(A,n)建立大根堆(调整初始数组成大根堆数组):根节点从(n-1)/2到0
 2.AdjustDown(A,k,n):总是向下调整,即i=i*2+1; 选取max(父节点/左孩子节点/右孩子节点)
@@ -19,8 +13,37 @@ buildMaxHeap: lg1+lg2+...+lg(n-1) = O(N)
 AdjustDown: O(lgN)
 heap_sort: N * AdjustDown = O(N*lgN)
 */
-//k表示当前要调节的节点的下标; [ n = 数组中有效元素的个数-1 ]
-void AdjustDown(int A[], int k, int n){ //向下调整
+
+//函数声明
+void printfArr(int A[], int len);
+void swap(int* data, int i, int j);
+
+void AdjustDown(int A[], int k, int n);
+void buildMaxHeap(int A[], int N);
+
+int eraseData(int A[], int n);//获取堆顶元素，并重新调整堆
+void insertData(int A[], int i, int data);//向堆的A[i]位置插入data
+
+void heap_sort(int A[], int len);
+void heap_sort_change(int A[], int len);
+
+void createHeap(); //逐个插入节点创建堆
+
+
+void printfArr(int A[], int len){
+	for (int i = 0; i < len; i++)
+		cout << A[i] << "  ";
+	cout << endl;
+}
+void swap(int* data, int i, int j){ //交换数组中的两个元素
+	if (i == j)
+		return;
+	data[i] ^= data[j];
+	data[j] ^= data[i];
+	data[i] ^= data[j];
+}
+
+void AdjustDown(int A[], int k, int n){ //实参n=len-1
 	for (int i = 2 * k + 1; i < n; i = i * 2 + 1){//（依次向下找左孩子i = i * 2 + 1，直到没有孩子i < n）
 		i = (i + 1<n && A[i]>A[i + 1]) ? i : i + 1; //如果右孩子存在；选取"左/右"中的较大者
 		if (A[k] > A[i]) //如果父节点>孩子节点，不用调整，直接break循环
@@ -31,27 +54,67 @@ void AdjustDown(int A[], int k, int n){ //向下调整
 		}
 	}
 }
-//n表示数组中有效元素的个数
-void buildMaxHeap(int A[], int n){
+void buildMaxHeap(int A[], int N){
 	//从最后一个父节点(n-1)/2开始调，调到第一个父节点0
-	for (int k = (n - 1) / 2; k >= 0; k--){
-		AdjustDown(A, k, n);
+	for (int k = (N - 1) / 2; k >= 0; k--){
+		AdjustDown(A, k, N);
 	}
 }
-void heap_sort(int A[], int n){
-	buildMaxHeap(A, n); //1.建立大根堆
-	for (int i = n - 1; i > 0;){ //注意：i>0，而不能i>=0
+//移除元素A[i];并调整堆
+int eraseData(int A[], int i){
+	if (i == 0)
+		return A[0];
+
+	int res = A[0];
+	swap(A, 0, i);
+	AdjustDown(A, 0, i - 1); 
+	return res;
+}
+//向堆的A[i]位置插入data;并调整堆
+void insertData(int A[], int i, int data){
+	A[i] = data;//插入元素
+	while ((i - 1) / 2 >= 0){
+		if (A[i] < A[(i - 1) / 2]){
+			swap(A, i, (i - 1) / 2);
+			i = (i - 1) / 2;
+		}
+		else
+			break;
+	}
+}
+void heap_sort(int A[], int len){
+	buildMaxHeap(A, len); 
+	for (int i = len - 1; i > 0;){ //注意：i>0，而不能i>=0
 		swap(A, 0, i);
 		AdjustDown(A, 0, --i);
 	}
 }
+
+void heap_sort_change(int A[], int len){
+	buildMaxHeap(A, len); //1.建立大根堆
+
+	//逐个返回堆顶元素A[0],（删除的同时进行堆排）
+	for (int i = len - 1; i >= 0; i--){
+		cout << eraseData(A, i) << "  ";
+	}
+	cout << endl;
+	printfArr(A, len);
+}
+
+void createHeap(){
+	int A[10] = {0};
+	srand(time(NULL));
+	for (int i = 0; i < 10; i++){
+		insertData(A, i, rand()%17);
+	}
+	printfArr(A, 10);
+}
 int main()
 {
 	int A[] = { 1, 2, 4, 1, 4, 3, 6, 5, 8 };
-	int n = sizeof(A) / sizeof(A[0]);
-	heap_sort(A, n);
+	int len = sizeof(A) / sizeof(A[0]);
 
-	for (int i = 0; i < n; i++)
-		cout << A[i] << "   ";
+	createHeap();
+
 	system("pause");
 }
