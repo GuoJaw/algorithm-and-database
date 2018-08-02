@@ -42,10 +42,9 @@ void buildMaxHeap(int A[], int n){
 }
 void heap_sort(int A[],int n){
 	buildMaxHeap(A, n); //1.建立大根堆
-	n--; 
-	while(n){ 
-		swap(A, 0, n); //2.将A[0]与A[最后一个有效元素]交换
-		AdjustDown(A, 0, --n); //3.重新调整
+	for (int i = N-1; i > 0; ){ //注意：i>0，而不能i>=0
+		swap(A, 0, i);
+		AdjustDown(A, 0, --i);
 	}
 }
 int main()
