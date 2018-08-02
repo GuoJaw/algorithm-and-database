@@ -1,0 +1,57 @@
+
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+void printArr(int A[], int N){
+	for (int i = 0; i < N; i++)
+		printf("%d   ", A[i]);
+	printf("\n");
+}
+
+void swap(int A[], int a, int b){
+	A[a] ^= A[b]; A[b] ^= A[a]; A[a] ^= A[b];
+}
+
+void AdjustDown(int A[], int k, int N){
+	for (int i = 2 * k + 1; i < N; i = i * 2 + 1){
+		i = (i + 1 < N && A[i] < A[i + 1]) ? i:i+1;
+		if (A[k]<A[i])
+			break;
+		else{
+			swap(A, k, i);
+			k = i;
+		}
+	}
+}
+
+void BuildMinHeap(int A[], int N){
+	for (int k = (N - 1) / 2; k >= 0; k--)
+		AdjustDown(A, k, N);
+}
+
+void HeapSort(int A[], int N){
+	BuildMinHeap(A, N);
+
+	for (int i = N-1; i > 0; ){
+		swap(A, 0, i);
+		AdjustDown(A, 0, --i);
+	}
+}
+
+void test(){
+	int A[] = { 2, 7, 4, 2, 10 };
+	int N = sizeof(A) / sizeof(A[0]);
+	
+	printArr(A, N); //2   7   4   2   10
+	HeapSort(A, N); //小根堆排序
+	printArr(A, N); //10   7   4   2   2
+	
+}
+int main(){
+	test();
+	system("pause");
+}
