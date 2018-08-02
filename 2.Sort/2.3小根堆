@@ -10,18 +10,18 @@ void swap(int A[], int  a, int b){
 }
 
 //调整以节点K为根的堆，成为小根堆
-void AdjustDown(int A[], int k, int n) //方法1: swap
+void AdjustDown(int A[], int k, int n) // swap
 {
 	for (int i = 2 * k + 1; i < n; i = 2 * i + 1) //依次向下找孩子，直到没有孩子
 	{
 		if (i + 1 < n && A[i] > A[i + 1]) //如果k存在右孩子，且 左孩子 > 右孩子
-			i++; //则选取右孩子节点
+			i++; //选取较小的
 
-		if (A[k] <= A[i]) //如果根k <= k的孩子节点，则已经是小根堆，不用调整，直接break
+		if (A[k] <= A[i]) //如果根k <= i的孩子节点，则已经是小根堆，不用调整，直接break
 			break;
 		else//进行调整
 		{
-			swap(A,k,i);   //采用交换：K ， K的子节点i
+			swap(A,k,i);   
 			k = i; //使k指向孩子节点，下一步执行i = 2 * i + 1，继续向下找孩子
 		}
 	}
