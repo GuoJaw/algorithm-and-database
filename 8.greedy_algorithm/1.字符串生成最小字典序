@@ -1,1 +1,45 @@
 
+/*
+错误的排序策略
+    if str1<=str2:
+      str1+str2
+    else:
+      str2+str1
+举例:
+    b与ba
+        由于b<ba,b放在前面--->bba > bab
+
+正确的排序策略：
+    if str1+str2<=str2+str1
+      str1+str2
+    else
+      str2+str1
+*/
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+bool compare_fun(string a, string b){
+	return (a + b) < (b + a);
+}
+void lowestString(vector<string>& strV){
+	sort(strV.begin(), strV.end(), compare_fun);
+}
+
+int main(){
+	vector<string> strV;
+	strV.push_back("CCC");
+	strV.push_back("BB");
+	strV.push_back("B");
+	strV.push_back("BA");
+
+	lowestString(strV);
+
+	for (auto iter : strV)
+		cout << iter << "  ";
+
+	system("pause");
+}
