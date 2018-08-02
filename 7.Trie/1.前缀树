@@ -1,8 +1,16 @@
+注意：一定不要把字母放在树的节点上，而是放在树的路径上
+    [
+        "树的路径"表示: 字母对应的nexts[]指针数组的index
+            树的路径本代码中固定范围: a~z
+            实际上可以用哈希表实现:map<char,int>
+    ]
 
-使用abc, bce, abd，bef创建前缀树
+
+使用abc, bce, abd，bef，be，be创建前缀树
 (1)遍历abc时，从T节点开始:
     如果没有到达某个节点的路，就创建
     如果有到达某个节点的路，就复用
+    到达字符串结尾时，将安插节点的data域++
 (2)遍历bce时，从T节点开始
     过程同上
 (3)遍历abd时，从T节点开始
@@ -14,11 +22,100 @@
                 a     b
              [O]       [O]
            b          e   c     
-        [O]         [O]   [O]
+        [O]         [0]   [O]
        c   d        f       e
-     [O]    [O]   [O]       [O] 
+     [0]    [0]   [0]       [0] 
+其中：
+    [0]：表示树节点
+    a,b,c...字母：表示路径--->(a~z)：本文用0~25表示a~z路径
 
-用途：
-    假设前缀树中已经安插了N个字符串，现在: 可以很方便的在前缀树中查找
-是否有一个字符串是以"be"开始的
+
+【用途】
+    假设前缀树中已经安插了N个字符串，给定一个字符串str，可以在前缀树中很方便的进
+行下面操作：
+(1)查存不存在某个前缀
+(2)如果存在，查包含该前缀的字符串的个数
+(3)查某个字符串在不在里面
+
+#include<iostream>
+#include <string>
+using namespace std;
+
+#define MAX_NEXTS 26
+
+class TrieNode{
+public:
+	TrieNode() :path(0), end(0){
+		memset(nexts, 0, MAX_NEXTS);
+	}
+public:
+	int path;
+	int end;
+	TrieNode* nexts[MAX_NEXTS];
+};
+
+class TrieTree{
+public:
+	TrieNode* root;
+public:
+	TrieTree(){
+		root = new TrieNode();
+	}
+	void insertStr(string str){
+		if (str == "")
+			return;
+		TrieNode* cur = root;
+		for (int i = 0; i < str.length; i++){
+			int index = str[i] - 'a';
+			if (cur->nexts[index] == NULL){//如果不存在"路"
+				cur->nexts[index] = new TrieNode();//创建一个
+			}
+			//更新cur为"路"连接的节点
+			cur = cur->nexts[index];
+			//有一个字符串划过该节点，cur->path++
+			cur->path++;
+		}
+		cur->end++; //到达字符串最后一个元素时，cur->end++
+	}
+	int searchCnt(string str){//查找字符串str出现的次数
+		if (str == "")
+			return 0;
+		TrieNode* cur = root;
+		for (int i = 0; i < str.length; i++){
+			int index = str[i] - 'a';
+			if (cur->nexts[index] == NULL)
+				return 0;
+			cur = cur->nexts[index]; //后移
+		}
+		return cur->end;
+	}
+	int prefixCnt(string preStr){//查以preStr作为前缀的字符串的个数
+		if (preStr == "")
+			return 0;
+		TrieNode* cur = root;
+		for (int i = 0; i < preStr.length; i++){
+			int index = preStr[i] - 'a';
+			if (cur->nexts[index] == NULL)
+				return 0;
+			cur = cur->nexts[index]; //后移
+		}
+		return cur->path;
+	}
+	void deleteStr(string str){//在前缀树中删除str一次
+		int cnt = searchCnt(str);
+		if (cnt <= 0) //如果查询不到str: 直接返回
+			return;
+		//如果查询到str: 在前缀树中删除str一次
+		TrieNode* cur = root;
+		for (int i = 0; i < str.length; i++){
+			int index = str[i] - 'a'; 
+			cur->nexts[index]->path--;
+			if (cur->nexts[index]->path == 0){
+				return;//C++需要手动释放内存空间
+			}
+			cur = cur->nexts[index];
+		}
+		cur->end--;
+	}
+};
 
