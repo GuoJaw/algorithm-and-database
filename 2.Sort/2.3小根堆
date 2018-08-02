@@ -1,61 +1,39 @@
 #include<iostream>
 using namespace std;
 
-void printArr(int A[], int n){
-	for (int i = 0; i < n; i++)
-		cout << A[i] << "   ";
+void swap(int& a, int& b){
+	a ^= b; b ^= a; a ^= b;
 }
-void swap(int A[], int  a, int b){
-	A[a] ^= A[b]; A[b] ^= A[a]; A[a] ^= A[b];
-}
-
-//调整以节点K为根的堆，成为小根堆
-void AdjustDown(int A[], int k, int n) // swap
-{
-	for (int i = 2 * k + 1; i < n; i = 2 * i + 1) //依次向下找孩子，直到没有孩子
-	{
-		if (i + 1 < n && A[i] > A[i + 1]) //如果k存在右孩子，且 左孩子 > 右孩子
-			i++; //选取较小的
-
-		if (A[k] <= A[i]) //如果根k <= i的孩子节点，则已经是小根堆，不用调整，直接break
+void AdjustDown(int A[], int k, int N){
+	for (int i = k * 2 + 1; i < N; i = i * 2 + 1){
+		if (i + 1 < N && A[i] < A[i + 1])
+			i++;
+		if (A[k] >= A[i])
 			break;
-		else//进行调整
-		{
-			swap(A,k,i);   
-			k = i; //使k指向孩子节点，下一步执行i = 2 * i + 1，继续向下找孩子
+		else{
+			swap(A[k], A[i]);
+			k = i;
 		}
 	}
 }
-void buildMinHeap(int A[], int n)
-{
-	for (int i = n / 2 - 1; i >= 0; i--) //从最后一个根节点到第一个根节点：[n/2-1 , 0]
-	{
-		AdjustDown(A, i, n);
+void BuildMinHeap(int A[], int N){
+	for (int i = N/2-1; i >= 0; i--){
+		AdjustDown(A, i, N);
 	}
 }
-void HeapSort(int A[], int n)
-{
-	//1.构建小根堆
-	buildMinHeap(A, n);
-	//2.交换堆顶元素与末尾元素 + 调整堆结构（进行n-1次循环，完成排序 ）
-	for (int i = n - 1; i > 0; i--)
-	{
-		swap(A,0,i);//将堆顶元素与末尾元素进行交换
-		AdjustDown(A, 0, i);//筛选 R[0] 结点，得到i-1个结点的堆  
+void HeapSort(int A[], int N){
+	BuildMinHeap(A, N);
+	for (int i = N - 1; i > 0; i--){
+		swap(A[0], A[i]);
+		AdjustDown(A, 0, i);
 	}
+	for (int i = 0; i < N;i++)
+		printf("%d  ", A[i]);
 }
 
-void test01()
-{
+int main(){
 	int A[] = { 2, 5, 6, 0, 53, 17, 78, 90, 4, 65, 87, 32, -1 };
-	int n = sizeof(A) / sizeof(A[0]);
-	HeapSort(A, n);
-
-	printArr(A, n);
-}
-
-int main()
-{
-	test01();
+	int N = sizeof(A) / sizeof(A[0]);
+	HeapSort(A, N);
 	system("pause");
 }
