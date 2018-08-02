@@ -19,9 +19,6 @@
 求完全二叉树的总结点个数
 */
 
-
-
-
 //1.1求节点总数
 int NodeCount(TreeNode* T){
 	if (T == NULL)
@@ -118,7 +115,7 @@ bool isAVL(TreeNode* T){
 	return process(T)->flag;
 }
 
-/*求完全二叉树的总结点个数:要求时间复杂度"低于"O(N)
+/*6.求完全二叉树的总结点个数:要求时间复杂度"低于"O(N)
 	先求T的左子树和右子树的深度:LHeight RHeight
 	if LHeightRHeight:
 		说明左子树满
