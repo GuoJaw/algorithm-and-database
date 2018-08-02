@@ -1,3 +1,5 @@
+4.(递归思想)节点数目|深度|相似|镜像
+
 
 主要考察的知识点： 递归思想
 (1)列出可能性
@@ -6,6 +8,19 @@
 	我会遍历每一个节点，考虑以每个节点为头的整棵树
 	左树和右树收集什么信息，是需要自己想的
 	接下来怎么写代码，完全套路的
+
+
+/*
+节点数目:总结点/叶子节点
+树深度:最大深度/最小深度
+判断两树是否相似 
+镜像：交换左右子树
+
+求完全二叉树的总结点个数
+*/
+
+
+
 
 //1.1求节点总数
 int NodeCount(TreeNode* T){
@@ -102,3 +117,48 @@ ReturnValue* process(TreeNode* T){
 bool isAVL(TreeNode* T){
 	return process(T)->flag;
 }
+
+/*求完全二叉树的总结点个数:要求时间复杂度"低于"O(N)
+	先求T的左子树和右子树的深度:LHeight RHeight
+	if LHeightRHeight:
+		说明左子树满
+	else:
+		说明右子树满
+*/
+int countCompleteNode(TreeNode* T){
+	if (T == NULL)
+		return 0;
+	//1.求T的左子树的深度:即T->left的左子树
+	int LHeight = 0;
+	TreeNode* Lc = T;
+	while (Lc->left){
+		LHeight++;
+		Lc = Lc->left;
+	}
+	//2.求T的右子树的深度:即T->right的最左节点
+	int RHeight = 0;
+	if (T->right){
+		RHeight++;
+		TreeNode* Rc = T->right;
+		while (Rc->left){
+			RHeight++;
+			Rc = Rc->left;
+		}
+	}
+	
+	if (LHeight == RHeight){//3.左子树满
+		//左子树的节点数+根节点
+		int LCnt = (pow(2, LHeight) - 1) + 1;
+		//递归计算右子树的节点个数
+		return LCnt + countCompleteNode(T->right);
+	}
+	else{ //4.右子树满
+		//右子树的节点数+根节点
+		int RCnt = (pow(2, RHeight) + 1) - 1;
+		//递归计算左子树的节点数
+		return RCnt + countCompleteNode(T->left);
+	}
+}
+
+
+
