@@ -1,8 +1,19 @@
-搜索二叉树
+搜索二叉树Binary Search Tree
     中序遍历是从小到大排列的
     
 题目:判断一棵树是否为"搜索二叉树"
-答案：采用非递归中序遍历的方式，记录当前节点的值，与下一个节点比较
+    int lastNum = INT_MIN;
+    bool isBST(TreeNode* T){
+        if (!T)
+            return true;
+        bool Lflag = isBST(T->left);
+        if (Lflag && T->data > lastNum)
+            lastNum = T->data;
+        else
+            return false;
+        bool Rflag = isBST(T->right);
+        return Rflag;
+    }
 
 
 AVL树
