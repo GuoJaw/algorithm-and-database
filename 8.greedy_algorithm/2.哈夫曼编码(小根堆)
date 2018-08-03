@@ -6,3 +6,82 @@
 (2)依次从小根堆中拿出两个数a和b（小根堆大小要--）； 然后a+b
 (3)将a+b放入小根堆，在调整AdjustDown
 (4)循环(2)(3)过程，直到小根堆中只有一个数，break循环
+
+
+#include<iostream>
+using namespace std;
+void printArr(int A[], int N){
+	for (int i = 0; i < N; i++)
+		cout << A[i] << "  ";
+}
+
+void swap(int A[], int a, int b){
+	if (a == b)
+		return;
+	A[a] ^= A[b]; A[b] ^= A[a]; A[a] ^= A[b];
+}
+void AdjustDown(int A[], int k, int N){
+	for (int i = 2 * k + 1; i < N; i = i * 2 + 1){
+		if (i + 1 < N && A[i] > A[i + 1])
+			i++;
+		if (A[k] <= A[i])
+			break;
+		else{
+			swap(A, i, k);
+			k = i;
+		}
+	}
+}
+void BuildMinHeap(int A[], int N){
+	for (int i = N / 2 - 1; i >= 0; i--)
+		AdjustDown(A, i, N);
+}
+int popData(int A[], int N){ //获取堆顶元素
+	int ret = A[0];
+	swap(A, 0, N);
+	AdjustDown(A, 0, N);
+	return ret;
+}
+void AdjustUp(int A[], int i){
+	int j = (i - 1) / 2;
+	while (j >= 0){
+		if (A[j] < A[i]){
+			swap(A, i, j);
+			i = j; j = (j - 1) / 2;
+		}
+		else
+			break;
+	}
+}
+void pushData(int A[], int i, int data){
+	A[i] = data;
+	AdjustUp(A, i);
+}
+int Huffman(int A[], int N){
+	BuildMinHeap(A, N); //先建立一个小根堆
+
+	int ret = 0;
+
+	//如果堆中元素为1个时，循环终止
+	for (int i = N - 1; i > 0;){ //i表示A的最大下标
+		//获得两个堆顶元素
+		int num_1 = popData(A, i--);
+		int num_2 = popData(A, i--);
+		//合并
+		int mergeNum = num_1 + num_2;
+		cout << "两两合并 mergeNum = "<<mergeNum << endl;
+		//代价
+		ret += mergeNum;
+		//将mergeNum放入堆中
+		pushData(A, ++i, mergeNum);
+	}
+	return ret;
+}
+int main(){
+	int A[] = { 2, 7, 4, 2, 10 };
+	int N = sizeof(A) / sizeof(A[0]);
+
+	int ret = Huffman(A, N);
+	cout << "\n生成huffman编码的最小代价 = " << ret << endl;
+	system("pause");
+}
