@@ -18,6 +18,7 @@
 
 5.判断一棵树是否为AVL树
 6.求完全二叉树的总结点个数
+
 7.判断是否为BST树
 */
 
@@ -160,17 +161,5 @@ int countCompleteNode(TreeNode* T){
 }
 
 //7.题目:判断一棵树是否为"搜索二叉树"
-int lastNum = INT_MIN;
-bool isBST(TreeNode* T){
-	if (!T)
-		return true;
-	bool Lflag = isBST(T->left);
-	if (Lflag && T->data > lastNum)
-		lastNum = T->data;
-	else
-		return false;
-	bool Rflag = isBST(T->right);
-	return Rflag;
-}
 
 
