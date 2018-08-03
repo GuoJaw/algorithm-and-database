@@ -117,7 +117,7 @@ void LevelTravel(TreeNode* T){
 			Q.push(cur->right);
 	}
 }
-//层序遍历使，连同行号也打印
+//层序遍历时，连同行号也打印
 void LevelTravelPrintLevelNo(TreeNode* T){
 	if (!T)
 		return;
