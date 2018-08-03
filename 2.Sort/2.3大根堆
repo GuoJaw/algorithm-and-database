@@ -8,6 +8,12 @@
 
 //大根堆代码
 
+/*
+AdjustDown   AdjustUp   BuildMaxHeap   HeapSort
+popData   pushData
+*/
+
+
 #include<iostream>
 using namespace std;
 
