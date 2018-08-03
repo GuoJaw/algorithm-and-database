@@ -1,0 +1,104 @@
+
+/*
+孩子下标i--->父亲下标(i-1)/2
+父亲下标i--->
+		左孩子下标2*i+1
+		左孩子下标2*i+2
+
+数组长度:N
+	最后一个父亲节点下标: ((N-1)-1)/2 = N/2-1
+	第一个父亲节点下标: 0
+*/
+
+/*代码常见错误:
+(1)AdjustDown: 缺少(i+1<N)的判断
+(2)AdjustUp: 交换；更新i和j
+*/
+
+//小根堆代码
+
+#include<iostream>
+#include<time.h>
+using namespace std;
+
+void printArr(int A[], int N){
+	for (int i = 0; i<N; i++)
+		cout << A[i] << "    ";
+	cout << endl;
+}
+void swap(int A[], int a, int b){
+	if (a == b) //交换之前，必须判断a和b是否相等
+		return;
+	A[a] ^= A[b]; A[b] ^= A[a]; A[a] ^= A[b];
+}
+
+//向下调整为小根堆
+void AdjustDown(int A[], int k, int N){ 
+	for (int i = 2 * k + 1; i < N; i = i * 2 + 1){
+		if (i + 1 < N && A[i] > A[i + 1])
+			i++;
+		if (A[k] <= A[i])
+			break;
+		else{
+			swap(A, i, k);
+			k = i;
+		}
+	}
+}
+//弹出堆顶元素A[0]
+int popData(int A[], int i){
+	int res = A[0];
+	swap(A, 0, i);
+	AdjustDown(A, 0, i);
+	return res;
+}
+//小根堆:向上调整
+void AdjustUp(int A[], int i){
+	int j = (i - 1) / 2;
+	while (j >= 0){
+		if (A[j] > A[i]){
+			swap(A, i, j);
+			i = j;  j = (j - 1) / 2;
+		}
+		else
+			break;
+	}
+}
+//向A[i]位置插入data
+void pushData(int A[], int i, int data){
+	A[i] = data;
+	//在i中插入
+	AdjustUp(A, i);
+}
+void BuildMinHeap(int A[], int N){//建立小根堆
+	for (int i = N / 2 - 1; i >= 0; i--)
+		AdjustDown(A, i, N);
+}
+void HeapSort(int A[], int N){ //堆排序
+	BuildMinHeap(A, N);
+	for (int i = N - 1; i >= 0; i--){
+		swap(A, 0, i);
+		AdjustDown(A, 0, i);
+	}
+}
+
+void test01(){
+	int B[] = { 2, 5, 6, 0, 53, 17, 78, 90, 4, 65, 87, 32, -1 };
+	const int N = sizeof(B) / sizeof(B[0]);
+
+	int A[N] = { 0 };
+
+	for (int i = 0; i < N; i++){
+		pushData(A, i, B[i]); //将B[i]逐个插入A，并实时调整A为大根堆
+	}
+	cout << "popData: ";
+	for (int i = N - 1; i >= 0; i--){
+		cout << popData(A, i) << "   ";
+	}
+	cout << endl;
+}
+
+int main(){
+	test01();
+	system("pause");
+}
