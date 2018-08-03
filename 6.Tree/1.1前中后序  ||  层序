@@ -103,6 +103,7 @@ void InOrderTravelUnRecur(TreeNode* T){ //中序遍历
 }
 
 /*-----层序遍历-----*/
+//二叉树的宽度优先遍历
 void LevelTravel(TreeNode* T){
 	if (T == NULL)
 		return;
@@ -116,6 +117,35 @@ void LevelTravel(TreeNode* T){
 			Q.push(cur->right);
 	}
 }
+//层序遍历使，连同行号也打印
+void LevelTravelPrintLevelNo(TreeNode* T){
+	if (!T)
+		return;
+	queue<TreeNode*> Q;
+
+	TreeNode* last; //当cur==last时，换行，换行时更新last=nlast
+	TreeNode* nlast;//[nlast用于更新last,每次向队列push节点时，nlast指向新增加的节点]
+
+	last = T; //显而易见，初始时last=T
+
+	Q.push(T);
+	while (!Q.empty()){
+		TreeNode* cur = Q.front(); Q.pop();
+		if (cur->left){
+			Q.push(cur->left);
+			nlast = cur->left;//迭代的nlast
+		}
+		if (cur->right){
+			Q.push(cur->right);
+			nlast = cur->right;//迭代的nlast
+		}
+		if (cur == last){
+			printf("\n");
+			last = nlast;
+		}
+	}
+}
+
 
 int main(){
 	TreeNode* T = createByPre(); //input: 1 2 0 4 0 0 3 5 0 0 0
