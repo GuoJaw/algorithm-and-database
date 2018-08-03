@@ -214,13 +214,13 @@ LinkNode* GetLastKthNode(LinkNode* head, int lastKth){
 		return NULL;
 	LinkNode* p = head;
 	LinkNode* q = head;
-	while (p && lastKth > 0){
+	while (p && lastKth > 0){ //先让p走(lastKth-1)步，走到第lastKth位置
 		p = p->next;
 		lastKth--;
 	}
-	if (lastKth > 0)
+	if (lastKth > 0)  //如果p已经到中终点，lastKth仍然>0--->lastKth越界
 		return NULL;
-	while (p){
+	while (p){  //此时p和q一起走，当直到p为NULL时，q的位置就是倒数第lastKth个节点位置
 		p = p->next;
 		q = q->next;
 	}
