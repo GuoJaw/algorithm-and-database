@@ -1,19 +1,13 @@
 /*
-数组的有效元素个数: N
-	父节点范围:[ (N-2)/2, 0 ]
-	下标:[0~N-1]
-		子节点 i ---> 父节点 (i-2)/2
-		父节点 i
+数组的有效元素个数: N --> 最后一个节点的下标为A[N-1]
+	子节点 i ---> 父节点 (i-1)/2 --> 父节点的取值范围[ ((N-1)-1)/2 ,0 ],即[N/2-1,0]
+	父节点 i 
 		左孩子--->2*i+1
 		左孩子--->2*i+2
 */
 
-/*
-小根堆
-(1)小根堆的堆顶元素始终是整个数组最小的
-(2)用小根堆拍好的序，数组竟然是从大到小的
-	因为每次都要将最小的堆顶元素A[0]，交换到数组的尾端
-*/
+
+//大根堆代码：排序后，从小到大
 
 #include<iostream>
 #include<time.h>
@@ -32,43 +26,81 @@ void swap(int A[], int a, int b){
 }
 
 void AdjustDown(int A[], int k, int N){
-	for (int i = k * 2 + 1; i < N; i = i * 2 + 1){
-		if (i + 1 < N && A[i] > A[i + 1])//判断不越界 && 选择二者较小的
+	for (int i = 2 * k + 1; i < N; i = i * 2 + 1){
+		if (i + 1 < N&&A[i] < A[i + 1])
 			i++;
-		if (A[k] <= A[i]) //如果父节点<=子节点
-			break; //不用向下调整，直接break
-		else{
-			swap(A, k, i);
+		if (A[k] >= A[i])
+			break;
+		else
+		{
+			swap(A[i], A[k]);
 			k = i;
 		}
 	}
 }
-void BuildMinHeap(int A[], int N){
-	for (int i = (N - 2) / 2; i >= 0; i--)//从最后一个分支节点到根节点
+void BuildMaxHeap(int A[], int N){
+	//依次AdjustDown(最后一个分支节点N/2-1到根节点0)
+	for (int i = N / 2 - 1; i >= 0; i--){
 		AdjustDown(A, i, N);
-}
-void HeapSort(int A[], int N){
-	BuildMinHeap(A, N); //先建堆
-	for (int i = N - 1; i >= 0; i--){ //i--
-		swap(A, 0, i); //拿出A[0]与最后一个元素交换
-		AdjustDown(A, 0, i);//交换后，向下调整A[0]
 	}
 }
-//取出堆顶元素A[0]
-int popData(int A[], int i){
-	int res = A[0];//保存堆顶元素
-	swap(A, 0, i); //A[0]与A[N-1]交换
-	AdjustDown(A, 0, i);//交换后，向下调整A[0]
-	return res;//返回堆顶元素
+void HeapSort(int A[], int N){
+	BuildMaxHeap(A, N);
+	for (int i = N - 1; i >= 0; i--){
+		swap(A, 0, i);//将A[0]与最后一个元素交换
+		AdjustDown(A, 0, i);//向下调整A[0]
+	}
 }
-int main(){
+//弹出堆顶元素A[0]；调整堆
+int popData(int A[], int i){
+	int ret = A[0];
+	swap(A, 0, i);//将A[0]与最后一个有效元素A[i]交换
+	AdjustDown(A, 0, i);//向下调整A[0]
+	return ret;
+}
+//将data插入A[i]位置(i表示插入的下标位置)
+void pushData(int A[], int i, int data){
+	A[i] = data;//i的父亲节点(i-1)/2
+
+	int j = (i - 1) / 2; //保证A[j]一直是A[i]的父节点
+	while (j >= 0){
+		if (A[j] < A[i]){
+			swap(A, i, j);
+			i = j; j = (j - 1) / 2; //j和i一直向上移动
+		}
+		else
+			break;
+	}
+}
+void test01(){
+	int B[] = { 2, 5, 6, 0, 53, 17, 78, 90, 4, 65, 87, 32, -1 };
+	const int n = sizeof(B) / sizeof(B[0]);
+	
+	int A[n] = { 0 };
+	
+	//创建大根堆(方法1): 通过逐个插入元素的方式
+	for (int i = 0; i < n; i++){
+		pushData(A, i, B[i]); //将B[i]逐个插入A，并实时调整A为大根堆
+	}
+	cout << "popData: ";
+	for (int i = n - 1; i >= 0; i--){
+		cout << popData(A, i) << "   ";
+	}
+	cout << endl;
+}
+void test02(){
 	int A[] = { 2, 5, 6, 0, 53, 17, 78, 90, 4, 65, 87, 32, -1 };
 	int n = sizeof(A) / sizeof(A[0]);
 
-	BuildMinHeap(A, n);//创建小根堆
-	for (int i = n - 1; i >= 0; i--){ //依次取出堆顶元素A[0]
-		cout << popData(A, i) << "    "; //在取的过程中，调整堆
+	BuildMaxHeap(A, n);
+	cout << "popData: ";
+	for (int i = n - 1; i >= 0; i--){
+		cout << popData(A, i) << "   ";
 	}
-
+	cout << endl;
+}
+int main(){
+	test01(); 
+	test02();
 	system("pause");
 }
