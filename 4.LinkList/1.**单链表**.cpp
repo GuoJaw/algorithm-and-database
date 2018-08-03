@@ -12,7 +12,7 @@ using namespace std;
 3.判环；第一个入环节点
 4.两个有序链表的合并
 5.链表反转
-链表局部反转
+	链表局部反转
 6.链表排序***
 7.查找值为key的节点
 8.打印两个链表的公共部分:相等，c1/c2一起后移
@@ -24,12 +24,11 @@ using namespace std;
 11.复制rand指针的单链表
 12.删除无序单链表中重复的节点
 13.一种怪异的节点删除方式
-不给定链表的head节点指针，只给node节点指针，要求在
-O(1)时间复杂度内，删除node节点
-答案:
-[1]将swap(node->data,node->next->data)交换
-[2]删除node节点的后继
-存在问题:node如果是最后一个节点,无法删除
+    不给定链表的head节点指针，只给node节点指针，要求在O(1)时间复杂度内，删除node节点
+ 答案:
+	[1]将swap(node->data,node->next->data)交换
+	[2]删除node节点的后继
+ 存在问题:node如果是最后一个节点,无法删除
 */
 typedef struct LinkNode{
 	struct LinkNode* next;
