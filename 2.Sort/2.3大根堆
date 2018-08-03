@@ -6,11 +6,9 @@
 		左孩子--->2*i+2
 */
 
-
-//大根堆代码：排序后，从小到大
+//大根堆代码
 
 #include<iostream>
-#include<time.h>
 using namespace std;
 
 void printArr(int A[], int N){
@@ -18,16 +16,15 @@ void printArr(int A[], int N){
 		cout << A[i] << "    ";
 	cout << endl;
 }
-
 void swap(int A[], int a, int b){
 	if (a == b) //交换之前，必须判断a和b是否相等
 		return;
 	A[a] ^= A[b]; A[b] ^= A[a]; A[a] ^= A[b];
 }
 
-void AdjustDown(int A[], int k, int N){
+void AdjustDown(int A[], int k, int N){ //大根堆调整
 	for (int i = 2 * k + 1; i < N; i = i * 2 + 1){
-		if (i + 1 < N&&A[i] < A[i + 1])
+		if (i + 1 < N&&A[i] < A[i + 1]) //判断是否越界
 			i++;
 		if (A[k] >= A[i])
 			break;
