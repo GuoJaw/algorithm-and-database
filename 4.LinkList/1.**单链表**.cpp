@@ -208,6 +208,7 @@ void printCommonPart(LinkNode* L1, LinkNode* L2){
 			c2 = c2->next;
 	}
 }
+//9.1查找倒数第K个节点
 LinkNode* GetLastKthNode(LinkNode* head, int lastKth){
 	if (head == NULL || head->next == NULL || lastKth <= 0)
 		return NULL;
@@ -225,7 +226,7 @@ LinkNode* GetLastKthNode(LinkNode* head, int lastKth){
 	}
 	return q;
 }
-//9.删除倒数第K个节点
+//9.2删除倒数第K个节点
 void RemoveLastKthNode(LinkNode* head, int lastKth){
 	//查找倒数第K+1个节点的位置(即倒数第K个节点的前驱)
 	LinkNode* pre = GetLastKthNode(head, lastKth + 1);
