@@ -12,11 +12,14 @@ using namespace std;
 3.判环；第一个入环节点
 4.两个有序链表的合并
 5.链表反转
-	链表局部反转
+链表局部反转
 6.链表排序***
 7.查找值为key的节点
 8.打印两个链表的公共部分:相等，c1/c2一起后移
-9.删除倒数第K个节点
+9.1查找倒数第K个节点
+9.2删除倒数第K个节点:
+	先查找倒数第K个节点的前驱，即查找倒数第K+1个节点
+	删除
 10.判断一个链表是否是回文***
 11.复制rand指针的单链表
 12.删除无序单链表中重复的节点
@@ -206,41 +209,36 @@ void printCommonPart(LinkNode* L1, LinkNode* L2){
 			c2 = c2->next;
 	}
 }
-//9.删除倒数第K个节点
-//(1)cur=head->next;遍历一次，lastKth--
-//(2)判断lastKth的三种情况
-//		=0:删除第一个元素  >0:直接返回head
-//		<0:while(++lastKth != 0) pre = pre->next; 查找前驱
-LinkNode* RemoveLastKthNode(LinkNode* head, int lastKth){
-	if (head == NULL || lastKth <= 0)
-		return head;
-	//查找倒数第K个节点
-	LinkNode* cur = head->next; //第一个有效节点
-	while (cur){
+LinkNode* GetLastKthNode(LinkNode* head, int lastKth){
+	if (head == NULL || head->next == NULL || lastKth <= 0)
+		return NULL;
+	LinkNode* p = head;
+	LinkNode* q = head;
+	while (p && lastKth > 0){
+		p = p->next;
 		lastKth--;
-		cur = cur->next;
 	}
-	if (lastKth > 0) //说明不存在倒数第K个节点，不需要调整
-		return head;
-	else if (lastKth == 0){ //删除第一个节点
-		LinkNode* deleteNode = head->next;
-		head->next = head->next->next;
-		free(deleteNode);
+	if (lastKth > 0)
+		return NULL;
+	while (p){
+		p = p->next;
+		q = q->next;
 	}
-	else{
-		LinkNode* pre = head->next; //当前节点
-		while (++lastKth != 0) //查找前驱 
-			pre = pre->next;
-		//删除倒数第K节点
-		LinkNode* deleteNode = pre->next;
-		pre->next = pre->next->next;
-		free(deleteNode);
-	}
-	return head;
+	return q;
+}
+//9.删除倒数第K个节点
+void RemoveLastKthNode(LinkNode* head, int lastKth){
+	//查找倒数第K+1个节点的位置(即倒数第K个节点的前驱)
+	LinkNode* pre = GetLastKthNode(head, lastKth + 1);
+	if (!pre) //如果没找到
+		return;
+	LinkNode* deleteNode = pre->next;
+	//删除deleteNode
+	pre->next = deleteNode->next; delete(deleteNode); deleteNode = NULL;
 }
 //10.判断链表是否为回文:O(N)  O(N/2)  O(1)
 //方法1：空间复杂度O(N)
-bool isPlalindrome1(LinkNode* head){ 
+bool isPlalindrome1(LinkNode* head){
 	assert(head != NULL);
 	if (head->next == NULL)
 		return true;
@@ -289,8 +287,8 @@ bool isPlalindrome2(LinkNode* head){
 }
 /*
 方法3：
-	1-->2-->3-->2-->1    1-->2-->2-->1
-	1-->2-->3<--2<--1    1-->2<--2<--1
+1-->2-->3-->2-->1    1-->2-->2-->1
+1-->2-->3<--2<--1    1-->2<--2<--1
 */
 
 //11.复制rand指针的单链表
@@ -412,9 +410,9 @@ void test03(){ //有序表的合并
 	LinkNode* L3 = mergeL1L2(L1, L2);
 	travel(L3);
 }
-void test04(){
+void test04(){ //删除节点
 	LinkNode* L1 = createLink();
-	L1 = RemoveLastKthNode(L1, 3);
+	RemoveLastKthNode(L1, 3);
 	travel(L1);
 }
 void test05(){  //查找
@@ -465,5 +463,5 @@ void test10(){
 }
 
 int main(){
-	test07();
+	test04();
 }
