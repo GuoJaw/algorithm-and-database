@@ -1,0 +1,104 @@
+bool operator()(T& a,T& b){...}
+    > 小根堆
+    < 大根堆
+
+/*
+(1)给定启动资金W，去接项目做：
+(2)现在有N个项目，每个项目都有两个相关变量：
+    投入项目资金:cost
+    赚取的净利润:prof
+(3)
+  每次只能做一个项目
+  
+问：
+  依次做K个项目，怎样依次选择项目--->能使赚取的利润最高？
+*/
+
+
+/*
+采用两个堆解决，思路很简单:
+1.每个项目有两个属性:cost和prof--->封装成结构体或类对象
+    有N个项目，因此创建N个对象构成的数组
+2.为了尽可能"少的花费，赚取多的利润"--->因此"cost小根堆,prof大根堆"
+3.初始时，将所有的项目全部放入"花费小根堆队列"
+4.
+  while(K)  //存在项目
+  {
+      将"花费小根堆队列"中，将cost<W的项目取出来，放入"利润大根堆队列"  //需要cost队列判断是否为空
+      从"利润大根堆队列"中，取出项目； //需要prof队列判断是否为空
+      做项目: W+=project.p; K-- 
+  }
+*/
+
+
+
+#include<iostream>
+#include<queue>
+using namespace std;
+
+class Node{ //项目
+public:
+	int c; //花费
+	int p; //利润
+public:
+	Node(int c, int p) :c(c), p(p){}
+};
+
+class costCmp{//仿函数
+public:
+	bool operator()(Node& a, Node& b){
+		return a.c > b.c;  // > 表示小根堆
+	}
+};
+class profCmp{//仿函数
+public:
+	bool operator()(Node& a, Node& b){
+		return a.p < b.p;  // < 表示大根堆
+	}
+};
+
+int MaxGetMoney(int K, int W, int Costs[], int Profs[], int N)
+{
+//尽可能"少的花费，多的利润"--->因此"cost小根堆,prof大根堆"
+	priority_queue<Node, vector<Node>, costCmp> costPQ; //花费:小根堆
+	priority_queue<Node, vector<Node>, profCmp> profPQ; //利润:大根堆
+	
+	//1.初始时
+	for (int i = 0; i < N; i++){//先把所有的项目，放入"花费小根堆"中
+		costPQ.push(Node(Costs[i], Profs[i])); 
+	}
+
+	//2.依次获取"花费小根堆"的头部，将小于W的值，放入到"利润大根堆"
+	while (K){
+		while (!costPQ.empty() && costPQ.top().c<=W){
+			Node tmp = costPQ.top();
+			costPQ.pop(); //从"花费小根堆"中取出tmp
+			profPQ.push(tmp); //tmp放入"利润大根堆"
+		}
+		if (!profPQ.empty()){ //如果"利润大根堆"中不是空:说明有项目可以做
+			Node project = profPQ.top(); profPQ.pop(); //获取"利润大根堆"的堆顶project
+			W += project.p;//做完一个项目,当前的W=W+project.利润
+			K--; //做完一个项目,项目数K--
+		}
+		else{
+			cout << "没做完K个项目,就已经退出" << endl;
+			break;
+		}
+	}
+	return W;
+}
+
+int main(){
+	int Costs[] = { 5,10,6,20 };
+	int Profs[] = { 3, 2, 4, 9 };
+	int N = sizeof(Costs) / sizeof(Costs[0]);
+
+	int W = 7;//成本
+	int K = 4;//项目个数
+
+	int ret = MaxGetMoney(K, W, Costs, Profs, N);
+	cout << "W + 赚取的最大利润 = " << ret << endl;
+	system("Pause");
+}
+
+
