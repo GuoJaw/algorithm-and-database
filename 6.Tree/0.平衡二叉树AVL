@@ -2,18 +2,7 @@
     中序遍历是从小到大排列的
     
 题目:判断一棵树是否为"搜索二叉树"
-    int lastNum = INT_MIN;
-    bool isBST(TreeNode* T){
-        if (!T)
-            return true;
-        bool Lflag = isBST(T->left);
-        if (Lflag && T->data > lastNum)
-            lastNum = T->data;
-        else
-            return false;
-        bool Rflag = isBST(T->right);
-        return Rflag;
-    }
+
 
 
 AVL树
