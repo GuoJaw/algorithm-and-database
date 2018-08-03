@@ -16,6 +16,10 @@
 */
 
 //小根堆代码
+/*
+AdjustDown   AdjustUp   BuildMinHeap   HeapSort
+popData   pushData
+*/
 
 #include<iostream>
 #include<time.h>
