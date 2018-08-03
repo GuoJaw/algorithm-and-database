@@ -1,0 +1,105 @@
+[
+      大根堆    less     <   
+      小根堆   greater   >
+]
+
+
+头文件  #include<queue>
+
+
+
+优先级队列的创建：
+【1】基础数据类型
+      priority_queue<int>  PQ;  //默认创建vector<int>,less<int>--->大根堆，即（每次取出的堆顶元素都是最大值）
+      priority_queue<int,vector<int>,greater<int>>  PQ; //---->小根堆，即（每次取出的堆顶元素都是最小值）
+注意:
+    greater---> 需要包含头文件 #include<functional>
+    
+【2】对于自定义类型，则必须重载operator< 或者 重写仿函数
+STL中priority_queue的声明模板有3个参数priority_queue<Type,Container,Functional>
+--->
+      重写仿函数,创建优先级队列对象时，参数列表必须写三个:priority_queue<Node, vector<Node>, costCmp> costPQ;
+      重载operator<，创建优先级队列，参数列表只需要写一个:priority_queue <Node> q(node,node+9);
+--->      
+[1]重写仿函数
+class Node{ //项目
+public:
+	int c; //花费
+	int p; //利润
+public:
+	Node(int c, int p) :c(c), p(p){}
+};
+
+class costCmp{//仿函数
+public:
+	bool operator()(Node& a, Node& b){
+		return a.c > b.c;  // > 表示小根堆
+	}
+};
+class profCmp{//仿函数
+public:
+	bool operator()(Node& a, Node& b){
+		return a.p < b.p;  // < 表示大根堆
+	}
+};
+int MaxGetMoney(int K, int W, int Costs[], int Profs[], int N)
+{     //创建队列时，必须是三个参数
+	priority_queue<Node, vector<Node>, costCmp> costPQ; //花费:小根堆
+	priority_queue<Node, vector<Node>, profCmp> profPQ; //利润:大根堆
+      ... ...
+}      
+
+
+[1]类外重载firend bool operator<(T& obj1,T&obj2); //形参是两个
+#include<iostream>
+#include<queue>
+using namespace std;
+struct Node
+{
+    int x,y;
+};
+bool operator<(Node a,Node b){
+    if(a.x!=b.x)
+        return a.x<b.x;//<为大顶堆，>为小顶堆
+    return a.y<b.y;
+}
+int main()
+{
+    Node node[9]={{0,0},{0,1},{0,2},{1,0},{1,1},{1,2},{2,0},{2,1},{2,2}};
+    //建立9个结点
+    priority_queue <Node> q(node,node+9);//将9个点存入优先队列q
+    while(!q.empty())//输出
+    {
+        Node n=q.top();
+        cout<<n.x<<' '<<n.y<<endl;
+        q.pop();
+    }
+    return 0;
+}
+[2]类内部重载bool operator<(T& another); //形参是一个
+#include<iostream>
+#include<queue>
+using namespace std;
+struct Node
+{
+    int x,y;
+    bool operator<(const Node another)const
+    {
+        if(x!=another.x)
+            return x<another.x;
+        return y<another.y;
+    }
+};
+int main()
+{
+    Node node[9]={{0,0},{0,1},{0,2},{1,0},{1,1},{1,2},{2,0},{2,1},{2,2}};
+    //建立9个结点
+    priority_queue <Node> q(node,node+9);//将9个点存入优先队列q
+    while(!q.empty())//输出
+    {
+        Node n=q.top();
+        cout<<n.x<<' '<<n.y<<endl;
+        q.pop();
+    }
+    return 0;
+}
