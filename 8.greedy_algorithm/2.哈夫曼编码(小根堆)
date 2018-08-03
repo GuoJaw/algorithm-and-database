@@ -8,6 +8,49 @@
 (4)循环(2)(3)过程，直到小根堆中只有一个数，break循环
 
 
+==================================================
+采用STL自带的优先级队列: priority_queue底层的数据结构是【堆】
+#include<iostream>
+#include<queue>
+#include<functional>//需要用到greater
+using namespace std;
+
+int Huffman(int A[], int N){
+	priority_queue<int,vector<int>,greater<int>> SmallPQ; //小根堆
+	
+	for (int i = 0; i < N; i++) //将所有的数放入小根堆
+		SmallPQ.push(A[i]);
+	int ret = 0;
+	while (SmallPQ.size()>1){
+		//获取对头元素
+		int top1 = SmallPQ.top(); SmallPQ.pop();
+		int top2 = SmallPQ.top(); SmallPQ.pop();
+		//合并后
+		ret += (top1 + top2);
+		cout << top1 + top2 << " = " << top1 << " + " << top2 << endl;
+		//重新放入小根堆中
+		SmallPQ.push(top1 + top2);
+	}
+	return ret;
+}
+int main(){
+	int A[] = { 2, 7, 4, 2, 10 };
+	int N = sizeof(A) / sizeof(A[0]);
+
+	int ret = Huffman(A, N);
+	cout << "\n生成huffman编码的最小代价 = " << ret << endl;
+	system("pause");
+}
+代码执行结果：
+	4 = 2 + 2
+	8 = 4 + 4
+	15 = 7 + 8
+	25 = 10 + 15
+
+	生成huffman编码的最小代价 = 52
+==================================================
+
+
 #include<iostream>
 using namespace std;
 void printArr(int A[], int N){
@@ -85,3 +128,7 @@ int main(){
 	cout << "\n生成huffman编码的最小代价 = " << ret << endl;
 	system("pause");
 }
+
+
+
+
