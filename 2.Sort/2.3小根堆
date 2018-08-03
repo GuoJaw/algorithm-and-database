@@ -1,40 +1,74 @@
+/*
+数组的有效元素个数: N
+	父节点范围:[ (N-2)/2, 0 ]
+	下标:[0~N-1]
+		子节点 i ---> 父节点 (i-2)/2
+		父节点 i
+		左孩子--->2*i+1
+		左孩子--->2*i+2
+*/
+
+/*
+小根堆
+(1)小根堆的堆顶元素始终是整个数组最小的
+(2)用小根堆拍好的序，数组竟然是从大到小的
+	因为每次都要将最小的堆顶元素A[0]，交换到数组的尾端
+*/
+
 #include<iostream>
+#include<time.h>
 using namespace std;
 
-void swap(int& a, int& b){
-	a ^= b; b ^= a; a ^= b;
+void printArr(int A[], int N){
+	for (int i = 0; i<N; i++)
+		cout << A[i] << "    ";
+	cout << endl;
 }
+
+void swap(int A[], int a, int b){
+	if (a == b) //交换之前，必须判断a和b是否相等
+		return;
+	A[a] ^= A[b]; A[b] ^= A[a]; A[a] ^= A[b];
+}
+
 void AdjustDown(int A[], int k, int N){
 	for (int i = k * 2 + 1; i < N; i = i * 2 + 1){
-		if (i + 1 < N && A[i] > A[i + 1])  
-			i++;  
-
-		if (A[k] <= A[i]) 
-			break;
+		if (i + 1 < N && A[i] > A[i + 1])//判断不越界 && 选择二者较小的
+			i++;
+		if (A[k] <= A[i]) //如果父节点<=子节点
+			break; //不用向下调整，直接break
 		else{
-			swap(A[k], A[i]);
+			swap(A, k, i);
 			k = i;
 		}
 	}
 }
 void BuildMinHeap(int A[], int N){
-	for (int i = N/2-1; i >= 0; i--){
+	for (int i = (N - 2) / 2; i >= 0; i--)//从最后一个分支节点到根节点
 		AdjustDown(A, i, N);
-	}
 }
 void HeapSort(int A[], int N){
-	BuildMinHeap(A, N);
-	for (int i = N - 1; i > 0; i--){
-		swap(A[0], A[i]);
-		AdjustDown(A, 0, i);
+	BuildMinHeap(A, N); //先建堆
+	for (int i = N - 1; i >= 0; i--){ //i--
+		swap(A, 0, i); //拿出A[0]与最后一个元素交换
+		AdjustDown(A, 0, i);//交换后，向下调整A[0]
 	}
-	for (int i = 0; i < N;i++)
-		printf("%d  ", A[i]);
 }
-
+//取出堆顶元素A[0]
+int popData(int A[], int i){
+	int res = A[0];//保存堆顶元素
+	swap(A, 0, i); //A[0]与A[N-1]交换
+	AdjustDown(A, 0, i);//交换后，向下调整A[0]
+	return res;//返回堆顶元素
+}
 int main(){
 	int A[] = { 2, 5, 6, 0, 53, 17, 78, 90, 4, 65, 87, 32, -1 };
-	int N = sizeof(A) / sizeof(A[0]);
-	HeapSort(A, N);
+	int n = sizeof(A) / sizeof(A[0]);
+
+	BuildMinHeap(A, n);//创建小根堆
+	for (int i = n - 1; i >= 0; i--){ //依次取出堆顶元素A[0]
+		cout << popData(A, i) << "    "; //在取的过程中，调整堆
+	}
+
 	system("pause");
 }
