@@ -1,6 +1,8 @@
-
+//下面两个题目的唯一区别:
+	判断条件不同：
+		if (A[mid] == num)
+		if (A[mid] == mid)
 （1）对于一个有序数组arr，再给定一个整数num，请在arr中找到num这个数出现的最左边的位置。
-
 int getPartMinV(int A[], int N, int num){
 	int ret = -1;
 
@@ -18,8 +20,6 @@ int getPartMinV(int A[], int N, int num){
 	}
 	return ret;
 }
-
-
 （2）有一个有序数组arr，其中不含有重复元素，请找到满足arr[i]==i条件的最左的位置
 int findAi_i(int A[], int N){
 	int ret = -1;
