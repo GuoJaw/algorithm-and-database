@@ -1,24 +1,32 @@
-题目:（从小到大排序后，处于第K个位置的元素值）
-int partition(int A[], int l, int r){
+
+求数组A中第K小的元素（从小到大排序后，处于第K个位置的元素值） 
+分析：QSort每一趟排序可以确定一个基准pivotPos的最终位置，直接看代码
+
+int partition(int A[], int l, int r) //QSort的划分操作
+{
 	int pivot = A[l];
-	while (l < r){
-		while (l < r && pivot <= A[r])
+	while (l < r)
+	{
+		while (l < r && A[r] >= pivot)
 			r--;
 		A[l] = A[r];
-		while (l < r && pivot >= A[l])
+		while (l < r && A[l] <= pivot)
 			l++;
 		A[r] = A[l];
 	}
 	A[l] = pivot;
 	return l;
 }
-int search_min_K(int A[], int l, int r, int K){
-	int pos = partition(A, l, r); //pos表示实际下标
-	int M = pos - l + 1; //M表示处于[l,r]内的第几个位置
-	if (M == K)
-		return A[pos];
-	else if (M > K)//说明K在[l,pos-1]内-->递归从[l,pos-1]中查找第K个位置
-		return search_min_K(A, l, pos - 1, K);
-	else if (M < K)//说明K在[pos+1,r]内-->去掉[l,pos]个位置-->递归从[pos+1,r]中查找第K-M个位置
-		return search_min_K(A, pos + 1, r, K - M);
+int search_min_K(int A[], int l, int r, int K)
+{
+	{
+		int pos = partition(A, l, r);
+		int m = pos - l + 1;   //m表示基准pos处于第几个位置
+		if (m == K) //如果基准pos处于第K个位置，直接返回
+			return A[pos];
+		else if (m > K) //如果基准pos大于第K个位置，递归地从A[l,pos-1]中查找，第K个元素
+			return search_min_K(A, l, pos - 1, K);
+		else //如果基准pos小于第K个位置，递归地从A[pos+1,r]中查找，第K-m个元素
+			return search_min_K(A, pos + 1, r, K - m);
+	}
 }
