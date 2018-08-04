@@ -1,1 +1,24 @@
 题目:（从小到大排序后，处于第K个位置的元素值）
+int partition(int A[], int l, int r){
+	int pivot = A[l];
+	while (l < r){
+		while (l < r && pivot <= A[r])
+			r--;
+		A[l] = A[r];
+		while (l < r && pivot >= A[l])
+			l++;
+		A[r] = A[l];
+	}
+	A[l] = pivot;
+	return l;
+}
+int search_min_K(int A[], int l, int r, int K){
+	int pos = partition(A, l, r); //pos表示实际下标
+	int M = pos - l + 1; //M表示处于[l,r]内的第几个位置
+	if (M == K)
+		return A[pos];
+	else if (M > K)//说明K在[l,pos-1]内-->递归从[l,pos-1]中查找第K个位置
+		return search_min_K(A, l, pos - 1, K);
+	else if (M < K)//说明K在[pos+1,r]内-->去掉[l,pos]个位置-->递归从[pos+1,r]中查找第K-M个位置
+		return search_min_K(A, pos + 1, r, K - M);
+}
