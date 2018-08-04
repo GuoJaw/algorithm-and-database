@@ -1,0 +1,20 @@
+
+对于一个有序数组arr，再给定一个整数num，请在arr中找到num这个数出现的最左边的位置。
+
+int getPartMinV(int A[], int N, int num){
+	int ret = -1;
+
+	int l = 0, r = N - 1;
+	while (l <= r){
+		int mid = l + (r - l) / 2;
+		if (A[mid] == num){//与二分查找，仅仅此处不同——>记录相等时的mid  二分查找是直接return mid
+			r = mid - 1;
+			ret = mid; 
+		}
+		else if (A[mid]>num)
+			r = mid - 1;
+		else
+			l = mid + 1;
+	}
+	return ret;
+}
