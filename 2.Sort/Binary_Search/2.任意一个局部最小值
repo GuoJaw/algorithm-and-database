@@ -1,11 +1,3 @@
-给定一个无序数组，已知任意“相邻的两个元素，值都不重复”
-要求：
-    返回任意一个局部最小的位置
-局部最小,有三种情况：
-  (1)A[0]<A[1]  ------> 0
-  (2)A[N-1]<A[N-2]----> N-1
-  (2)A[K-1]<A[K]<A[K+1]---->K
-
 //用"递减思想"---->两端"递减"，那么中间必然存在局部最小值
 int getPartMinV(int A[], int N){
 	if (N == 0) //1.如果没有数，说明没有局部最少
@@ -23,9 +15,12 @@ int getPartMinV(int A[], int N){
 		int mid = l + (r - l) / 2;
 		if (A[mid] < A[mid - 1] && A[mid] < A[mid + 1]) //如果mid小于两边的值
 			return mid;
-		else if (A[mid]>A[mid - 1])//在[l,mid-1]之间，必然存在最小值
+		else if (A[mid]>A[mid - 1] && A[mid] < A[mid + 1])//在[l,mid-1]之间，必然存在最小值
 			r = mid - 1;
-		else
+		else if (A[mid]<A[mid - 1] && A[mid] > A[mid + 1])//极大值点
 			l = mid + 1;
+		else
+			r = mid - 1; //l = mid + 1   二者都可以
+		
 	}
 }
