@@ -24,3 +24,6 @@ void Reverse_I(string& str, int i){
 	reverse(str, i, str.length()-1); //[i,N-1]局部逆序：BA EDC
 	reverse(str, 0, str.length()-1); //整体逆序---> CDEAB
 }
+
+注意：上题和循环后移的考察点完全不同
+循环后移的考察点：memcpy
