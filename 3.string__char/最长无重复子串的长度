@@ -1,3 +1,33 @@
 返回str的最长无重复子串的长度
 最优解：时间复杂度O(N),空间复杂度O(N)
-答案：求出亿str中每个字符结尾的清  
+答案：
+  需要2个变量
+    map<char,int>:表示每个char，上一次出现的下标int---->用int map[256]代替
+    pre：表示以str[i-1]字符为结尾，最长不重复子串到达的下标
+
+#include<iostream>
+#include<string>
+using namespace std;
+
+int getMaxNotEqualSubstr(string str){
+	if (str == "")
+		return 0;
+	//创建哈希表，key表示char，value表示char上一次出现的下标位置
+	char map[256]; memset(map, -1, 256); 
+
+	int maxRet = 0; //最长不重复子串的长度
+	int pre = -1; //以str[i-1]字符作为结尾的，最长不重复子串到达的下标
+	
+	for (int i = 0; i < str.length(); i++){//遍历str
+		int nlast = map[str[i]]; //str[i]上一次出现的下标
+		pre = pre>nlast ? pre : nlast;//更新str[i]的pre
+		int curmax = i - pre;//curmax:表示str[i]的最长不重复子串的长度
+		maxRet = maxRet > curmax ? maxRet : curmax; //更新maxRet
+		map[str[i]] = i; //更新str[i]的最近一次出现的下标
+	}
+	return maxRet;
+}
+void main(){
+	string str = "abcdabcd";
+	int ret = getMaxNotEqualSubstr(str);
+}
