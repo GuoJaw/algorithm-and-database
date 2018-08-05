@@ -3,7 +3,8 @@
 #include<string>
 using namespace std;
 /*
-1.字符串倒置
+1.字符串反转
+	反转[l,r]字符串
 2.I am from shanghai-->shanghai from am I
 3.strstr
 4.atoi:存在前后为空格（两头堵）
