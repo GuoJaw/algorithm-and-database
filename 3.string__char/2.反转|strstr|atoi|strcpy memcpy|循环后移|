@@ -4,7 +4,8 @@
 using namespace std;
 /*
 1.字符串反转
-	反转[l,r]字符串
+	整体反转
+	反转[start,end] 
 2.I am from shanghai-->shanghai from am I
 3.strstr
 4.atoi:存在前后为空格（两头堵）
@@ -17,7 +18,7 @@ void swap(char& a, char& b){
 	b ^= a;
 	a ^= b;
 }
-//1.字符串倒置
+//1.字符串整体倒置
 void myReverse1(char* str){
 	char* r = str + strlen(str) - 1;
 	char* l = str;
@@ -25,7 +26,7 @@ void myReverse1(char* str){
 		swap(*l++, *r--);
 	}
 }
-void myReverse2(char* start, char* end){
+void myReverse2(char* start, char* end){//字符串[start,end]区间倒置
 	while (start < end){
 		swap(*start++, *end--);
 	}
@@ -33,7 +34,7 @@ void myReverse2(char* start, char* end){
 //2.I am from shanghai-->shanghai from am I
 void myReverse3(char* str){
 	assert(str != NULL);
-	myReverse1(str);//字符串整个反转
+	myReverse2(str, str + strlen(str) - 1); //字符串整个反转
 	char* start = str;//记录start
 	while (*str++ != '\0'){ //寻找第一个空格
 		if (*str == ' ' || str == '\0'){
@@ -62,7 +63,7 @@ char* mystrstr(char* str, char* sub){
 (2)判断左面第一个元素是否为符号:+和-
 (3)从左到右，一次取出每个值，再计算:num = num * 10 + (*ch - '0');
 */
-int myatoi(char* src){  
+int myatoi(char* src){
 	assert(src != NULL);
 	char* start = src;
 	char* end = src + strlen(src) - 1;
@@ -107,7 +108,7 @@ void* mymemcpy(void* dst, const void* src, size_t size){
 	return dst;
 }
 //6.循环后移:考察API的使用
-void loopstep(char* src,int steps){
+void loopstep(char* src, int steps){
 	assert(src);
 	int len = strlen(src) - steps;
 	char buf[1024] = { '\0' };
@@ -151,5 +152,6 @@ void test04(){
 	int num = myatoi(A);
 }
 int main(){
-	test04();
+	test01();
+	system("pause");
 }
