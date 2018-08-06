@@ -1,10 +1,10 @@
 二叉排序树(Binary Sort Tree)也叫二叉搜索树(Binary Search Tree)
-
-
+   相关操作
+	查找节点
+	插入节点  |  使用插入节点的方式创建二叉树
+	删除节点
 
 #include<iostream>
-#include<stack>
-#include<queue>
 using namespace std;
 typedef int DataType;
 typedef struct BST_Node {
@@ -26,67 +26,57 @@ BST_P Search_BST(BST_P root, DataType key){
 	}
 }
 
-
-void Insert_BST(BST_P *root, DataType data)
-{
-	//初始化插入节点
-	BST_P p = (BST_P)malloc(sizeof(struct BST_Node));
-	if (!p) return;
-	p->data = data;
-	p->lchild = p->rchild = NULL;
-
-	//空树时，直接作为根节点
-	if (*root == NULL)
-	{
-		*root = p;
+//插入节点data
+void Insert_BST(BST_P *root, DataType data){
+	//0.判断data是否存在,存在就不插入
+	if (Search_BST(*root, data) != NULL)
+		return;
+	
+	//1.创建待插入节点data
+	BST_P newNode = (BST_P)malloc(sizeof(struct BST_Node));
+	newNode->data = data;
+	newNode->lchild = NULL;
+	newNode->rchild = NULL;
+	if (*root == NULL){
+		*root = newNode;
 		return;
 	}
-
-	//是否存在，已存在则返回，不插入
-	if (Search_BST(*root, data) != NULL) return;
-
-	//进行插入，首先找到要插入的位置的父节点
-	BST_P tnode = NULL, troot = *root;
-	while (troot)
-	{
-		tnode = troot;
-		troot = (data < troot->data) ? troot->lchild : troot->rchild;
+		
+	//2.寻找插入位置的父节点pre （插入位置总是在叶子节点）
+	BST_P pre = NULL;//用pre保存插入位置的父节点
+	BST_P cur = *root; //用cur遍历插入位置
+	while (cur){
+		pre = cur; //保存插入节点的父节点
+		if (data > cur->data) 
+			cur = cur->rchild; //向右查找插入位置
+		else
+			cur = cur->lchild; //向左查找插入位置
 	}
-	if (data < tnode->data)
-		tnode->lchild = p;
+	//3.插入
+	if (data > pre->data)
+		pre->rchild = newNode; 
 	else
-		tnode->rchild = p;
+		pre->lchild = newNode;
 }
-void CreateBST(BST_P *T, int a[], int n)
-{
-	int i;
-	for (i = 0; i < n; i++)
-	{
+//用逐个插入节点的方式，创建一颗二叉查找树
+void CreateBST(BST_P *T, int a[], int n){
+	 for (int i = 0; i < n; i++)
 		Insert_BST(T, a[i]);
-	}
 }
-void DeleteBSTNode(BST_P *root, DataType data)
-{
+void DeleteBSpre(BST_P *root, DataType data){
 	BST_P p = *root, parent = NULL, s = NULL;
 
 	if (!p) return;
 
-	if (p->data == data) //找到要删除的节点了
-	{
-		/* It's a leaf node */
-		if (!p->rchild && !p->lchild)
+	//找到要删除的节点p
+	if (p->data == data) {
+		if (!p->rchild && !p->lchild)//1.p是叶子节点，直接删除
 			*root = NULL;
-
-		// 只有一个左节点
-		else if (!p->rchild&&p->lchild)
+		else if (!p->rchild && p->lchild)//2.1右子树为空
 			*root = p->lchild;
-
-		// 只有一个右节点
-		else if (!p->lchild&&p->rchild)
+		else if (!p->lchild && p->rchild)//2.2左子树为空
 			*root = p->rchild;
-
-		//左右节点都不空
-		else
+		else//3.左右子树树都不为空
 		{
 			s = p->rchild;
 			/* the s without left child */
@@ -111,14 +101,13 @@ void DeleteBSTNode(BST_P *root, DataType data)
 		free(p);
 	}
 	else if (data > p->data) //向右找
-		DeleteBSTNode(&(p->rchild), data);
+		DeleteBSpre(&(p->rchild), data);
 	else if (data < p->data) //向左找
-		DeleteBSTNode(&(p->lchild), data);
+		DeleteBSpre(&(p->lchild), data);
 }
-void InOrderTravel(BST_P T)
-{
-	if (T)
-	{
+//中序遍历
+void InOrderTravel(BST_P T){
+	if (T){
 		InOrderTravel(T->lchild);
 		cout << T->data << " ";
 		InOrderTravel(T->rchild);
@@ -150,7 +139,7 @@ int main()
 	printf("\n");
 
 	//删除二叉排序树中的节点12
-	DeleteBSTNode(&root, 12);
+	DeleteBSpre(&root, 12);
 	printf("遍历删除元素后的树:");
 	InOrderTravel(root);
 }
