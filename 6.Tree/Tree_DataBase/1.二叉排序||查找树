@@ -1,0 +1,156 @@
+二叉排序树(Binary Sort Tree)也叫二叉搜索树(Binary Search Tree)
+
+
+
+#include<iostream>
+#include<stack>
+#include<queue>
+using namespace std;
+typedef int DataType;
+typedef struct BST_Node {
+	DataType data;
+	struct BST_Node *lchild, *rchild;
+}BST_T, *BST_P;
+
+
+BST_P Search_BST(BST_P root, DataType key){
+	if (root == NULL)
+		return NULL;
+	else {
+		if (key == root->data)
+			return root;
+		else if (key > root->data)
+			return Search_BST(root->rchild, key);
+		else
+			return Search_BST(root->lchild, key);
+	}
+}
+
+
+void Insert_BST(BST_P *root, DataType data)
+{
+	//初始化插入节点
+	BST_P p = (BST_P)malloc(sizeof(struct BST_Node));
+	if (!p) return;
+	p->data = data;
+	p->lchild = p->rchild = NULL;
+
+	//空树时，直接作为根节点
+	if (*root == NULL)
+	{
+		*root = p;
+		return;
+	}
+
+	//是否存在，已存在则返回，不插入
+	if (Search_BST(*root, data) != NULL) return;
+
+	//进行插入，首先找到要插入的位置的父节点
+	BST_P tnode = NULL, troot = *root;
+	while (troot)
+	{
+		tnode = troot;
+		troot = (data < troot->data) ? troot->lchild : troot->rchild;
+	}
+	if (data < tnode->data)
+		tnode->lchild = p;
+	else
+		tnode->rchild = p;
+}
+void CreateBST(BST_P *T, int a[], int n)
+{
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		Insert_BST(T, a[i]);
+	}
+}
+void DeleteBSTNode(BST_P *root, DataType data)
+{
+	BST_P p = *root, parent = NULL, s = NULL;
+
+	if (!p) return;
+
+	if (p->data == data) //找到要删除的节点了
+	{
+		/* It's a leaf node */
+		if (!p->rchild && !p->lchild)
+			*root = NULL;
+
+		// 只有一个左节点
+		else if (!p->rchild&&p->lchild)
+			*root = p->lchild;
+
+		// 只有一个右节点
+		else if (!p->lchild&&p->rchild)
+			*root = p->rchild;
+
+		//左右节点都不空
+		else
+		{
+			s = p->rchild;
+			/* the s without left child */
+			if (!s->lchild)
+				s->lchild = p->lchild;
+			/* the s have left child */
+			else
+			{
+				/* find the smallest node in the left subtree of s */
+				while (s->lchild)
+				{
+					/* record the parent node of s */
+					parent = s;
+					s = s->lchild;
+				}
+				parent->lchild = s->rchild;
+				s->lchild = p->lchild;
+				s->rchild = p->rchild;
+			}
+			*root = s;
+		}
+		free(p);
+	}
+	else if (data > p->data) //向右找
+		DeleteBSTNode(&(p->rchild), data);
+	else if (data < p->data) //向左找
+		DeleteBSTNode(&(p->lchild), data);
+}
+void InOrderTravel(BST_P T)
+{
+	if (T)
+	{
+		InOrderTravel(T->lchild);
+		cout << T->data << " ";
+		InOrderTravel(T->rchild);
+	}
+}
+int main()
+{
+	int arr[] = { 17, 12, 19, 10, 15, 18, 25, 8, 11, 13, 16, 22 };
+	BST_P root = NULL;
+
+	//创建二叉排序树
+	CreateBST(&root, arr, 12);
+	printf("遍历创建的树:");
+	InOrderTravel(root);
+	printf("\n");
+
+	//在二叉排序树中查找节点12.
+	BST_P result = Search_BST(root, 12);
+	printf("查找元素:12 ");
+	if (result == NULL)
+		printf("查找失败\n");
+	else{
+		printf("指针=%d,指针的值=%d", result, result->data);
+	}
+	//在二叉排序树中插入9
+	Insert_BST(&root, 9);
+	printf("遍历插入元素后的树:");
+	InOrderTravel(root);
+	printf("\n");
+
+	//删除二叉排序树中的节点12
+	DeleteBSTNode(&root, 12);
+	printf("遍历删除元素后的树:");
+	InOrderTravel(root);
+}
