@@ -58,7 +58,7 @@ LinkNode* createLink(){
 	return head;
 }
 //2.获取中间节点
-LinkNode* getMidNode(LinkNode* head){
+LinkNode* getMidNode(LinkNode* head){//mid=n/2向下取整
 	assert(head != NULL);
 	if (head->next == NULL) //链表没有有效节点,返回NULL
 		return NULL;
@@ -71,6 +71,21 @@ LinkNode* getMidNode(LinkNode* head){
 	}
 	return slow;
 }
+/*
+LinkNode* getMidNode(LinkNode* head){ //mid=n/2向上取整
+	assert(head != NULL);
+	if (head->next == NULL) //链表没有有效节点,返回NULL
+		return NULL;
+	//【初始化】
+	LinkNode* slow = head;  //slow指向第一个有效节点
+	LinkNode* fast = head; //fast指向第二个有效节点
+	while (fast&&fast->next){
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	return slow;
+}
+*/
 
 /*3.
 判断单链表是否有环：
