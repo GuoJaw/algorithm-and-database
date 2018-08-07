@@ -1,14 +1,8 @@
-
+题目1：
 类似题目：
 	奇数左，偶数右
 	荷兰国旗
-
-
-#include<iostream>
-#include<string>
-using namespace std;
-
-int swap0_1(string& str){
+int swap0_1(string& str){  //string str = "010101000";
 	int ret = 0;
 
 	int l = 0, r = str.length() - 1;
@@ -22,11 +16,61 @@ int swap0_1(string& str){
 	}
 	return ret;
 }
-void test0(){
-	string str = "010101000";
-	swap0_1(str);
-}
-int main(){
-	test0();
 
+题目2：将str中的空格替换成"%20"，假设str足够长
+思想：从后向前
+	先遍历一次，求出空格的个数K-->计算出str替换后的长度str.length()+(K-1)
+	两个指针i和j从后向前遍历，i遇到空格，j就替换%20
+	直到循环结束
+题目3：一个有序数组，去重
+int removeEqual(int A[], int N){
+	if (A == NULL) 
+		return -1;
+
+	int i = 0, j = 1;
+	for (; j <= N - 1;j++){
+		if (A[i] == A[j]) //如果重复，j++
+			j++;
+		else //如果不重复，A[i++]=A[j]; j++
+			A[++i] = A[j++];
+	}
+	return i + 1;
 }
+void test0(){
+	int A[] = { 1, 1, 2, 2, 3, 3 }; //1 2 3 2 3 3
+	int N = sizeof(A)/sizeof(A[0]);
+	int retLen = removeEqual(A, N);
+}
+题目4：(微软)将字符串中只有*和数字，将*移动到数字的前面（要求移动后相对数字位置不变）
+解题方法1：从后向前遍历，用两个指针i和j，
+	当str[i]=='*'，只执行i--，j不--
+	当str[i]!='*'，执行str[j]=str[i]；i--；j--
+void backTfront(string& str){
+	int i = str.length() - 1, j = str.length() - 1;
+	while (i >= 0){
+		if (str[i] == '*')
+			i--; //只让i--，j不变
+		else{ //str[i] != '*'
+			str[j] = str[i]; //赋值给str[i]
+			i--; j--; //i--,j--
+		}
+	}
+	while (j >= 0){ //将[0,j]位置全部赋值为'*'
+		str[j] = '*';
+		j--;
+	}
+}
+解题方法2：快排的partition——数字的相对位置会改变
+void patition(string& str){
+	int l = 0, r = str.length() - 1;
+	while (l < r){
+		while (l < r && str[l] == '*')
+			l++;
+		while (l < r && str[r] != '*')
+			r--;
+		swap(str[l], str[r]);
+	}
+}
+
+
+
