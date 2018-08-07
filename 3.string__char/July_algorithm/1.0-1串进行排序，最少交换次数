@@ -1,4 +1,10 @@
- #include<iostream>
+
+类似题目：
+	奇数左，偶数右
+	荷兰国旗
+
+
+#include<iostream>
 #include<string>
 using namespace std;
 
