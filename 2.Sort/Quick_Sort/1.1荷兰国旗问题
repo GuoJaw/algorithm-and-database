@@ -1,28 +1,13 @@
 
 时间复杂度O(N)，空间复杂度O(1),不具有稳定性
 
+
+荷兰国旗问题和partition最大的不同：
+	荷兰国旗：A[i]与A[L]和A[R]交换
+	partition：A[L]与A[R]交换
+
 #include<iostream>
 using namespace std;
-
-void printA(int A[], int n){
-	for (int i = 0; i < n; i++)
-		cout << A[i] << "   ";
-	cout << endl;
-}
-void swap(int &a, int &b){
-	a ^= b; b ^= a; a ^= b;
-}
-/*
-（1）初始值：
-	l和r分别指向最左最右位置
-	i用于遍历每个数
-（2）循环条件：while(i<r)
-（3）
-/*
-	i:用于遍历每个A[i],判断A[i]的值
-	begin:指向最开始的有效节点
-	end:指向最后一个有效节点
-*/
 void holanflag(int A[], int N){
 	int begin = 0, end = N - 1;
 	for (int i = 0; i <= end;){
@@ -42,7 +27,6 @@ void test(){
 	int A[] = { 0,0,2,2,1,1,2,0,1 };
 	int len = sizeof(A) / sizeof(A[0]);
 	holanflag(A,len);  //荷兰国旗
-	printA(A, len);
 }
 
 int main(){
