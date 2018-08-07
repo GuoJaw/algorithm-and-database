@@ -1,0 +1,26 @@
+ #include<iostream>
+#include<string>
+using namespace std;
+
+int swap0_1(string& str){
+	int ret = 0;
+
+	int l = 0, r = str.length() - 1;
+	while (l < r){
+		while (l < r && str[l] == '0')
+			l++;
+		while (l < r && str[r] == '1')
+			r--;
+		swap(str[l], str[r]);
+		ret++;
+	}
+	return ret;
+}
+void test0(){
+	string str = "010101000";
+	swap0_1(str);
+}
+int main(){
+	test0();
+
+}
