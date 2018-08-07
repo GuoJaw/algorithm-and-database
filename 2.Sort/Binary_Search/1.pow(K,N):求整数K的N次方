@@ -16,20 +16,19 @@
 将N转化成二进制形式，先求出10^1，根据两个10^1可以求出10^2，再根据两个10^2可以求出10^4，依次……；
 如果对应二进制的位置为1，则累乘。
 
-int my_POW(int num, int N){
+int my_pow(int num, int N){
 	int res = 1;
-	while (N>0){
+	while (N > 0){
 		if ((N & 1) != 0){
-			res *= num;
+			res = res*num;
 		}
-		N = N >> 1;
 		num = num*num;
+		N = N >> 1;
 	}
 	return res;
 }
-
 int main(){
-	int N = my_POW(2, 5);
+	int N = my_pow(2, 5);
 }
 
 
