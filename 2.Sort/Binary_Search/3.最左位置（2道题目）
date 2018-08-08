@@ -1,7 +1,7 @@
 （1.1）对于一个有序数组arr，再给定一个整数num，请在arr中找到num这个数出现的最左边的位置。
 （1.2）对于一个有序数组arr，再给定一个整数num，请在arr中找到num这个数出现的次数。
 （2）有一个有序数组arr，其中不含有重复元素，请找到满足arr[i]==i条件的位置
-
+（3）有序的数组A和 target，要求找出 A 中大于 target 的最小数字，如果找不到就返回第1个数字
 //(1.1)和(2)的解法的唯一区别:
 	判断条件不同：
 		if (A[mid] == num)
@@ -85,4 +85,26 @@ int findAi_i(int A[], int N){
 			l = mid + 1;
 	}
 	return ret;
+}
+
+（3）有序的数组A和 target，要求找出 A 中大于 target 的最小数字，如果找不到就返回第1个数字
+int nextGreatestLetter(int A[],int N, char target){
+	int l = 0, r = N - 1;
+	int ret = 0;
+	while (l <= r){
+		int mid = (l + r) / 2;
+		if (A[mid] > target){
+			ret = mid;
+			r = mid - 1;
+		}
+		else{
+			l = mid + 1;
+		}
+	}
+	return A[ret];
+}
+
+int main(){
+	int A[] = { 1, 2, 3, 3, 4, 4, 5, 6, 7, 8 };
+	int ret = nextGreatestLetter(A, 10, 6);
 }
