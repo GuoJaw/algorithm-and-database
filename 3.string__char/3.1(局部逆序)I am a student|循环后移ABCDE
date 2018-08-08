@@ -1,0 +1,45 @@
+【活用{局部逆序函数}的组合】
+//1.I am from shanghai-->shanghai from am I
+void swap(char& a, char& b){
+	a ^= b; b ^= a; a ^= b;
+}
+void reversePart(char* start, char* end){
+	while (start < end){
+		swap(*start++, *end--);
+	}
+}
+void reverse(char* str){
+	if (str == NULL)
+		return;
+	reversePart(str, str + strlen(str) - 1); //整体倒置
+
+	char* start = str;
+	char* cur = str;
+	while (*cur != '\0'){
+		if (*cur != ' ')
+			cur++;
+		else{
+			char* end = cur - 1;
+			reversePart(start, end);  //局部倒置
+			cur++;
+			start = cur;
+		}
+	}
+}
+//2.循环移位:str=“ABCDE”，i=2 ---> “DEABC”
+void loopMove(char* str, int i){
+	if (str == NULL || strlen(str) == 0 || i > strlen(str))
+		return;
+	int Len = strlen(str);
+	//[0,i]逆序
+	reversePart(str + 0, str + i);
+	//[i+1,Len-1]逆序
+	reversePart(str + i + 1, str + Len - 1);
+	//最后整体逆序
+	reversePart(str, str + Len - 1);
+}
+int main(){
+	char A[100] = "ABCDE";
+	loopMove(A,2);
+	cout << A << endl;
+}
