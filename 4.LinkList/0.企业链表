@@ -1,3 +1,37 @@
+/*
+企业链表的核心：
+(1)传统的链表，是将"结构体的数据和链表指针next"都存放在struct Person结构体中，如下：
+struct Person{
+     struct Person* next; //链表指针next
+     char* name; //结构体数据
+     int age;//结构体数据
+}
+(2)与传统的单链表不同的是，企业级别的链表为了能更加适应于多种类型的数据，
+而是[将链表指针next和结构体数据分离出来]，是怎么分离的呢？
+	[1]将链表节点单独出来
+	struct LinkNode{ //链表结构体
+	    struct LinkNode * next;	
+	}
+	[2]在各个结构体中，包含链表节点变量struct LinkNode node
+	struct Person{
+	    struct LinkNode node; // [链表节点] //数据节点中第一个元素是LinkNode
+	    char* name; //Person的结构体数据
+	    int age;//Person的结构体数据
+	}
+	struct Car{
+	    struct LinkNode node; //[链表节点] //数据节点中第一个元素是LinkNode
+	    int weight; //Car的结构体数据
+	}
+	[3]假设现在有很多Person类型的变量p1,p2,...，因为p1,p2,...中都包含了链表节点变量，
+	并且链表节点变量又是相互连接起来的，因此p1,p2,...就连接了起来
+	【换句话说，p1,p2,...变量通过内部的node链表节点变量连接而连接起来。】
+以上就是企业级链表的真谛，其实很简单：
+就是将链表和实际数据相分离
+实际数据中包含链表节点node
+多个数据变量用node串起来，形成链表
+*/
+
+
 =======线性表=======
 #define _CRT_SECURE_NO_WARNINGS
 #pragma once
