@@ -1,0 +1,31 @@
+题目：求旋转数组的最小值,循环有序数组===旋转数组：[3,4,5,1,2]
+
+(1)基础知识
+	旋转数组特点:旋转数组包括两个递增子数组[3,4,5] [1,2]
+
+(2)解题关键：单调性 -----> (递增/递减)
+--->二分查找
+    A[mid]与A[r]进行比较：
+    	A[mid]>A[r]: [mid,r]区间是先递增，再递减--->最小值必然在(mid,r]区间：l=mid+1
+	A[mid]<A[r]: [mid,r]区间是单调递增的--->最小值必然出现在[l,mid]区间：r=mid
+	A[mid]=A[r]: r--
+	
+int findMin(int A[],int N) {
+	int l = 0, r = N - 1;
+
+	while (l < r) {
+		int mid = (l + r) / 2;
+		if (A[mid] > A[r]) //最小值
+			l = mid + 1;
+		else if (A[mid] < A[r])
+			r = mid;
+		else 
+			r--;
+	}
+	return A[l];
+}
+int main(){
+	int A[] = { 1,0,1,1,1,1,1,1 };
+	int N = sizeof(A) / sizeof(A[0]);
+	int ret = findMin(A, N);
+}
