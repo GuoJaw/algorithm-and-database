@@ -3,46 +3,12 @@
 #include<string>
 using namespace std;
 /*
-1.字符串反转
-	整体反转
-	反转[start,end] 
-2.I am from shanghai-->shanghai from am I
 3.strstr
 4.atoi:存在前后为空格（两头堵）
 5.字符串拷贝：strcpy和memcpy
-6.循环后移:考察API的使用
 7.strcat
 */
-void swap(char& a, char& b){
-	a ^= b;
-	b ^= a;
-	a ^= b;
-}
-//1.字符串整体倒置
-void myReverse1(char* str){
-	char* r = str + strlen(str) - 1;
-	char* l = str;
-	while (l < r){
-		swap(*l++, *r--);
-	}
-}
-void myReverse2(char* start, char* end){//字符串[start,end]区间倒置
-	while (start < end){
-		swap(*start++, *end--);
-	}
-}
-//2.I am from shanghai-->shanghai from am I
-void myReverse3(char* str){
-	assert(str != NULL);
-	myReverse2(str, str + strlen(str) - 1); //字符串整个反转
-	char* start = str;//记录start
-	while (*str++ != '\0'){ //寻找第一个空格
-		if (*str == ' ' || str == '\0'){
-			myReverse2(start, str - 1);
-			start = str + 1;//更新start
-		}
-	}
-}
+
 //3.strstr
 char* mystrstr(char* str, char* sub){
 	assert((str != NULL) && (sub != NULL));
@@ -107,15 +73,7 @@ void* mymemcpy(void* dst, const void* src, size_t size){
 	}
 	return dst;
 }
-//6.循环后移:考察API的使用
-void loopstep(char* src, int steps){
-	assert(src);
-	int len = strlen(src) - steps;
-	char buf[1024] = { '\0' };
-	memcpy(buf, src + len, steps);
-	memcpy(src + steps, src, len);
-	memcpy(src, buf, steps);
-}
+
 //7.strcat
 char* mystrcat(char* dst, const char* src){
 	assert((dst != NULL) && (src != NULL));
@@ -125,19 +83,6 @@ char* mystrcat(char* dst, const char* src){
 	//拼接
 	while ((*dst++ = *src++) != '\0');
 	return tmp;
-}
-
-void test01(){
-	char A[] = "I am from shanghai   ";
-	myReverse3(A);
-	cout << A << endl;
-	system("pause");
-}
-void test02(){
-	char A[] = "I am from shanghai";
-	loopstep(A, 5);
-	cout << A << endl;
-	system("pause");
 }
 void test03(){
 	char* ret = mystrstr("I am from shanghai", "hai");
@@ -152,6 +97,6 @@ void test04(){
 	int num = myatoi(A);
 }
 int main(){
-	test01();
+	test04();
 	system("pause");
 }
