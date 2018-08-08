@@ -33,6 +33,11 @@ using namespace std;
 	[2]删除node节点的后继
  存在问题:node如果是最后一个节点,无法删除
 */
+#include<assert.h>
+#include<unordered_set>
+#include<stack>
+#include<iostream>
+using namespace std;
 typedef struct LinkNode{
 	struct LinkNode* next;
 	struct LinkNode* rand;
@@ -62,8 +67,7 @@ LinkNode* createLink(){
 }
 //2.获取中间节点
 LinkNode* getMidNode(LinkNode* head){//mid=n/2向下取整
-	assert(head != NULL);
-	if (head->next == NULL) //链表没有有效节点,返回NULL
+	if (head == NULL|| head->next == NULL) //链表没有有效节点,返回NULL
 		return NULL;
 	//【初始化】
 	LinkNode* slow = head->next;  //slow指向第一个有效节点
@@ -76,17 +80,16 @@ LinkNode* getMidNode(LinkNode* head){//mid=n/2向下取整
 }
 /*
 LinkNode* getMidNode(LinkNode* head){ //mid=n/2向上取整
-	assert(head != NULL);
-	if (head->next == NULL) //链表没有有效节点,返回NULL
-		return NULL;
-	//【初始化】
-	LinkNode* slow = head;  //slow指向第一个有效节点
-	LinkNode* fast = head; //fast指向第二个有效节点
-	while (fast&&fast->next){
-		slow = slow->next;
-		fast = fast->next->next;
-	}
-	return slow;
+if (head == NULL || head->next == NULL) //链表没有有效节点,返回NULL
+return NULL;
+//【初始化】
+LinkNode* slow = head;  //slow指向第一个有效节点
+LinkNode* fast = head; //fast指向第二个有效节点
+while (fast&&fast->next){
+slow = slow->next;
+fast = fast->next->next;
+}
+return slow;
 }
 */
 
@@ -96,17 +99,17 @@ LinkNode* getMidNode(LinkNode* head){ //mid=n/2向上取整
 如果没有，返回NULL
 */
 LinkNode* isLoop(LinkNode* head){
-	assert(head != NULL);
-	//【初始化】
+	if (!head)
+		return NULL;
 	LinkNode* slow = head;
 	LinkNode* fast = head;
-	while (fast&&fast->next){
+	while (fast&&fast->next){ //如果fast走到末尾，跳出while
 		slow = slow->next;
 		fast = fast->next->next;
-		if (slow == fast)
+		if (slow == fast) //如果slow==fast时，相撞，跳出while
 			break;
 	}
-	if (slow != fast)//不相等，说明无环
+	if (slow != fast)//判断是不是fast/slow相撞才退出循环？
 		return NULL;
 	//在相遇位置，使快指针指向head，之后快慢指针都一次走一步，下一次相交点就是第一个入环点
 	fast = head;
@@ -118,26 +121,33 @@ LinkNode* isLoop(LinkNode* head){
 }
 //4.有序链表的合并:将L2中的节点插入到L1中
 LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
-	assert((L1 != NULL) && (L2 != NULL));
-	//初始化L1和L2的前驱节点/当前节点的指针
-	LinkNode* p1 = L1; LinkNode* c1 = L1->next;
-	LinkNode* p2 = L2; LinkNode* c2 = L2->next;
+	if (L1 == NULL)
+		return L2;
+	else if (L2 == NULL)
+		return L1;
+
+	//p1和p2指向头节点有效节点
+	LinkNode* p1 = L1;
+	LinkNode* p2 = L2;
+	//c1和c2指向第一个有效节点
+	LinkNode* c1 = L1->next;
+	LinkNode* c2 = L2->next;
+
 	while (c1 && c2){
-		if (c1->data <= c2->data){
-			p1 = c1; c1 = c1->next;
-		}
-		else{//在L1中插入L2中的c2
-			//1.保存删除节点的后继
-			LinkNode* tmp = c2->next;
-			//2.c2插入L1
+		if (c1->data > c2->data){//将c2插入到L1中
+			//L1中删除c2
+			p2->next = c2->next;
+			//将c2插入到L1中
 			c2->next = c1; p1->next = c2;
-			//3.更新p1/c1和p2/c2
-			p1 = p1->next; p2->next = tmp; c2 = tmp;
+			//更新c2, p1
+			c2 = p2->next;  p1 = p1->next;
+		}
+		else{
+			p1 = c1; c1 = c1->next;
 		}
 	}
 	if (p2 != NULL)
 		p1->next = c2;
-	free(L2);
 	return L1;
 }
 //5.单链表的倒置
@@ -147,7 +157,7 @@ LinkNode* reverse(LinkNode* head){
 	if (head->next == NULL)
 		return head;
 
-	LinkNode* pre=NULL;
+	LinkNode* pre = NULL;
 	LinkNode* cur = head->next; //第一个有效节点
 	while (cur){
 		LinkNode* post = cur->next;
@@ -157,12 +167,11 @@ LinkNode* reverse(LinkNode* head){
 	head->next = pre;
 	return head;
 }
-//扩展：链表的局部反转——[from,to]
 LinkNode* searchPre(LinkNode* head, LinkNode* node){ //查找node的前驱
 	if (head == NULL || node == NULL)
 		return NULL;
 	LinkNode* cur = head->next;
-	LinkNode* pre = head;
+	LinkNode* pre=NULL;
 	while (cur != NULL){
 		if (cur != node){
 			pre = cur;
@@ -173,31 +182,31 @@ LinkNode* searchPre(LinkNode* head, LinkNode* node){ //查找node的前驱
 	}
 	return NULL;
 }
-void reversePart(LinkNode*& head, LinkNode* from, LinkNode* to){
-	if (head == NULL || from == NULL || to == NULL || from >= to)
-		return;
-	LinkNode* pre_from = searchPre(head, from);//1.查找from的前驱
-	if (pre_from == NULL) //如果没找到from，则直接返回，不做任何处理
-		return;
-	LinkNode* last_to = to->next; //2.查找to的后继
-	//3.反转局部链表[from,to]
-	LinkNode* pre = from;
-	LinkNode* cur = from->next;
-	while (cur != last_to){
-		LinkNode* last = cur->next;
+
+void reverse_start_end(LinkNode* left, LinkNode* start, LinkNode* end, LinkNode* right){
+	//3.反转局部链表[from,to],要使用四个变量[start,from,to,end]
+	LinkNode* pre = NULL;
+	LinkNode* cur = start;
+	while (cur != right){
+		LinkNode* post = cur->next;
 		cur->next = pre;//反指
-		pre = cur; cur = last;
+		pre = cur; cur = post;//更新pre和cur，后移
 	}
 	//4.重新连接
-	pre_from->next->next = last_to; //pre_from->next指向last_to
-	pre_from->next = to;//pre_from指向to
+	left->next = end;
+	start->next = right;
 }
-//6.单链表排序
-//LinkNode* sortLinkNode(LinkNode* head){
-//	assert(head != NULL);
-//	//排序
-//
-//}
+void reversePart(LinkNode*& head, LinkNode* start, LinkNode* end){
+	if (head == NULL || start == NULL || end == NULL || start >= end)
+		return;
+	LinkNode* left = searchPre(head, start);//1.from的前驱
+	if (left == NULL) //如果没找到from，则直接返回，不做任何处理
+		return;
+	LinkNode* right = end->next; //2.end的后继
+	//反转[start,end]
+	reverse_start_end(left, start, end, right);
+}
+
 //7.查找
 LinkNode* searchData(LinkNode* head, int key){
 	assert(head != NULL);
@@ -480,5 +489,5 @@ void test10(){
 }
 
 int main(){
-	test04();
+	test03();
 }
