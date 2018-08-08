@@ -12,7 +12,7 @@
 #include<string>
 using namespace std;
 void Replace(char* str, const char* substr){
-	if (str == NULL || substr == NULL)
+	if (str == NULL || substr == NULL || strlen(str) == 0 || strlen(substr) ==0)
 		return;
 	//0.求出str和replace的长度
 	int strLen = strlen(str);
