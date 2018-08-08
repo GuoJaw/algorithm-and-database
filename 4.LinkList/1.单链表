@@ -1,3 +1,20 @@
+
+/*--链表排序--*/
+
+/*
+1.获取中间节点
+2.判环；第一个入环节点
+3.两个有序链表的合并
+4.1链表逆序: reverse(LinkNode* head)
+5.1链表局部反转: reverse(left,start,end,right)
+6.打印两个链表的公共部分:相等，c1/c2一起后移
+7.查找倒数第K个节点
+8.判断一个链表是否是回文***
+9.复制rand指针的单链表
+10.删除无序单链表中重复的节点unordered_set<int>
+11.一种怪异的节点删除方式O(1)
+*/
+
 #include<assert.h>
 #include<unordered_set>
 #include<stack>
@@ -84,7 +101,9 @@ LinkNode* isLoop(LinkNode* head){
 }
 /*
 4.有序链表的合并:将L2中的节点c2,插入到L1中
-	实际上，是将L2中的c2插入到L1的p1和c1之间
+	过程:比较c1和c2的大小
+		如果c1较大，则c1,p1更新
+		如果c1较小，则将c2插入到[p1,c1]之间
 */
 LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
 	if (L1 == NULL)
@@ -172,7 +191,6 @@ void reversePart(LinkNode*& head, LinkNode* start, LinkNode* end){
 	//反转[start,end]
 	reverse_start_end(left, start, end, right);
 }
-
 //7.查找
 LinkNode* searchData(LinkNode* head, int key){
 	assert(head != NULL);
@@ -187,7 +205,8 @@ LinkNode* searchData(LinkNode* head, int key){
 }
 //8.打印两个链表的公共部分
 void printCommonPart(LinkNode* L1, LinkNode* L2){
-	assert((L1 != NULL) && (L2 != NULL));
+	if (L1 == NULL || L2 == NULL)
+		return;
 	LinkNode* c1 = L1; LinkNode* c2 = L2;
 	while (c1 != NULL&&c2 != NULL){ //如果相等，c1/c2都后移
 		if (c1->data == c2->data){
@@ -200,7 +219,7 @@ void printCommonPart(LinkNode* L1, LinkNode* L2){
 			c2 = c2->next;
 	}
 }
-//9.1查找倒数第K个节点
+//9.1查找倒数第K个节点: 双指针p和q
 LinkNode* GetLastKthNode(LinkNode* head, int lastKth){
 	if (head == NULL || head->next == NULL || lastKth <= 0)
 		return NULL;
@@ -279,8 +298,8 @@ bool isPlalindrome2(LinkNode* head){
 }
 /*
 方法3：
-1-->2-->3-->2-->1    1-->2-->2-->1
-1-->2-->3<--2<--1    1-->2<--2<--1
+	1-->2-->3-->2-->1    1-->2-->2-->1
+	1-->2-->3<--2<--1    1-->2<--2<--1
 */
 
 //11.复制rand指针的单链表
@@ -317,13 +336,13 @@ LinkNode* CopyRandLink(LinkNode* head){
 	}
 	return ret;
 }
-//12.删除无序链表中重复的值1-->2-->3-->3-->4-->2-->1-->null
-/*方法1：类似于插入排序——时间复杂度O(N*N)，空间复杂度O(1)
-首先检查第一个有效节点1；然后向后依次遍历值为1的节点，删除
-检查第二个有效节点2；然后向后依次遍历值为2的节点，删除
-...
+/*
+12.删除无序链表中重复的值1-->2-->3-->3-->4-->2-->1-->null
+哈希表——时间复杂度O(N),空间复杂度O(N): unordered_set<int>
+	cur依次遍历链表中的每个元素data，判断哈希表中是否有data
+	(1)如果没有，直接将data插入链表
+	(2)如果有，将当前节点删除
 */
-//方法2：哈希表——时间复杂度O(N),空间复杂度O(N)
 void RemoveRep(LinkNode*& head){
 	if (head == NULL || head->next == NULL)
 		return;
@@ -345,22 +364,7 @@ void RemoveRep(LinkNode*& head){
 		}
 	}
 }
-void RemoveValue(LinkNode*& head, int num){
-	if (head == NULL || head->next == NULL)
-		return;
-	LinkNode* pre = head;
-	LinkNode* cur = head->next;
-	while (cur != NULL){
-		if (cur->data == num){
-			LinkNode* tmp = cur;
-			pre->next = pre->next->next; free(tmp);
-			cur = pre->next;
-		}
-		else{
-			pre = cur; cur = cur->next;
-		}
-	}
-}
+
 //遍历
 void travel(LinkNode* head){
 	LinkNode* cur = head->next;//cur指向第一个有效节点
@@ -448,11 +452,7 @@ void test09(){ //无序单链表的去重
 	RemoveRep(head);
 	travel(head);
 }
-void test10(){
-	LinkNode* head = createLink();
-	RemoveValue(head, 10);
-	travel(head);
-}
+
 
 int main(){
 	test03();
