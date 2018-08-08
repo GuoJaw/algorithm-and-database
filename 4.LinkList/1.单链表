@@ -1,38 +1,3 @@
-/*
-链表的基本操作
-      **排序Partition，归并排序
-*/
-
-#include<assert.h>
-#include<iostream>
-#include<stack>
-#include<unordered_set> //哈希表
-using namespace std;
-
-/*
-1.创建节点
-2.获取中间节点
-3.判环；第一个入环节点
-4.两个有序链表的合并
-5.链表反转
-	链表局部反转
-6.链表排序***
-7.查找值为key的节点
-8.打印两个链表的公共部分:相等，c1/c2一起后移
-9.1查找倒数第K个节点
-9.2删除倒数第K个节点:
-	先查找倒数第K个节点的前驱，即查找倒数第K+1个节点
-	删除
-10.判断一个链表是否是回文***
-11.复制rand指针的单链表
-12.删除无序单链表中重复的节点
-13.一种怪异的节点删除方式
-    不给定链表的head节点指针，只给node节点指针，要求在O(1)时间复杂度内，删除node节点
- 答案:
-	[1]将swap(node->data,node->next->data)交换
-	[2]删除node节点的后继
- 存在问题:node如果是最后一个节点,无法删除
-*/
 #include<assert.h>
 #include<unordered_set>
 #include<stack>
@@ -66,10 +31,10 @@ LinkNode* createLink(){
 	return head;
 }
 //2.获取中间节点
-LinkNode* getMidNode(LinkNode* head){//mid=n/2向下取整
-	if (head == NULL|| head->next == NULL) //链表没有有效节点,返回NULL
+//靠前
+LinkNode* getMidNode(LinkNode* head){
+	if (head == NULL || head->next == NULL) //链表没有有效节点,返回NULL
 		return NULL;
-	//【初始化】
 	LinkNode* slow = head->next;  //slow指向第一个有效节点
 	LinkNode* fast = head->next->next; //fast指向第二个有效节点
 	while (fast&&fast->next){
@@ -78,20 +43,18 @@ LinkNode* getMidNode(LinkNode* head){//mid=n/2向下取整
 	}
 	return slow;
 }
-/*
-LinkNode* getMidNode(LinkNode* head){ //mid=n/2向上取整
-if (head == NULL || head->next == NULL) //链表没有有效节点,返回NULL
-return NULL;
-//【初始化】
-LinkNode* slow = head;  //slow指向第一个有效节点
-LinkNode* fast = head; //fast指向第二个有效节点
-while (fast&&fast->next){
-slow = slow->next;
-fast = fast->next->next;
+//靠后
+LinkNode* getMidNode_2(LinkNode* head){//第[n/2向下取整]个有效节点: 
+	if (head == NULL || head->next == NULL) //链表没有有效节点,返回NULL
+		return NULL;
+	LinkNode* slow = head;  //slow指向第一个有效节点
+	LinkNode* fast = head; //fast指向第二个有效节点
+	while (fast&&fast->next){
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	return slow;
 }
-return slow;
-}
-*/
 
 /*3.
 判断单链表是否有环：
@@ -119,7 +82,10 @@ LinkNode* isLoop(LinkNode* head){
 	}
 	return slow;
 }
-//4.有序链表的合并:将L2中的节点插入到L1中
+/*
+4.有序链表的合并:将L2中的节点c2,插入到L1中
+	实际上，是将L2中的c2插入到L1的p1和c1之间
+*/
 LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
 	if (L1 == NULL)
 		return L2;
@@ -139,8 +105,8 @@ LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
 			p2->next = c2->next;
 			//将c2插入到L1中
 			c2->next = c1; p1->next = c2;
-			//更新c2, p1
-			c2 = p2->next;  p1 = p1->next;
+			c2 = p2->next; //更新c2
+			p1 = p1->next; //不要忘记L1中插入元素后,p1后移
 		}
 		else{
 			p1 = c1; c1 = c1->next;
@@ -171,7 +137,7 @@ LinkNode* searchPre(LinkNode* head, LinkNode* node){ //查找node的前驱
 	if (head == NULL || node == NULL)
 		return NULL;
 	LinkNode* cur = head->next;
-	LinkNode* pre=NULL;
+	LinkNode* pre = NULL;
 	while (cur != NULL){
 		if (cur != node){
 			pre = cur;
@@ -490,4 +456,5 @@ void test10(){
 
 int main(){
 	test03();
+	system("pause");
 }
