@@ -1,0 +1,19 @@
+//一个有序数组只有一个数不出现两次，找出这个数。要求以 O(logN) 时间复杂度进行求解。
+int singleNonDuplicate(int A[], int N) {
+	int l = 0, r = N - 1;
+	while (l < r){
+		int mid = l + (r - l) / 2;
+		if (mid % 2 == 1)
+			mid--; // 保证 l/r/m 都在偶数位，使得查找区间大小一直都是奇数
+		if (A[mid] == A[mid + 1])
+			l = mid + 2;
+		else
+			r = mid;
+	}
+	return A[l];
+}
+int main(){
+	int A[] = { 1,1, 2,2, 3, 3, 4, 4,6,7,7,8,8 };
+	int N = sizeof(A) / sizeof(A[0]);
+	int ret = singleNonDuplicate(A, N);
+}
