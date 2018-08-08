@@ -142,19 +142,18 @@ LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
 }
 //5.单链表的倒置
 LinkNode* reverse(LinkNode* head){
-	if (head->next == NULL) //如果没有有效节点
+	if (head == NULL)
+		return NULL;
+	if (head->next == NULL)
 		return head;
-	if (head->next->next == NULL)
-		return head;  //只有一个有效节点
-	//【初始化】
-	LinkNode* pre = head->next;
-	LinkNode* cur = head->next->next; //cur指向第二个有效节点
-	while (cur != NULL){
-		LinkNode* last = cur->next;//1.保存cur的后继，防止断链
-		cur->next = pre;//2.cur反指向pre
-		pre = cur; cur = last; //3.后移cur和pre: 更新pre和cur
+
+	LinkNode* pre=NULL;
+	LinkNode* cur = head->next; //第一个有效节点
+	while (cur){
+		LinkNode* post = cur->next;
+		cur->next = pre;
+		pre = cur; cur = post;
 	}
-	head->next->next = NULL;
 	head->next = pre;
 	return head;
 }
