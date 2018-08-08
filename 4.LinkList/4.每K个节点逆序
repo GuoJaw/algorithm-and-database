@@ -3,4 +3,85 @@
   从左到右遍历链表，如果栈的大小不等于K，就将节点不断进栈
   当栈的大小等于K后，说明凑齐了K个节点，此时从栈中弹出节点，并根据节点弹出的顺序重新连接
 (2)方法2：原地反转
-  
+typedef struct LinkNode{
+	struct LinkNode* next;
+	int data;
+}LinkNode;
+
+//反转[start,end]之间的链表; 重新连接左left,右right
+void reverse(LinkNode* left, LinkNode* start, LinkNode* end, LinkNode* right){
+	//start和end反转
+	LinkNode* pre = start;
+	LinkNode* cur = start->next;
+	while (cur != right){
+		LinkNode* post = cur->next; //保存cur的后继
+		cur->next = pre; //指针反指
+		pre = cur; cur = post;//更新pre和cur
+	}
+	//重新连接
+	left->next = end; start->next = right;
+}
+LinkNode* reverseKNode(LinkNode* head, int K){
+	LinkNode* left = head; //记录头节点
+	LinkNode* cur = head->next; //指向第一个有效节点
+	
+	int Kcnt = K;
+
+	while (cur){
+		if (Kcnt != 1){
+			cur = cur->next; Kcnt--;
+		}
+		else if (Kcnt == 1){
+			LinkNode* start = left->next;
+			LinkNode* end = cur;
+			LinkNode* right = cur->next;
+			reverse(left, start, end, right);
+			//更新
+			left = start; cur = right;
+			Kcnt = K;//重置
+		}
+	}
+	return head;
+}
+
+========================
+//测试代码
+LinkNode* createLink(){
+	LinkNode* head = (LinkNode*)malloc(sizeof(LinkNode));
+	head->next = NULL;
+	LinkNode* ptr = head;
+	int data;
+	while (1){
+		cout << "请输入data=";
+		cin >> data;
+		if (data == -1)
+			break;
+		//创建新节点
+		LinkNode* newNode = (LinkNode*)malloc(sizeof(LinkNode));
+		newNode->data = data;
+		newNode->next = NULL;
+		//在尾部插入新节点newNode
+		ptr->next = newNode;
+		//ptr指针指向新的尾部节点
+		ptr = newNode;
+	}
+	return head;
+}
+//遍历
+void travel(LinkNode* head){
+	LinkNode* cur = head->next;//cur指向第一个有效节点
+	while (cur){
+		cout << cur->data << "  ";
+		cur = cur->next;
+	}
+	cout << endl;
+}
+int main(){
+	LinkNode* head = createLink();
+	travel(head);
+	reverseKNode(head, 3);
+	travel(head);
+}
+
+
+
