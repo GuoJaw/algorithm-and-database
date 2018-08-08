@@ -1,0 +1,14 @@
+void josehpusKill(TreeNode* T ,int personCnt,int K){
+	TreeNode* cur = T; TreeNode* pre;
+
+	while (personCnt > 1){ 
+		if (K != 0){ //继续向后遍历
+			pre = cur; cur = cur->next; K--;
+		}
+		else{ //开始杀人
+			pre->next = pre->next->next; cur = pre->next; //删除一个人
+			K = 2;//重置K
+			personCnt--; //总人数--
+		}
+	}
+}
