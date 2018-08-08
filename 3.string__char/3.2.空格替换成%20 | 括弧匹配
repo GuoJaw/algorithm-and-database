@@ -1,12 +1,39 @@
 1.假设str有足够的空间，将其中所有的空格替换成%20
-
 最优解：时间复杂度O(N)，空间复杂度O(1)
-
+/*
 答案：
-  先遍历一遍str，找到空格的个数K---->str在替换后，长度为str.length+2*K
-  使用两个索引i和j，i指向str的末尾，j指向第str.length+2*K个位置，i和j都从后向前遍历
-      如果str[i]!=' '--->str[j]=str[i]
-      如果str[i]==' '--->str[j]，str[j-1]，str[j-2]等于02%
+先遍历一遍str，找到空格的个数K---->str在替换后，长度为str.length + 2 * K
+使用两个索引i和j，i指向str的末尾，j指向第str.length + 2 * K个位置，i和j都从后向前遍历
+如果str[i] != ' '--->str[j] = str[i]
+如果str[i] == ' '--->str[j]，str[j - 1]，str[j - 2]等于02%
+*/
+//1.替换空格 ---> 将其中所有的空格替换成%20
+void replaceSpace(char str[]){
+	if (str == NULL || strlen(str)==0)
+		return;
+	int N = strlen(str);
+	int cnt = 0;
+	for (int i = 0; i < N; i++){
+		if (str[i] == ' ')
+			cnt++;
+	}
+	int end = N + (3 - 1)*cnt;
+	//定义两个指针ptr1,ptr2
+	char* ptr1 = str + N - 1;
+	char* ptr2 = str + end - 1;
+	while (ptr1 >= str){
+		if (*ptr1 != ' '){
+			*ptr2-- = *ptr1;
+		}
+		else{
+			*ptr2-- = '0';
+			*ptr2-- = '2';
+			*ptr2-- = '%';
+		}
+		ptr1--;
+	}
+}
+
 #include<assert.h>
 #include<iostream>
 #include<string>
