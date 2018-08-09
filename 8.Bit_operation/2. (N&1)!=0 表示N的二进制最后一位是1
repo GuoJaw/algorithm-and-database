@@ -15,5 +15,5 @@ double Power(double base, int exponent) {
 		m = m >> 1;
 		base = base*base;
 	}
-	return exponent>0 ? ret : 1 / ret;
+	return exponent>0 ? ret : 1 / ret;  //如果exponent是负数，返回1/ret
 }
