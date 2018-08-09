@@ -1,0 +1,39 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void spiralOrderPrint(vector<vector<int>> matrix, int tlx, int tly, int brx, int bry){
+	if (tlx == brx){
+		for (int i = tly; i <= bry; i++)
+			cout << matrix[tlx][i] << "   ";
+	}
+	else if (tly == bry){
+		for (int i = tlx; i <= brx; i++)
+			cout << matrix[i][tly] << "   ";
+	}
+	else{
+		for (int i = tly; i <= bry; i++)
+			cout << matrix[tlx][i] << "   ";
+		for (int i = tlx+1; i <= brx; i++)
+			cout << matrix[i][bry] << "   ";
+		for (int i = bry-1; i >= tly; i--)
+			cout << matrix[brx][i] << "   ";
+		for (int i = brx-1; i >= tlx+1; i--)
+			cout << matrix[i][tly] << "   ";
+	}
+}
+void printMatrix(vector<vector<int>> matrix) {
+	int M = matrix.size();  //行数
+	int N = matrix[0].size(); //列数
+	//定义四个变量，分别表示矩形左上角和右下角
+	int tlx = 0, tly = 0;
+	int brx = M - 1, bry = N - 1;
+	while (tlx <= brx && tly <= bry){
+		spiralOrderPrint(matrix, tlx++, tly++, brx--, bry--);//打印外圈
+	}
+}
+int main(){
+	vector<vector<int>> V1 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }};
+	printMatrix(V1);
+	system("pause");
+}
