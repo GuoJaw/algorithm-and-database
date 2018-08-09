@@ -29,3 +29,21 @@ int main(){
 	int N = sizeof(A) / sizeof(A[0]);
 	int ret = findMin(A, N);
 }
+
+牛客：
+class Solution {
+public:
+    int minNumberInRotateArray(vector<int> rotateArray) {
+        int l=0,r=rotateArray.size()-1;
+        while(l<=r){
+            int mid=(r-l)/2+l;
+            if(rotateArray[mid]>rotateArray[r])
+                l=mid+1;
+            else if(rotateArray[mid]<rotateArray[r])
+                r=mid;
+            else
+                r--;
+        }
+        return rotateArray[l];
+    }
+};
