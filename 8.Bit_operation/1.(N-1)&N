@@ -1,3 +1,4 @@
+【题目1】求一个数二进制的1的个数
 1.超时解法
 思想：右移，逐个判断是否是1
 int  NumberOf1(int n) {
@@ -21,3 +22,4 @@ int  NumberOf1(int n) {
          }
          return ret;
      }
+【题目2】
