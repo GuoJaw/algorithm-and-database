@@ -29,7 +29,7 @@ TreeNode* searchNextNode(TreeNode* p){
 	else{ //2.如果p没有右孩子
 		while (p->parent != NULL && p->parent->right == p)//如果p是p->parent的右孩子
 			p = p->parent; //向上查找
-		return p->parent;
+		return p->parent;//直到p->parent==NULL或者p->parent->right!=p,结束while循环，返回p
 	}
 }
 //查找节点p的前驱(中序遍历)
