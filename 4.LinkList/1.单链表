@@ -89,7 +89,7 @@ LinkNode* isLoop(LinkNode* head){
 		if (slow == fast) //如果slow==fast时，相撞，跳出while
 			break;
 	}
-	if (slow != fast)//判断是不是fast/slow相撞才退出循环？
+	if(fast==NULL || fast->next==NULL)  //判断条件，非常的重要！
 		return NULL;
 	//在相遇位置，使快指针指向head，之后快慢指针都一次走一步，下一次相交点就是第一个入环点
 	fast = head;
