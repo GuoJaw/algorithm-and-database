@@ -13,7 +13,7 @@
 int findMin(int A[],int N) {
 	int l = 0, r = N - 1;
 
-	while (l < r) {
+	while (l <= r) {
 		int mid = (l + r) / 2;
 		if (A[mid] > A[r]) //最小值
 			l = mid + 1;
