@@ -1,0 +1,24 @@
+面试官一般想让我们写出非递归版本
+
+int fibonaciRecu(int N){  //递归版本
+	if (N <= 0)
+		return 0;
+	else if (N == 1 || N == 2)
+		return 1;
+	else
+		return fibonaciRec(N - 1) + fibonaciRec(N - 2);
+}
+
+int fibonaci(int N){ //非递归版本
+	if (N <= 0)
+		return 0;
+	if (N == 1 || N == 2)
+		return 1;
+	//N必然大于2
+	int a = 1, b = 1, ret;
+	for (int i = 3; i <= N; i++){
+		ret = a + b;
+		a = b; b = ret; //更新a和b
+	}
+	return ret;
+}
