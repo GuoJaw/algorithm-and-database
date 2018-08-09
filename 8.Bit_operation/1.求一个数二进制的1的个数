@@ -1,0 +1,23 @@
+1.超时解法
+思想：右移，逐个判断是否是1
+int  NumberOf1(int n) {
+     int ret=0;
+     while(n){
+         if((n&1)!=0) //n的二进制 & 000..001 ---> 实际上得到的结果是:n的最后一位&1
+             ret++;
+         n=n>>1;  //右移1位
+     }
+     return ret;
+}
+
+2.AC解法
+思想：一个公式n=n&(n-1):表示将n的最后一位由1变成0
+那么，n的二进制，有几个1，就能变几次，用ret统计
+int  NumberOf1(int n) {
+         int ret=0;
+         while(n){
+             n=(n&(n-1));  //将整数的二进制最右边的1变成0
+             ret++;
+         }
+         return ret;
+     }
