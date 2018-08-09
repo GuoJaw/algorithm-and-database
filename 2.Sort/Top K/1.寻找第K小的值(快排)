@@ -1,0 +1,11 @@
+方法1：堆排序,时间复杂度O(N*lgK)
+  建立大小为K的小根堆
+  
+方法2：快速排序,时间复杂度O(N)
+M=pos-l+1;
+if M+1=K:
+  return A[pos];
+else if M+1>K:
+  searchKthMin(Arr,l,pos-1,K);
+else:
+  searchKthMin(Arr,pos+1,r,K-m);
