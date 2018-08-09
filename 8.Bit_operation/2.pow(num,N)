@@ -1,0 +1,16 @@
+int pow(int num, int N){
+	if (N == 0) //指数N为0
+		return 1;
+	if (N < 0)
+		return -1;
+
+	int ret = 1;
+	while (N){  //N指数的二进制
+		if ((N & 1) == 1){ //判断最后一位是否为1
+			ret = ret*num;
+		}
+		N = N >> 1;
+		num = num*num;
+	}
+	return ret;
+}
