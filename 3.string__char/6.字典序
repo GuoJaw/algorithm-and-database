@@ -1,0 +1,29 @@
+字典序：
+    按照字典的大小顺序，所在的位置
+
+题目1：
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+bool cmp(int a, int b){ //为了防止int型数据溢出，将其改成string类型
+	string A = to_string(a);
+	string B = to_string(b);
+	return A + B < B + A;
+}
+string PrintMinNumber(vector<int> numbers) {
+	if (numbers.size() == 0)
+		return "";
+
+	sort(numbers.begin(), numbers.end(), cmp); //排序
+	string ret;
+	for (int i = 0; i < numbers.size(); i++){
+		ret += to_string(numbers[i]);
+	}
+	return ret;
+}
+int main(){
+	vector<int> numbers = { 3,32,321 };  //321323
+	string ret = PrintMinNumber(numbers);
+}
+
+题目2：字典序
+将多个字符串组合起来，使得组合后的字符串的字典序最小
