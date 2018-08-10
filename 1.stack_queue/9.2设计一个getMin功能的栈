@@ -5,43 +5,33 @@
 
 答案：使用辅助栈minStack，保证minStack的栈顶元素始终是stackData的最小值
 
-#include<iostream>
-#include<stack>
-using namespace std;
-
-class myStack{
-private:
-	stack<int> stackData;
-	stack<int> stackMin;
+class Solution {
+    public:
+    stack<int> Data;
+    stack<int> Help;
 public:
-	void push(int data){
-		if (stackData.empty()){//1.如果栈为空，直接插入
-			stackMin.push(data);
-		}
-		else{
-			//2.选择stackMin.top()和data，插入到stackMin中
-			int minNum = stackMin.top() < data ? stackMin.top() : data;
-			//插入
-			stackMin.push(minNum);
-		}
-		stackData.push(data);
-	}
-	void pop(){
-		if (!stackData.empty()){
-			stackData.pop();
-			stackMin.pop();
-		}
-	}
-	int getMin(){
-		return stackMin.top();
-	}
+    void push(int value) {
+        if(Data.empty()){  //不要忘记判断当前Data是否为空
+            Data.push(value);
+            Help.push(value);
+            return;
+        }
+            
+        //将value和Data.top()较小的压入Help栈--->Help的栈顶元素中始终是数组的最小值
+        if(value<Data.top())
+            Help.push(value);
+        else
+            Help.push(Data.top());
+        Data.push(value);
+    }
+    void pop() {
+        Data.pop();
+        Help.pop();
+    }
+    int top() {
+        return Data.top();
+    }
+    int min() {
+        return Help.top();
+    }
 };
-
-int main(){
-	myStack my;
-	my.push(1);
-	my.push(2);
-	my.push(-10);
-	my.push(3); my.push(3);
-	int ret = my.getMin();
-}
