@@ -1,0 +1,90 @@
+说明：本题目非常好，考察堆排序的使用
+分析：从流中依次获取数num，放入大根堆和小根堆要保证下面规则：
+(1)大根堆中的数 < 小根堆中的数
+(2)保证大根堆和小根堆中元素个数的差不超过1
+解决方案：
+void Insert(int num){
+  if maxPQ.size()+minPQ.size() == 偶数:   //num放入大根堆
+      if minPQ.size()>0 && num大于小根堆的堆顶：    
+          num进小根堆minPQ并调整
+          取出小根堆minPQ堆顶元素，并放入大根堆maxPQ
+  if maxPQ.size()+minPQ.size() == 奇数:  //num放入小根堆
+      if maxPQ.size()>0 && num小于大根堆的堆顶：
+          num进入大根堆maxPQ并调整
+          取出大根堆maxPQ堆顶元素，并放入小根堆minPQ
+}
+vector<int> GetMedian(){ //获取中位数的函数
+    需要判断maxPQ.size()+minPQ.size()的总元素个数是奇数还是偶数
+        if  is  奇数：
+            直接返回大根堆的堆顶
+        if  is  偶数：
+            返回大根堆和小根堆的堆顶
+}
+
+#include<iostream>
+#include<functional>
+#include<vector>
+#include<queue>
+using namespace std;
+
+//大根堆和小根堆
+
+class Solution {
+public:
+	void Insert(int num){
+		int maxSize = maxPQ.size();
+		int minSize = minPQ.size();
+		if ((maxSize + minSize) % 2 == 0){ //偶数，进大根堆
+			if (minSize > 0 && num > minPQ.top()){
+				minPQ.push(num);
+				int topData = minPQ.top(); minPQ.pop();
+				maxPQ.push(topData);
+			}
+			else{
+				maxPQ.push(num);
+			}
+		}
+		else{ //奇数，进小根堆
+			if (maxSize > 0 && num < maxPQ.top()){
+				maxPQ.push(num);
+				int topData = maxPQ.top(); maxPQ.pop();
+				minPQ.push(topData);
+			}
+			else
+				minPQ.push(num);
+		}
+	}
+	vector<int> GetMedian(){
+		vector<int> Ret;
+		int maxSize = maxPQ.size();
+		int minSize = minPQ.size();
+		if ((maxSize + minSize) % 2 != 0){//奇数
+			Ret.push_back(maxPQ.top());
+			return Ret;
+		}
+		else{
+			Ret.push_back(minPQ.top());
+			Ret.push_back(maxPQ.top());
+			return Ret;
+		}
+		
+
+	}
+public:
+	priority_queue<int> maxPQ;  //大根堆
+	priority_queue<int,vector<int>,greater<int>> minPQ;  //小根堆
+};
+int main(){
+	Solution obj;
+	obj.Insert(11);
+	obj.Insert(3);
+	obj.Insert(4);
+	obj.Insert(20);
+	obj.Insert(5);
+	obj.Insert(7);
+	obj.Insert(6);
+	vector<int> Ret = obj.GetMedian();
+	for (int i = 0; i < Ret.size(); i++)
+		cout << Ret[i] << endl;
+	system("pause");
+}
