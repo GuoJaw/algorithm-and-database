@@ -1,6 +1,8 @@
 （1）前序遍历创建二叉树
 （2）遍历：前，中，后，层
 
+
+
 #include<iostream>
 #include<stack>
 #include<queue>
@@ -50,10 +52,10 @@ void PostTravel(TreeNode* T){
 /*非递归遍历
 1.都是在pop时搞事情: 打印 | 进辅助栈
 2.中序: 先将所有的左孩子全部进栈
-3.先序/后序的唯一区别: 
-	(1)后序有辅助栈help
-	(2)push时: 先序是先右孩子再左孩子；后序是先左孩子再右孩子
-	(3)pop时: 先序是打印；后序是进辅助栈
+3.先序/后序的唯一区别:
+(1)后序有辅助栈help
+(2)push时: 先序是先右孩子再左孩子；后序是先左孩子再右孩子
+(3)pop时: 先序是打印；后序是进辅助栈
 */
 void PreTravelUnRecur(TreeNode* T){ //先序遍历
 	if (T == NULL)
@@ -61,7 +63,7 @@ void PreTravelUnRecur(TreeNode* T){ //先序遍历
 	stack<TreeNode*> S;
 	S.push(T);
 	while (!S.empty()){
-		TreeNode* p = S.top(); S.pop(); printf("%d  ",p->data); //printf
+		TreeNode* p = S.top(); S.pop(); printf("%d  ", p->data); //printf
 		if (p->right) //先右
 			S.push(p->right);
 		if (p->left)  //后左
@@ -118,19 +120,19 @@ void LevelTravel(TreeNode* T){
 	}
 }
 //层序遍历时，连同行号也打印
-void LevelTravelPrintLevelNo(TreeNode* T){
+void LevelTravelPrintLevelNo_1(TreeNode* T){
 	if (!T)
 		return;
 	queue<TreeNode*> Q;
 
 	TreeNode* last; //当cur==last时，换行，换行时更新last=nlast
-	TreeNode* nlast;//[nlast用于更新last,每次向队列push节点时，nlast指向新增加的节点]
+	TreeNode* nlast=NULL;//[nlast用于更新last,每次向队列push节点时，nlast指向新增加的节点]
 
 	last = T; //显而易见，初始时last=T
 
 	Q.push(T);
 	while (!Q.empty()){
-		TreeNode* cur = Q.front(); Q.pop();
+		TreeNode* cur = Q.front(); Q.pop(); cout << cur->data << "  ";
 		if (cur->left){
 			Q.push(cur->left);
 			nlast = cur->left;//迭代的nlast
@@ -145,29 +147,50 @@ void LevelTravelPrintLevelNo(TreeNode* T){
 		}
 	}
 }
+//层序遍历时，连同行号也打印
+vector<vector<int>> LevelTravelPrintLevelNo_2(TreeNode* T){
+	if (!T)
+		return vector<vector<int>>();
 
+	vector<vector<int>> V;
+	vector<int> subV;
 
-int main(){
-	TreeNode* T = createByPre(); //input: 1 2 0 4 0 0 3 5 0 0 0
+	queue<TreeNode*> Q;
 
-//遍历方式
-	printf("-------层序遍历------\n");
-	LevelTravel(T);
-
-	printf("\n-------先序遍历------\n");
-	PreTravel(T);
-	printf("\n");
-	PreTravelUnRecur(T);
+	TreeNode* last = T; //当cur==last时，换行，换行时更新last=nlast
+	TreeNode* nlast=NULL;//[nlast用于更新last,每次向队列push节点时，nlast指向新增加的节点]
+	Q.push(T);
 	
-	printf("\n-------中序遍历------\n");
-	InOrderTravel(T);
-	printf("\n");
-	InOrderTravelUnRecur(T);
+	while (!Q.empty()){
+		TreeNode* cur = Q.front(); Q.pop(); subV.push_back(cur->data);  
+		if (cur->left){
+			Q.push(cur->left);
+			nlast = cur->left;//迭代的nlast
+		}
+		if (cur->right){
+			Q.push(cur->right);
+			nlast = cur->right;//迭代的nlast
+		}
+		if (cur == last){
+			V.push_back(subV);
+			subV.clear();
+			last = nlast;
+		}
+	}
+	return V;
+}
 
-	printf("\n-------后序遍历------\n");
-	PostTravel(T);
-	printf("\n");
-	PostTravelUnRecur(T);
-
+void test01(){
+	TreeNode* T = createByPre(); //input: 1 2 0 4 0 0 3 5 0 0 0
+	vector<vector<int>> ret = LevelTravelPrintLevelNo_2(T);
+	cout << "(逐行)层序遍历" << endl;
+	for (int i = 0; i < ret.size(); i++){
+		for (int j = 0; j < ret[i].size(); j++)
+			cout << ret[i][j] << "   ";
+		cout << endl;
+	}
+}
+int main(){
+	test01();
 	system("pause");
 }
