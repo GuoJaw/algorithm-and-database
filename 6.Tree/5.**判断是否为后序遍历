@@ -1,0 +1,28 @@
+分析：5，7，6，9，11，10，8
+二叉树的后序遍历：
+(1)最后一个数始终是根节点，即8
+(2)找分界点：使用i，从左向右找第一个大于8的数（即9），那么
+      [5,7,6]必然是左子树    [9,11,10]必然是右子树
+        (3)遍历右子树，判断每个值是否都大于8
+                如果有一个值不大于8，return false
+                否则，return 递归判断左子树&&递归判断右子树
+
+//因为是后序遍历，所以seq[end]将区间分成-->[start,i-1]和[i,end]
+bool judge(vector<int> seq, int start, int end){
+	if (start >= end) //1.如果start和end相撞，说明全部遍历完，返回true
+		return true;
+	int i = start; //2.用i求出左子树和右子树的分界线
+	for (; i < end && seq[i] < seq[end]; i++);
+	//3.判断右子树是否全部大于根节点的值seq[end]
+	for (int j = i; j < end; j++){
+		if (seq[j] < seq[end]) //如果有一个不大于
+			return false; //返回false
+	}
+	//4.递归判断左子树 && 递归判断右子树
+	return judge(seq, start, i - 1) && judge(seq, i, end - 1);
+}
+bool VerifySquenceOfBST(vector<int> seq){
+	if (seq.size() == 0)
+		return false;
+	return judge(seq, 0, seq.size() - 1);
+}
