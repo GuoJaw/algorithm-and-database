@@ -1,5 +1,10 @@
-priority_queue
 
+解法1：快速排序----O(N)
+        使用partition找到第Kth大小的数，设为kthValue
+        遍历一边数组，找到小于等于kthValue的数输出
+
+解法2：
+priority_queue
 堆排序: O(N*lgK)    
 （1）首先拿前K个数建立大根堆
 （2）接下来遍历整个数组，遍历过程中看当前数是否比堆顶元素小，
