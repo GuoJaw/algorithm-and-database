@@ -1,7 +1,50 @@
-Arr[N]
+
+方法1：哈希表+桶排序
 1.建立一个哈希表，统计每个数字num出现的次数cnt，即<key,value> ---> <num,cnt>
 2.再建立一个桶list<int> bucket[N],
     bucket[i]解释
         i下标：表示出现频率cnt
         bucket[i]元素：是一个list，里面存放着出现次数相同的数字num
-        
+3.从后向前遍历哈希表
+		找出桶中的前K个元素，就是topKFrequent
+#include<iostream>
+#include<list>
+#include<unordered_map>
+using namespace std;
+
+list<int> topKFrequent(int A[], int N, int k){
+	list<int> ret;
+
+	unordered_map<int, int> map;
+	//1.遍历一遍A[i]，使用哈希表进行词频统计
+	for (int i = 0; i < N; i++)
+		map[A[i]] = map[A[i]] + 1; //key:数字， value:数字key出现的次数
+
+	//2.创建N个桶，每个桶存放的元素是list
+	list<int>* bucket = new list<int>[N + 1]; 
+	for (auto node : map){
+		int key = node.first;//取出key
+		int cnt = node.second;//取出key出现的次数cnt
+		//使用cnt，将元素key加入到桶中
+		bucket[cnt].push_back(key);
+	}
+	//3.从后向前遍历一次桶，取出k个元素，即为出现频率最多的k个数
+	for (int i = N; i >= 0 && k>0; i--){
+		while (bucket[i].size() > 0){
+			int elem = bucket[i].front(); bucket[i].pop_front();
+			ret.push_back(elem); k--;
+		}
+	}
+	return ret;
+}
+
+int main(){
+	int A[] = { 1, 1, 1, 2, 2, 3 };
+	int N = sizeof(A) / sizeof(A[0]);
+	int K = 2;
+	topKFrequent(A, N, K);
+}
+=============
+方法2：堆排序  O(N*lgK)
+(1)将每个数用哈希表进行出现次数统计
+(2)使用大小为K的大根堆排序
