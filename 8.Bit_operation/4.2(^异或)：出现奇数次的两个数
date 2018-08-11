@@ -1,0 +1,55 @@
+
+0^num=num  //0异或操作任何数，都等于该数
+== == == == == == == == == == =
+【进阶问题】
+有两个数出现了奇数次，其他数出现了偶数次，打印这两个数。
+(假设两个奇数次的数是a和b)
+解：
+(1)整个数组中的元素，相互异或----->偶数的数相互抵消---->a^b
+(2)找到a^b中第一个位==1的位bitIndex
+(3)重新遍历数组，根据bitIndex位是否==1，分成两个子数组
+	两个子数组中的数异或--->两个数a和b
+
+int getbitis1(int ret){ //获得ret二进制第一个为1的位置
+	int bitIndex = 0;
+	for (int i = 0; i < 32; i++){ //使用循环，依次判断ret最右位是否为1:ret=ret&1
+		bitIndex++;
+		if ((ret & 1) == 1) //如果ret的最右位置==1
+			break;
+		ret = ret >> 1;
+	}
+	return bitIndex;
+}
+bool BitIs1(int ret,int bitIndex){//判断ret的第bitIndex位是否==1
+	if (((ret>>(bitIndex-1))& 1) == 1)
+		return true;
+	else
+		return false;
+}
+void FindNumsAppearOnce(vector<int> A, int* num1, int* num2) {
+	int N = A.size();
+	if (N == 0)
+		return;
+	int ret = 0;  //必须是0
+	for (int i = 0; i < N; i++)
+		ret ^= A[i]; //a^b
+	
+	int bitIndex = getbitis1(ret);//查找a^b中第一个位为1的位置：bitIndex
+
+	int a = 0, b = 0;
+	for (int i = 0; i < N; i++){ //按照bitIndex位是否为1或0分成两个子数组
+		if (BitIs1(A[i], bitIndex))
+			a ^= A[i];
+		else
+			b ^= A[i];
+	}
+	*num1 = a;
+	*num2 = b;
+}
+
+int main(){
+	vector<int > A = { 1,2,3,6,5,4,2,3,6,5 };
+	int a = 0, b = 10;
+	FindNumsAppearOnce(A, &a, &b);
+}
+
