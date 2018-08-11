@@ -1,4 +1,16 @@
 google---->gole
 
+方法1：遍历2次
 1.建立哈希表int map[256]，遍历一次str && 对str进行词频统计
 2.再遍历一次str，删除哈希表中map[str[i]]>1的数
+
+方法2：遍历一次
+1.建立哈希表bool map[256]，其中map[i]表示每个字符是否出现过
+2.遍历每个str[i],判断str[i]是否出现过，出现过就删除；没出现过，就设置为出现过
+    for(int i=0;i<str[i];i++){
+        if(map[str[i]] == true)
+            删除str[i];
+        else
+            map[str[i]]=true;
+    }
+
