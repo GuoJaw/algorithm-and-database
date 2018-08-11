@@ -1,0 +1,28 @@
+    在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,
+并返回它的位置, 如果没有则返回 -1（需要区分大小写）.
+
+
+解释：
+  char是一个长度为8的数据类型，因此总共有256种可能！
+  
+class Solution {
+public:
+    int FirstNotRepeatingChar(string str) {
+        if(str=="")
+            return -1;
+            
+        char map[256];  //定义一个哈希表
+        memset(map,0,256);
+        
+        int len=str.length();
+        for(int i=0;i<len;i++){  //词频统计
+            map[str[i]]++;
+        }
+        
+        for(int i=0;i<len;i++){  //在遍历一次，判断每个单词是否都只出现1次
+            if(map[str[i]]==1)
+                return i;
+        }
+        return -1;
+    }
+};
