@@ -1,0 +1,7 @@
+Arr[N]
+1.建立一个哈希表，统计每个数字num出现的次数cnt，即<key,value> ---> <num,cnt>
+2.再建立一个桶list<int> bucket[N],
+    bucket[i]解释
+        i下标：表示出现频率cnt
+        bucket[i]元素：是一个list，里面存放着出现次数相同的数字num
+        
