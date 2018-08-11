@@ -1,0 +1,13 @@
+
+变形词：如果两个单词中出现的字母相同，并且每个字母出现的次数也相同
+
+判断str1和str2是否互为变形词
+
+1.创建哈希表int map[256]
+2.遍历str1，map[str1[i]]++
+3.遍历str2，map[str2[i]]--
+3.遍历哈希表map,判断所有的map[i]==0？
+    if  存在一个map[i]!=0:
+      return false;
+    else
+      return true;
