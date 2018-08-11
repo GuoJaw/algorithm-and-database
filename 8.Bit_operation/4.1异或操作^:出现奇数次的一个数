@@ -1,0 +1,13 @@
+【题目】
+　　给定一个数组arr，其中只有一个数出现了奇数次，其他数都出现了偶数次，打印这个数。
+解：
+    先申请一个整型变量记为e，初始化为0，让e去和数组中每一个元素进行异或，最终的e就是答案。
+int printOddTimesNum1(vector<int> arr)
+{
+    int e = 0;
+    for(int i=0; i<arr.size(); i++)
+    {
+        e = e ^ arr[i];
+    }
+    return e;
+}
