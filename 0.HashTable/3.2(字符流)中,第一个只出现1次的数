@@ -1,1 +1,73 @@
+1.创建哈希表int map[256]，即<key,value>---><char，char对应的index>
+      初始化memset(map,-1,sizeof(map));
+2.insert(char ch){
+      if ch不已经在map中：
+            map[ch]=index
+      else if(ch已经再map中)：
+            map[ch]=-2;
 
+      index++
+}
+3.怎么查找第一次只出现一次的数
+      
+
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+class Solution
+{
+public:
+	Solution(){
+		index = 0;
+		memset(map, -1, sizeof(map));
+	}
+public:
+	int index;  //插入元素是第几个
+	int map[256]; //哈希表<key,value>--><char,index>
+public:
+	//函数: 从流中取出字符串ch，插入index位置，如何更新哈希表map[ch]
+	void Insert(char ch)
+	{
+		if (map[ch] == -1){//1.（ch第一次出现），就插入到哈希表
+			map[ch] = index;//将ch的插入位置设为index
+		}
+		else if (map[ch] >= 0){ //2.（ch第二次出现）
+			map[ch] = -2;  //将ch的插入位置设为-2，以后再碰到ch，就忽略
+			//这样map[ch]的值始终是-2
+		}
+		index++;
+	}
+	//根据哈希表map，获取第一个只出现一次的数
+	char FirstAppearingOnce(){
+		//查找index最小的数
+		int minIndex = INT_MAX;
+		char ret = '\0';
+		for (int ch = 0; ch < 256; ch++){
+			if (map[ch] >= 0 && map[ch] < minIndex){ //如果ch只出现一次，index是ch的下标位置
+				minIndex = map[ch];  //下标位置
+				ret = char(ch);
+			}
+		}
+		return ret;
+	}
+};
+
+int main(){
+	Solution sol;
+	sol.Insert('g');
+	sol.Insert('o');
+	sol.Insert('o');
+	sol.Insert('g');
+	sol.Insert('l');
+	sol.Insert('e');
+	
+	char ret = sol.FirstAppearingOnce();
+	if (ret == '#')
+		cout << "没有字符" << endl;
+	else
+		cout << ret << endl;
+	system("pause");
+}
