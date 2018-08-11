@@ -1,0 +1,4 @@
+google---->gole
+
+1.建立哈希表int map[256]，遍历一次str && 对str进行词频统计
+2.再遍历一次str，删除哈希表中map[str[i]]>1的数
