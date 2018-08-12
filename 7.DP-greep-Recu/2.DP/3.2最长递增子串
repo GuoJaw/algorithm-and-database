@@ -1,1 +1,53 @@
 
+
+/*
+DP[i]表示以vec[i]结尾的，最长递增子串的长度
+DP[i]怎么求呢？
+	if A[i]>A[i-1]:
+		DP[i]=DP[i-1]+1;
+	else
+		DP[i]=1;
+*/
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+//1.获取DP
+vector<int> getDP(vector<int> vec){
+	int N = vec.size();
+	if (N <= 0)
+		return vector<int>();
+	
+	vector<int> DP(N,1); //初始值设为1:“递增子序列长度”的最小值必然是1
+
+	for (int i = 1; i < N; i++){
+		if (vec[i]>vec[i - 1])
+			DP[i] = DP[i - 1] + 1;
+	}
+	return DP;
+}
+//2.根据DP，求出最长递增子串
+vector<int> getLIS(vector<int> DP, vector<int> vec){
+	int size = DP.size();
+	if (size == 0)
+		return vector<int>();
+	
+	vector<int> ret;
+	//求DP的最大位置
+	int maxPos = max_element(DP.begin(), DP.end()) - DP.begin();
+	int len = DP[maxPos];
+	while (len--){
+		ret.emplace_back(vec[maxPos--]);
+	}
+	return ret;
+}
+
+int main(){
+	vector<int> vec = { 2,1,2,3,4,5,0 };
+	vector<int> DP = getDP(vec);
+
+	vector<int> ret = getLIS(DP, vec);
+	for (auto node : ret)
+		cout << node << "  ";
+}
