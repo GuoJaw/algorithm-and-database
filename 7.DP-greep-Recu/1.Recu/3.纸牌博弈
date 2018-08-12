@@ -1,0 +1,40 @@
+
+两个聪明绝顶的人A和B，从一堆牌中拿牌，每次都能拿牌的两端；
+问：
+  返回最后获胜者的分数
+  
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int second(int A[], int i, int j);
+int first(int A[], int i, int j);
+
+int first(int A[], int i, int j){
+	if (i == j)
+		return A[i];
+	else
+		return max(A[i] + second(A, i + 1, j), A[j] + second(A, i, j - 1));
+}
+int second(int A[], int i, int j){
+	if (i == j)
+		return 0;
+	else
+		return min(first(A, i + 1, j), first(A, i, j - 1));
+}
+
+int win(int A[], int N){
+	if (A == NULL || N <= 0)
+		return 0;
+
+	int firstVal = first(A, 0, N - 1);
+	int secondVal = second(A, 0, N - 1);
+	
+	return max(firstVal, secondVal);
+}
+
+int main(){
+	int A[] = { 1, 2, 100, 4 };
+	int N = sizeof(A) / sizeof(A[0]);
+	int ret = win(A, N);  //101
+}
