@@ -1,1 +1,70 @@
 
+
+Arr： 2  1  5  3  6  4  8  9  7 
+答案：9  8  4  3  1
+
+Arr： 2  1  5  3  6  4  8  9  7 
+dp：  1  1  2  2  3  3  4  5  4
+
+dp[i]表示在必须以Arr[i]为结尾的情况下，Arr[0...i]中的最大递增子序列长度
+
+/*
+DP[i]表示以vec[i]结尾的，最长递增子序列的长度
+DP[i]怎么求呢？
+	if 所有的A[i] < A[0~i-1]:
+		DP[i]=1;
+	if 存在A[i] > A[0~i-1]:
+		DP[i] = {max{DP[j]}+1}  0<=j<i, A[j] < A[i]
+*/
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+//1.获取DP
+vector<int> getDP(vector<int> vec){
+	int N = vec.size();
+	if (N <= 0)
+		return vector<int>();
+	
+	vector<int> DP(N,1); //初始值设为1:“递增子序列长度”的最小值必然是1
+
+	for (int i = 1; i < N; i++){ //求DP[i]
+		int maxV = INT_MIN;
+		for (int j = 0; j < i; j++){ //求[0~i-1]中,对应的vec[j]<vec[i]时,DP[j]最大值
+			if (vec[j] < vec[i]){
+				maxV = max(maxV, DP[j]);
+				DP[i] = maxV + 1; 
+			}
+		}
+	}
+	return DP;
+}
+//2.根据DP，求出最长递增子序列
+vector<int> getLIS(vector<int> DP, vector<int> vec){
+	int size = DP.size();
+	if (size == 0)
+		return vector<int>();
+	vector<int> ret;
+
+	//[1]获取DP的最大值的下标: 就是最后一个元素的下标
+	int maxPos = max_element(DP.begin(), DP.end()) - DP.begin();
+	ret.emplace_back(vec[maxPos]);
+	//[2]从后向前遍历
+	for (int i = maxPos - 1; i >= 0; i--){
+		if (vec[i] < vec[maxPos] && DP[i] + 1 == DP[maxPos]){
+			ret.emplace_back(vec[i]);
+			maxPos = i;
+		}
+	}
+	return ret;
+}
+
+int main(){
+	vector<int> vec = { 2, 1, 5, 3, 6, 4, 8, 9, 7 };
+	vector<int> DP = getDP(vec);
+
+	vector<int> ret = getLIS(DP, vec);
+	for (auto node : ret)
+		cout << node << "  ";
+}
