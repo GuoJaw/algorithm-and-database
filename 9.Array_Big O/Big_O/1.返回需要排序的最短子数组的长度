@@ -1,0 +1,44 @@
+
+需要排序的最短子数组的长度
+
+举例：
+             1  5  4  2  6  7
+左--右maxV   1  5  5  5  6  7  ---> 逐渐增大
+        R          R  R  
+
+             1  5  4  2  6  7
+右--左minV   1  2  2  2  6  7  <--- 逐渐减小
+        L       L  L       
+
+输出结果： 1  [ 5  4  2 ]  6  7    --->  3
+
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int getMinSort(vector<int> A){
+	int N = A.size();
+
+	int maxV = INT_MIN, R = -1;
+	for (int i = 0; i < N; i++){
+		if (A[i]>maxV)  
+			maxV = A[i];  //更新maxV
+		else
+			R = i;  //记录逆序的下标
+	}
+	if (R == -1)
+		return 0;
+
+	int minV = INT_MAX, L;
+	for (int j = N - 1; j >= 0; j--){
+		if (A[j] < minV)
+			minV = j;
+		else
+			L = j;
+	}
+	return R - L + 1;
+}
+int main(){
+	vector<int> vec = { 1, 5, 4, 2, 6, 7 };
+	int ret = getMinSort(vec);
+}
