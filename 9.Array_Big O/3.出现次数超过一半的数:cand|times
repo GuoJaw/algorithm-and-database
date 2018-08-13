@@ -1,3 +1,6 @@
+
+出现次数超过一半的数如果存在，那么只可能有一个，且该数位于排序后下标等于Arr.length/2的位置
+
 int MoreHalfNum(int A[], int N){
 	int cand; //候选者
 	int times = 0;
