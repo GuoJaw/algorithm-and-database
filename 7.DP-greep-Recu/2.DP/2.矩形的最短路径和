@@ -8,6 +8,9 @@
       8 8 4 0 
 路径1,3,1,0,6,1,0是所有路径中路径和最小的，所以返回12. 
 
+DP表示：到达Vec[i][j]位置时，最短路径：
+	DP[i][j] = Vec[i][j] + min( DP[i-1][j],DP[i][j-1] )
+
 #include<iostream>
 #include<vector>
 #include<algorithm>
