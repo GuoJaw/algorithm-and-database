@@ -1,1 +1,80 @@
 
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+//1.获得DP: 
+vector<vector<int>> getDP(string str1, string str2){ 
+	if (str1 == "" ||str2=="" )
+		return vector<vector<int>>();
+
+	int M = str1.length(); 
+	int N = str2.length();
+	
+	vector<vector<int>> DP(M, vector<int>(N, 0));  //二维数组，行数=M,列数=N,初始化全为0
+	
+	//初始化:第一行和第一列
+	DP[0][0] = (str1[0] == str2[0]) ? 1 : 0;  //初始化第一个DP[0][0]
+	for (int i = 1; i < M; i++){ //初始化第一列
+		DP[i][0] = str1[i] == str2[0] ? 1 : 0;
+	}
+	for (int i = 1; i < N; i++){ //初始化第一行
+		DP[0][i] = str1[0] == str2[i] ? 1 : 0;
+	}
+	//初始化剩下的元素:[1,M]行, [1,N]列---->两种情况
+	for (int i = 1; i < M; i++){
+		for (int j = 1; j < N; j++){
+			if (str1[i] == str2[j]) // case1:str1[i]=str2[j]
+				DP[i][j] = DP[i - 1][j - 1] + 1; //DP[i-1][j-1]左上角值+1
+			else // case2:str1[i]!=str2[j]
+				DP[i][j] = 0;  
+		}
+	}
+	return DP;
+}
+
+//2.根据DP求出最长公共子串
+vector<char> getLCS(vector<vector<int>> DP, string str1, string str2) { 
+	int M = DP.size();
+	int N = DP[0].size();
+	if (M <= 0 || N <= 0)
+		return vector<char>();
+/*
+	DP矩阵的最大值 = 最长公共子串的长度(MaxLen)
+	此时:
+		i=str1_index
+
+	  找出了最后一个相同字符的索引位置str1_index，向前找MaxLen个字符，
+	就获得最长公共子串
+*/
+	int MaxLen = INT_MIN;  
+	int str1_index; //str1
+	for (int i = 0; i < M; i++){
+		for (int j = 0; j < N; j++){
+			if (MaxLen < DP[i][j]){
+				MaxLen = DP[i][j];
+				str1_index = i;
+			}
+		}
+	}
+	vector<char> ret;
+	while (MaxLen--){
+		ret.push_back(str1[str1_index--]);
+	}
+	return ret;
+}
+
+int main(){
+	string str1 = "abcde";
+	string str2 = "bebcd";
+	
+	vector<vector<int>> DP = getDP(str1, str2);
+	
+	vector<char> ret = getLCS(DP, str1, str2);
+	for (auto iter = ret.rbegin(); iter != ret.rend(); iter++)
+		cout << *iter << "  ";
+
+	system("pause");
+}
