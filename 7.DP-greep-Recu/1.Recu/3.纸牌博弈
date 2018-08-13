@@ -4,8 +4,8 @@
   返回最后获胜者的分数
   
 解：
-first表示第一个拿牌的人获得的钱数
-second表示第二个拿牌的人获得的钱数
+	first表示先拿牌的人获得的钱数
+	second表示后拿牌的人获得的钱数
 返回first/second中较大的那个
 
 #include<iostream>
