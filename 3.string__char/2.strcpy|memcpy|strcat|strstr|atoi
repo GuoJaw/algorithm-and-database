@@ -85,19 +85,3 @@ char* mystrcat(char* dst, const char* src){
 	while ((*dst++ = *src++) != '\0');
 	return tmp;
 }
-void test03(){
-	char* ret = mystrstr("I am from shanghai", "hai");
-	if (ret != NULL)
-		cout << ret << endl;
-	else
-		cout << "查找substr失败" << endl;
-	system("pause");
-}
-void test04(){
-	char A[] = "   -123456   ";
-	int num = myatoi(A);
-}
-int main(){
-	test04();
-	system("pause");
-}
