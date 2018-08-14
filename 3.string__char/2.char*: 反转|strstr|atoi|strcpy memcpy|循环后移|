@@ -79,7 +79,8 @@ char* mystrcat(char* dst, const char* src){
 	assert((dst != NULL) && (src != NULL));
 	char* tmp = dst;//备份
 	//查找dst的'\0'位置
-	while (*dst++ != '\0'); dst--;
+	while (*dst != '\0')
+		dst++;
 	//拼接
 	while ((*dst++ = *src++) != '\0');
 	return tmp;
