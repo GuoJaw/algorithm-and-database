@@ -1,0 +1,36 @@
+   
+
+//未排序整数数组中累加和为给定值的最长子数组长度
+int getMaxLen(vector<int> vec,int value){
+	int l = 0, r = 0;
+	int N = vec.size();
+	if (N == 0)
+		return 0;
+	int maxLen = 0;
+	int sum = vec[l]; //1.sum初始值设为vec[l]
+	for (int r = 0; r < N;){
+		if (sum < value){
+			r++;
+			if (r == N) //小心越界
+				break; 
+			sum += vec[r];
+		}
+		else if (sum > value){
+			sum -= vec[l];  l++;
+		}
+		else{ //if (sum == value)
+			maxLen = max(maxLen, r - l + 1);
+			sum -= vec[l];
+			l++; r++; 
+			if (r == N)  //小心越界
+				break;
+			sum += vec[r];
+		}
+	}
+	return maxLen;
+}
+int main(){
+	vector<int> vec = { 7,1,1,1,1,1,1,1,1,1,1,2,1,2,1,5 };
+	int value = 7;
+	int ret = getMaxLen(vec, value);
+}
