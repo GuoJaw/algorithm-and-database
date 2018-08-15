@@ -1,0 +1,20 @@
+
+//在有序数组中找出两个数，使它们的和为 target。
+int* TwoSum(int A[], int N, int target){
+	int l = 0, r = N - 1;//l和r分别指向首尾
+	int *ret = new int[2];
+	while (l < r){//当二者不想撞时，判断sum是否等于target
+		int sum = A[l] + A[r];
+		if (sum == target){//等于，直接返回
+			ret[0] = l; ret[1] = r;
+			return ret;
+		}
+		else if (sum>target)//sum>target,r--
+			r--;
+		else
+			l++;
+	}
+	return NULL;
+}
+
+
