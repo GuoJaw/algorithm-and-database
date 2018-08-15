@@ -1,3 +1,35 @@
+1.递归
+void printVec(vector<vector<int>> vec, int x1, int y1, int x2, int y2){
+	if (x1 > x2 || y1 > y2)
+		return;
+	if (x1 == x2){
+		for (int i = y1; i <= y2; i++)
+			cout << vec[x1][i] << " ";
+		return;
+	}
+	if (y1 == y2){
+		for (int i = x1; i <= x2; i++)
+			cout << vec[i][y1] << " ";
+		return;
+	}
+	for (int i = y1; i <= y2-1; i++)
+		cout << vec[x1][i] << " ";
+	for (int i = x1; i <= x2-1; i++)
+		cout << vec[i][y2] << " ";
+	for (int i = y2; i>=y1+1; i--)
+		cout << vec[x2][i] << " ";
+	for (int i = x2; i >= x1 + 1;i--)
+		cout << vec[i][y1] << " ";
+	printVec(vec, ++x1, ++y1, --x2, --y2);
+}
+int main(){
+	vector<vector<int>> vec = {
+		{ 1 }, { 2 }, {3}
+	};
+	printVec(vec, 0, 0, vec.size() - 1, vec[0].size() - 1);
+}
+
+2.非递归
 #include<iostream>
 #include<vector>
 using namespace std;
