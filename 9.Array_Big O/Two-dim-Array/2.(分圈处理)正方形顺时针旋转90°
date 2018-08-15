@@ -1,23 +1,19 @@
-
 #include<iostream>
-#include<algorithm>
 #include<vector>
-
 using namespace std;
 
-
 void RotateEdge(vector<vector<int>>& vec, int x1, int y1, int x2, int y2){
-	if (x1 < x2){
-		int times = x2 - x1; //分组的个数
-		for (int i = 0; i < times; i++){
-			int tmp = vec[x1][y1 + i];
-			vec[x1][y1 + i] = vec[x2 - i][y1];
-			vec[x2 - i][y1] = vec[x2][y2 - i];
-			vec[x2][y2 - i] = vec[x1 + i][y2];
-			vec[x1 + i][y2] = tmp;
-		}
-		RotateEdge(vec, ++x1, ++y1, --x2, --y2);
+	if (x1 < 0 || x2 < 0 || x1 > x2)
+		return;
+	int times = x2 - x1; //分组的个数
+	for (int i = 0; i < times; i++){
+		int tmp = vec[x1][y1 + i];
+		vec[x1][y1 + i] = vec[x2 - i][y1];
+		vec[x2 - i][y1] = vec[x2][y2 - i];
+		vec[x2][y2 - i] = vec[x1 + i][y2];
+		vec[x1 + i][y2] = tmp;
 	}
+	RotateEdge(vec, ++x1, ++y1, --x2, --y2);
 }
 int main(){
 	vector<vector<int>> vec = {
