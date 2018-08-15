@@ -39,4 +39,8 @@ TreeNode* searchNearestAnchor(TreeNode* cur, TreeNode* no1, TreeNode* no2){
 		return cur;
 	return leftRet != NULL ? leftRet : rightRet;
 }
-【要求4】：求一个“普通”的树中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
+【要求4】：求一个“普通”的“多叉树”T中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
+分析：这下就难了，是多叉树，不是二叉树哦！--->剑指offer
+方法1：
+
+
