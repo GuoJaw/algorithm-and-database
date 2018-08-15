@@ -1,0 +1,74 @@
+【要求1】：求一个“普通”的二叉树中，两个节点A和B的最近公共祖先节点（有指向父节点的指针）
+分析：问题也很简单，
+1.从A和B分别出发，通过parent指针，会串联成两个单链表；
+2.问题转换成求[A,T]和[B,T]两个单链表的第一个公共节点
+详细：
+从A节点开始，求到T的长度LA；从B节点开始，求到T的长度LB；
+max(LA,LB)较大的一方，先走abs(LA-LB)步
+之后p和q一起走，直到p==q时，return，此时p/q的指向就是最近的公共节点
+
+【要求2】：求一个“搜索”二叉树中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
+分析：问题很简单，由于搜索二叉树的性质，左<根<右--->因此直接拿当前根节点T和A和B进行比较
+if  T->data在A->data和B->data之间：
+        return T;  //T必然是两个节点A和B的最近公共祖先节点
+else if T->data都大于A->data和B->data：
+        最近的公共祖先节点一定“在T的左子树”
+else if T->data都小于A->data和B->data：
+        最近的公共祖先节点一定“在T的右子树”
+
+【要求3】：求一个“普通”的二叉树中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
+代码：
+//在树T中查找data：查找到data,返回查找到的节点；查找不到data，返回NULL
+TreeNode* hasNode(TreeNode* T, int data){
+	if (T == NULL)
+		return NULL;
+	if (T->data == data)
+		return T;
+	TreeNode* Lret = hasNode(T->left, data);
+	if (Lret != NULL) //如果在左子树中查找到
+		return Lret;
+	return hasNode(T->right, data);//否则，在右子树中查找
+}
+TreeNode* searchNearest(TreeNode* T, int no1, int no2){
+	//1.判断T中是否有no1和no2
+	TreeNode* ret1 = hasNode(T, no1);
+	TreeNode* ret2 = hasNode(T, no2);
+	if (!ret1 || !ret2) //如果有一个不存在，就不存在-->返回NULL
+		return NULL;
+
+//2.表示的含义是no1和no2是不是互为父子关系
+	//2.1查看ret1是否是ret2的父亲，如果是，直接返回ret1
+	if (hasNode(ret1, ret2->data))
+		return ret1;
+	//2.2查看ret2是否是ret1的父亲，如果是，直接返回ret2
+	if (hasNode(ret2, ret1->data))
+		return ret2;
+	//3.
+	if (hasNode(T->left, no1)){
+		if (hasNode(T->left, no2))
+			searchNearest(T->left, no1, no2);
+		else
+			return T;
+	}
+	else{
+		if (!hasNode(T->left, no2))
+			searchNearest(T->right, no1, no2);
+		else
+			return T->right;
+	}
+}
+int main(){
+	while (1){
+		TreeNode* T = createByPre();
+		int a, b;
+		cin >> a >> b;
+		TreeNode* ret = searchNearest(T, a, b);
+		if (ret)
+			cout << ret->data << endl;
+		else
+			cout << "没有" << endl;
+	}
+}
+
+
+
