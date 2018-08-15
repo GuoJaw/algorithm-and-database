@@ -44,17 +44,17 @@ TreeNode* searchNearest(TreeNode* T, int no1, int no2){
 	if (hasNode(ret2, ret1->data))
 		return ret2;
 	//3.
-	if (hasNode(T->left, no1)){
-		if (hasNode(T->left, no2))
-			searchNearest(T->left, no1, no2);
-		else
+	if (hasNode(T->left, no1)){//如果T->left中有no1
+		if (hasNode(T->left, no2))//如果T->left也有no2
+			searchNearest(T->left, no1, no2); //查找T->left
+		else //否则，no1和no2分别在T的左右子树中，return T
 			return T;
 	}
-	else{
-		if (!hasNode(T->left, no2))
-			searchNearest(T->right, no1, no2);
-		else
-			return T->right;
+	else{ //如果T->left没有no1，说明T->right中有no1
+		if (hasNode(T->right, no2)) //如果T->right中也有no2
+			searchNearest(T->right, no1, no2);//查找T->right
+		else //否则，no1和no2分别在T的左右子树中，return T
+			return T; 
 	}
 }
 int main(){
