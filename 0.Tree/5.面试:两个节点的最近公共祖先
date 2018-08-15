@@ -1,0 +1,42 @@
+【要求1】：求一个“搜索”二叉树中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
+分析：问题很简单，由于搜索二叉树的性质，左<根<右--->因此直接拿当前根节点T和A和B进行比较
+if  T->data在A->data和B->data之间：
+        return T;  //T必然是两个节点A和B的最近公共祖先节点
+else if T->data都大于A->data和B->data：
+        最近的公共祖先节点一定“在T的左子树”
+else if T->data都小于A->data和B->data：
+        最近的公共祖先节点一定“在T的右子树”
+【要求2】：求一个“普通”的二叉树中，两个节点A和B的最近公共祖先节点（有指向父节点的指针）
+分析：问题也很简单，
+1.从A和B分别出发，通过parent指针，会串联成两个单链表；
+2.问题转换成求[A,T]和[B,T]两个单链表的第一个公共节点
+详细：
+从A节点开始，求到T的长度LA；从B节点开始，求到T的长度LB；
+max(LA,LB)较大的一方，先走abs(LA-LB)步
+之后p和q一起走，直到p==q时，return，此时p/q的指向就是最近的公共节点
+【要求3】：求一个“普通”的二叉树中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
+分析：问题变得不简单，主要考察二叉树的后序遍历，直接看代码
+/*后序遍历思想
+先处理cur的两棵子树：
+假设左子树返回节点为leftRet；右子树返回节点是rightRet，有下面几种情况：
+if 左==NULL&&右==NULL:
+	说明整棵树上都没有发现no1和no2---->return NULL
+else{
+	if leftRet!=NULL&&右!=NULL:
+		说明cur的左子树和右子树上都发现过no1或no2,cur就是最近的公共节点，直接return cur
+	else //即:leftRet和rightRet有一个是NULL,一个不是NULL,（假设不空节点记为node，此时node是什么呢？有两种可能）
+		 //要么node是no1或no2中的一个，要么node已经是最近的公共祖先节点
+		 //无论哪种情况，直接返回node即可！
+	return node;  //即return leftRet!=NULL?leftRet:rightRet;
+}
+*/
+TreeNode* searchNearestAnchor(TreeNode* cur, TreeNode* no1, TreeNode* no2){
+	if (cur == NULL || cur == no1 || cur == no2)
+		return cur;
+	TreeNode* leftRet = searchNearestAnchor(cur->left, no1, no2);
+	TreeNode* rightRet = searchNearestAnchor(cur->right, no1, no2);
+	if (leftRet != NULL && rightRet != NULL)
+		return cur;
+	return leftRet != NULL ? leftRet : rightRet;
+}
+【要求4】：求一个“普通”的树中，两个节点A和B的最近公共祖先节点（没有指向父节点的指针）
