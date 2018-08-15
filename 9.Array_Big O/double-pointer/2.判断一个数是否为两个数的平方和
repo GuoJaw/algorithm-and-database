@@ -1,0 +1,14 @@
+//判断一个数是否为两个数的平方和
+bool isSqrtSum(int Num){
+	int l = 0, r = sqrt(Num); //注意r从Num的根号开始
+	while (l < r){
+		int sqrtSum = l*l + r*r;
+		if (sqrtSum == Num)
+			return true;
+		else if (sqrtSum>Num)
+			r--;
+		else
+			l++;
+	}
+	return false;
+}
