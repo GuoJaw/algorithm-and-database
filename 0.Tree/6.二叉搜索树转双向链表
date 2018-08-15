@@ -1,0 +1,43 @@
+要求转换后的链表是排好序的！因此选择中序遍历二叉树
+
+======
+
+//中序遍历：转换cur节点为双向链表
+分析：当遍历到cur节点时候，将二叉树看作3个部分cur，cur的左子树，cur的右子树
+(1)先转换cur的左子树，用lastPtr记录转换成链表的最后一个节点
+(2)cur与左子树进行连接：lastPtr和cur指针连接
+(3)更新lastPrt指向cur
+(4)最后转换cur的右子树
+void ConvertNode(TreeNode* cur, TreeNode*& lastPtr){
+	if (cur == NULL)
+		return;
+	//1.转换左子树
+	if (cur->left)
+		ConvertNode(cur->left, lastPtr);
+	//2.重新连接
+	cur->left = lastPtr;
+	if (lastPtr)
+		lastPtr->right = cur;
+	//3.lastPtr指向cur
+	lastPtr = cur;
+	//4.转换右子树
+	if (cur->right)
+		ConvertNode(cur->right, lastPtr);
+}
+
+//转换二叉树T成为双向链表
+TreeNode* Convert(TreeNode* T){
+	if (T == NULL)
+		return NULL;
+	TreeNode* lastPtr = NULL; //1.始终指向转换后的链表的尾节点
+	ConvertNode(T, lastPtr); //2.转换二叉搜索树成双向链表
+	//3.寻找链表的头节点，并返回
+	TreeNode* ret = lastPtr;
+	while (ret && ret->left) //从链表尾，从后向前找
+		ret = ret->left;
+	return ret;
+}
+
+
+
+
