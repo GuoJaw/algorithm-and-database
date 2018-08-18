@@ -45,6 +45,14 @@ public:
 		//4.返回
 		return *this;
 	}
+	Smartptr* operator->(){
+		if (ptr)
+			return ptr;
+	}
+	Smartptr& operator*(){
+		if (ptr)
+			return *ptr;
+	}
 private:
 	int* cnt;
 	T* ptr;
