@@ -1,0 +1,27 @@
+遍历每一个字符，
+        if  vec[i]=='(':   //如果是左括弧，就进栈
+              就进栈
+        if  vec[i]==')'    //如果是右括弧
+              if  栈空 || 括弧不匹配：
+                    return false;
+              else
+                    stack.pop();
+                    
+return 栈空？true：false；
+              
+
+
+bool isMatch2(vector<char> vec){
+	stack<char> stack;
+	for (int i = 0; i < vec.size(); i++){
+		if (vec[i] == '(')
+			stack.push(vec[i]);
+		if (vec[i] == ')'){
+			if (stack.empty() || stack.top() != '(')
+				return false;
+			else
+				stack.pop();
+		}
+	}
+	return stack.empty() ? true : false;
+}
