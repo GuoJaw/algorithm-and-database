@@ -1,0 +1,54 @@
+typedef struct TreeNode{
+	struct TreeNode* left;
+	struct TreeNode* right;
+	int data;
+}TreeNode;
+//使用前序遍历创建一颗二叉树
+TreeNode* createByPre(){
+	int data;
+	cin >> data;
+	if (data == 0) //输入值为0
+		return NULL;
+	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+	newNode->data = data;
+	newNode->left = createByPre();
+	newNode->right = createByPre();
+	return newNode;
+}
+
+vector<vector<int>> ret;
+int cnt = 0;
+vector<int> path;
+void preOrder(TreeNode* T, int sum){//先序遍历
+	if (T == NULL)
+		return;
+	
+	//1.将T的元素加入path和cnt
+	path.emplace_back(T->data);	cnt += T->data;
+	
+	if (!T->left && !T->right && cnt == sum) //2.满足条件
+			ret.emplace_back(path);//path存入ret
+	
+	//3.如果左子树和右子树不是空，就遍历左右子树
+	if (T->left)
+		preOrder(T->left, sum);
+	if (T->right)
+		preOrder(T->right, sum);
+
+	/*4.节点访问后，递归函数将自动回到它的父节点-->在函数退出前要在路径上删除
+	当前节点&&减去当前节点的值*/
+	path.pop_back(); cnt -= T->data;
+}
+
+int main(){
+	 TreeNode* T = createByPre(); //10 5 12 0 0 7 0 0 12 0 0
+	 int sum = 22;
+	 preOrder(T, sum);
+	 for (auto i = ret.begin(); i != ret.end(); i++){
+		 for (auto j = i->begin(); j != i->end(); j++){
+			 cout << *j << "  ";
+		 }
+		 cout << endl;
+	 }
+}
+
