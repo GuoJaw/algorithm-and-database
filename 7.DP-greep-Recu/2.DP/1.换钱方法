@@ -1,12 +1,26 @@
 题目：arr中所有的值都为正数且不重复。每个值代表一种面置的货币，每种面值的货币可以使用"任意张"。
 给定一个整数aim代表要找的钱数，求换钱有多少种方法。
 
-换句话说：
-      arr：存放着货币值
-      aim
-      用arr中的元素（arr中的元素可重复利用），拼出aim的种类数
+暴力递归，时间复杂度最差为O（aim^N） 
 
-暴力搜索
-  
-记忆搜索
-动态规划
+//process(vec,index,aim)表示：vec[index,vec.size()]构成aim的方法数
+int process(vector<int> vec, int index, int aim){
+	int res = 0;
+	if (index == vec.size())
+		res = (aim == 0) ? 1 : 0;
+            
+	for (int i = 0; vec[index] * i <= aim; i++){
+		res += process(vec, index + 1, aim - vec[index] * i);
+		//对于arr[5,10,25,1],aim=1000
+		//用0张5，让[5,10,25,1]组成剩下的1000，方法res1
+		//用1张5，让[5,10,25,1]组成剩下的995，方法res2
+		//用200张5，让[5,10,25,1]组成剩下的0，方法res201
+		//res=res1+....+res201
+	}
+	return res;
+}
+int coins(vector<int> vec ,int aim){
+	if (vec.size() < 0 || aim < 0)
+	return process(vec, 0, aim);
+}
+
