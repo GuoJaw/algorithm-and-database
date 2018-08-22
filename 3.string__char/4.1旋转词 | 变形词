@@ -3,8 +3,20 @@
     a="1ab2"，b="ab12"，返回false；
     a="2ab1"，b="ab12"，返回true。
 解：
-  s2是否为s1+s1的子串——>KMP算法
-
+  s2是否为s1+s1的子串——>KMP算法    int ret = (s1+s1).find(s2);   ret == -1?
+  
+bool isRotate(string a, string b){
+	if (a.size() < 0 || b.size() < 0)
+		return false;
+	string tmp = a + a;
+	int ret = tmp.find(b);
+	return ret == -1 ? false : true;
+}
+int main(int argc, const char * argv[]) {
+	string a = "abcd";
+	bool b = isRotate(a, "cdab");
+	cout << b << endl;
+}
 =================
 
 2.str1和str2互为变形词：
