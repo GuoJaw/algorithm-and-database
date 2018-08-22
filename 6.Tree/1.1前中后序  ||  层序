@@ -1,19 +1,20 @@
-（1）前序遍历创建二叉树
-（2）遍历：前，中，后，层
 
 
-
-#include<iostream>
-#include<stack>
+#include<assert.h>
+#include <iostream>
 #include<queue>
+#include<stack>
+#include<map>
+#include<unordered_set>
+#include<unordered_map>
+#include<vector>
+#include<string>
 using namespace std;
-
 typedef struct TreeNode{
-	int data;
 	struct TreeNode* left;
 	struct TreeNode* right;
+	int data;
 }TreeNode;
-
 //使用前序遍历创建一颗二叉树
 TreeNode* createByPre(){
 	int data;
@@ -26,7 +27,6 @@ TreeNode* createByPre(){
 	newNode->right = createByPre();
 	return newNode;
 }
-
 /*-----(先/中/后)遍历-----*/
 void PreTravel(TreeNode* T){
 	if (T){
@@ -49,7 +49,6 @@ void PostTravel(TreeNode* T){
 		printf("%d  ", T->data);
 	}
 }
-/*非递归遍历*/
 void preOrder(TreeNode* T){ //先序遍历
 	if (T == NULL)
 		return;
@@ -82,30 +81,26 @@ void inOrder(TreeNode* T){//中序遍历
 		}
 	}
 }
-void PostTravelUnRecur(TreeNode* T){//后序遍历
-	if (T == NULL)
+
+void postOrder(TreeNode* T){
+	if (!T)
 		return;
 	stack<TreeNode*> S;
-	stack<TreeNode*> help; //多了一个辅助栈help
-
+	stack<TreeNode*> helpS;
 	S.push(T);
 	while (!S.empty()){
-		TreeNode* p = S.top(); S.pop(); help.push(p); //数据不打印，让数据进辅助栈help
-		if (p->left)   //先左
-			S.push(p->left);
-		if (p->right)  //后右
-			S.push(p->right);
+		TreeNode* cur = S.top(); S.pop(); helpS.push(cur);
+		if (cur->left)
+			S.push(cur->left);
+		if (cur->right)
+			S.push(cur->right);
 	}
-	while (!help.empty()){ //将help打印
-		TreeNode* tmp = help.top(); help.pop(); printf("%d  ", tmp->data);
+	while (!helpS.empty()){
+		printf("%d  ", helpS.top()->data); helpS.pop();
 	}
 }
-
-
-/*-----层序遍历-----*/
-//二叉树的宽度优先遍历
-void LevelTravel(TreeNode* T){
-	if (T == NULL)
+void levelOrder(TreeNode* T){
+	if (!T)
 		return;
 	queue<TreeNode*> Q;
 	Q.push(T);
@@ -117,78 +112,48 @@ void LevelTravel(TreeNode* T){
 			Q.push(cur->right);
 	}
 }
-//层序遍历时，连同行号也打印
-void LevelTravelPrintLevelNo_1(TreeNode* T){
+
+void levelOrderTravel(TreeNode* T){
 	if (!T)
 		return;
 	queue<TreeNode*> Q;
-
-	TreeNode* last; //当cur==last时，换行，换行时更新last=nlast
-	TreeNode* nlast=NULL;//[nlast用于更新last,每次向队列push节点时，nlast指向新增加的节点]
-
-	last = T; //显而易见，初始时last=T
-
 	Q.push(T);
+
+	TreeNode* last = T;
+	TreeNode* nlast = NULL;
 	while (!Q.empty()){
-		TreeNode* cur = Q.front(); Q.pop(); cout << cur->data << "  ";
+		TreeNode* cur = Q.front(); Q.pop();  printf("%d  ", cur->data);
 		if (cur->left){
 			Q.push(cur->left);
-			nlast = cur->left;//迭代的nlast
+			nlast = cur->left;
 		}
 		if (cur->right){
 			Q.push(cur->right);
-			nlast = cur->right;//迭代的nlast
+			nlast = cur->right;
 		}
 		if (cur == last){
+			last = nlast;
 			printf("\n");
-			last = nlast;
 		}
-	}
-}
-//层序遍历时，连同行号也打印
-vector<vector<int>> LevelTravelPrintLevelNo_2(TreeNode* T){
-	if (!T)
-		return vector<vector<int>>();
-
-	vector<vector<int>> V;
-	vector<int> subV;
-
-	queue<TreeNode*> Q;
-
-	TreeNode* last = T; //当cur==last时，换行，换行时更新last=nlast
-	TreeNode* nlast=NULL;//[nlast用于更新last,每次向队列push节点时，nlast指向新增加的节点]
-	Q.push(T);
-	
-	while (!Q.empty()){
-		TreeNode* cur = Q.front(); Q.pop(); subV.push_back(cur->data);  
-		if (cur->left){
-			Q.push(cur->left);
-			nlast = cur->left;//迭代的nlast
-		}
-		if (cur->right){
-			Q.push(cur->right);
-			nlast = cur->right;//迭代的nlast
-		}
-		if (cur == last){
-			V.push_back(subV);
-			subV.clear();
-			last = nlast;
-		}
-	}
-	return V;
-}
-
-void test01(){
-	TreeNode* T = createByPre(); //input: 1 2 0 4 0 0 3 5 0 0 0
-	vector<vector<int>> ret = LevelTravelPrintLevelNo_2(T);
-	cout << "(逐行)层序遍历" << endl;
-	for (int i = 0; i < ret.size(); i++){
-		for (int j = 0; j < ret[i].size(); j++)
-			cout << ret[i][j] << "   ";
-		cout << endl;
 	}
 }
 int main(){
-	test01();
-	system("pause");
+	 TreeNode* T = createByPre(); //1 2 0 4 0 0 3 5 0 0 0
+
+	 preOrder(T);
+	 cout << endl;
+	 inOrder(T);
+	 cout << endl;
+	 postOrder(T);
+	 cout << endl;
+	 levelOrderTravel(T);
+	 cout << endl;
 }
+
+先  1  2  4  3  5
+中  2  4  1  5  3
+后  4  2  5  3  1
+层
+1
+2  3
+4  5
