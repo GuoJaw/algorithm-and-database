@@ -21,3 +21,5 @@ int main(void){
 	vector<pair<int, int>> ret = getSum(vec, sum);
 }
 
+如果题目让求出a和b的下标，就是用map
+	<key,value>------下标i，sum-vec[i]
