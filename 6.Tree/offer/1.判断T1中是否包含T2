@@ -1,0 +1,34 @@
+
+思想：
+    1.先寻找T1中，与T2的根节点相同的点
+    2.如果找到，就判断T1是否包含T2
+    3.条件1或条件2有一个不符合，就递归T1的左子树和右子树
+
+typedef struct TreeNode{
+	struct TreeNode* left;
+	struct TreeNode* right;
+	int data;
+}TreeNode;
+
+bool judgeT1HasT2(TreeNode* T1, TreeNode* T2){ 
+	if (!T2)
+		return true;
+	if (!T1)
+		return false;
+	if (T1->data != T2->data)
+		return false;
+	return judgeT1HasT2(T1->left, T2->left) && judgeT1HasT2(T1->right, T2->right);
+}
+//1.在树T1中查找T1->data与T2->data相等的节点
+bool T1HasT2(TreeNode* T1, TreeNode* T2){ 
+	bool ret = false;
+	if (T1 && T2){
+		if (T1->data == T2->data)//2.查找到后
+			ret = judgeT1HasT2(T1, T2);//判断T1中是否包含T2
+		if (ret == false)//如果不包含
+			ret = T1HasT2(T1->left, T2);//递归T->left
+		if (ret == false)
+			ret = T1HasT2(T1->right, T2);
+	}
+	return ret;
+}
