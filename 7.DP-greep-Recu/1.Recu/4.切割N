@@ -1,0 +1,23 @@
+一段钢管，奇数米的话要先切掉1m，偶数米的话一分为二，最后都切成1m长，编程实现
+
+void cutArr(int l, int r){
+	if (r > l){
+		if ((r - l + 1) % 2 != 0){ //奇数
+			cout << r << endl; r--;  //切掉最后一个
+			cutArr(l, r);
+		}
+		else{ //偶数
+			int len = r - l + 1;
+
+			cout << l << "," << l + len / 2 - 1 << endl;  //切左边
+			cutArr(l, l + len / 2 - 1); 
+
+			cout << l + len / 2 << "," << r << endl;  //切右边
+			cutArr(l + len / 2, r);
+		}
+	}
+}
+
+int main(void){
+	cutArr(1,5);
+}
