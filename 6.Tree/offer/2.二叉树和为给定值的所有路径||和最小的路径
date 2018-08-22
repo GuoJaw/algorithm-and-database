@@ -1,21 +1,9 @@
-typedef struct TreeNode{
-	struct TreeNode* left;
-	struct TreeNode* right;
-	int data;
-}TreeNode;
-//使用前序遍历创建一颗二叉树
-TreeNode* createByPre(){
-	int data;
-	cin >> data;
-	if (data == 0) //输入值为0
-		return NULL;
-	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-	newNode->data = data;
-	newNode->left = createByPre();
-	newNode->right = createByPre();
-	return newNode;
-}
+题目1：二叉树和为给定值的所有路径
+题目2：有一个普通的二叉树，求从根节点到叶子节点的和最小的路径
 
+==================================
+
+题目1：二叉树和为给定值的所有路径
 vector<vector<int>> ret;
 int cnt = 0;
 vector<int> path;
@@ -52,3 +40,33 @@ int main(){
 	 }
 }
 
+===============================
+
+题目2：有一个普通的二叉树，求从根节点到叶子节点的和最小的路径
+vector<int> path;
+int cnt = 0;
+int MaxCnt = INT_MIN;
+vector<int> ret;
+void preOrder(TreeNode* T){
+	if (!T)
+		return;
+	path.push_back(T->data); cnt += T->data;
+	if (!T->left && !T->right){ //叶子节点
+		if (MaxCnt < cnt){
+			ret = path; MaxCnt = cnt;
+		}
+	}
+
+	if (T->left)
+		preOrder(T->left);
+	if (T->right)
+		preOrder(T->right);
+	path.pop_back(); cnt -= T->data;
+}
+int main(){
+	TreeNode* T = createByPre(); //10 5 4 0 0 7 0 0 13 0 0
+	preOrder(T);
+	for (auto i = ret.begin(); i != ret.end(); i++){
+		cout << *i << "  ";
+	}
+}
