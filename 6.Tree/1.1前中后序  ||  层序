@@ -49,25 +49,37 @@ void PostTravel(TreeNode* T){
 		printf("%d  ", T->data);
 	}
 }
-/*非递归遍历
-1.都是在pop时搞事情: 打印 | 进辅助栈
-2.中序: 先将所有的左孩子全部进栈
-3.先序/后序的唯一区别:
-(1)后序有辅助栈help
-(2)push时: 先序是先右孩子再左孩子；后序是先左孩子再右孩子
-(3)pop时: 先序是打印；后序是进辅助栈
-*/
-void PreTravelUnRecur(TreeNode* T){ //先序遍历
+/*非递归遍历*/
+void preOrder(TreeNode* T){ //先序遍历
 	if (T == NULL)
 		return;
 	stack<TreeNode*> S;
-	S.push(T);
-	while (!S.empty()){
-		TreeNode* p = S.top(); S.pop(); printf("%d  ", p->data); //printf
-		if (p->right) //先右
-			S.push(p->right);
-		if (p->left)  //后左
-			S.push(p->left);
+	TreeNode* p = T;
+	while (p || !S.empty()){
+		if (p){
+			S.push(p); printf("%d  ", p->data);
+			p = p->left;
+		}
+		else{
+			p = S.top(); S.pop();
+			p = p->right;
+		}
+	}
+}
+void inOrder(TreeNode* T){//中序遍历
+	if(T == NULL)
+		return;
+	stack<TreeNode*> S;
+	TreeNode* p = T;
+	while (p || !S.empty()){
+		if (p){
+			S.push(p); 
+			p = p->left;
+		}
+		else{
+			p = S.top(); S.pop(); printf("%d  ", p->data);
+			p = p->right;
+		}
 	}
 }
 void PostTravelUnRecur(TreeNode* T){//后序遍历
@@ -88,21 +100,7 @@ void PostTravelUnRecur(TreeNode* T){//后序遍历
 		TreeNode* tmp = help.top(); help.pop(); printf("%d  ", tmp->data);
 	}
 }
-void InOrderTravelUnRecur(TreeNode* T){ //中序遍历
-	if (T == NULL)
-		return;
-	stack<TreeNode*> S;
-	TreeNode* p = T;
-	while (p || !S.empty()){
-		if (p){ //p为真，p进栈，再让p指向p->left
-			S.push(p); p = p->left;
-		}
-		else{ //p为空时，出栈，并打印
-			p = S.top(); S.pop(); printf("%d  ", p->data);
-			p = p->right;
-		}
-	}
-}
+
 
 /*-----层序遍历-----*/
 //二叉树的宽度优先遍历
