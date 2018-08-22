@@ -111,8 +111,7 @@ ReturnValue* process(TreeNode* T){
 	//左右子树都平衡
 	if (abs(Lret->height - Rret->height) > 1)
 		return new ReturnValue(false, -1);
-	return new ReturnValue(true, 
-		1 + (Lret->height > Rret->height ? Lret->height : Rret->height));
+	return new ReturnValue(true, 1 + max(Lret.height, Rret.height));
 }
 bool isAVL(TreeNode* T){
 	return process(T)->flag;
