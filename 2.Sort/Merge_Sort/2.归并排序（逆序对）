@@ -1,54 +1,42 @@
-//归并排序：用--的形式给help辅助数组赋值
 
-#include<iostream>
-using namespace std;
-#define STRLEN(A) (sizeof((A))/sizeof((A[0])))
-void printA(int A[], int n){
-	for (int i = 0; i < n; i++)
-		cout << A[i] << "   ";
-	cout << endl;
-}
-
-//归并排序
-int merge(int A[], int L, int mid, int R){
-	int* help = new int[R - L + 1]; //辅助数组
-	int i = R;
-	int p1 = mid, p2 = R;
-	int res = 0;
-	//p1属于[L,mid]  p2属于[mid+1,R]
-	while (p1 >=L && p2 >= mid+1){
-		res += (A[p1] > A[p2]) ? (p2 - (mid + 1) + 1) : 0; //逆序对
-		help[i--] = (A[p1] > A[p2]) ? A[p1--] : A[p2--];
+vector<pair<int, int>> ret;
+void merge(vector<int>& vec, vector<int> help, int l, int m, int r){
+	int i = l, j = m + 1, k = l;
+	while (i <= m && j <= r){
+		if (vec[i] > vec[j]){ //找到逆序点j,{ vec[i], vec[m+1,j] }
+			for (int k = m + 1; k <= j; k++)
+				ret.emplace_back(vec[i], vec[k]);
+		}
+		help[k++] = vec[i] < vec[j] ? vec[i++] : vec[j++]; //取较小者
 	}
-	//两个必然有且只有一个越界
-	while (p1 >= L){
-		help[i--] = A[p1--];
+	while (i <= m)
+		help[k++] = vec[i++];
+	while (j <= r)
+		help[k++] = vec[j++];
+	for (int i = l; i <= r; i++)
+		vec[i] = help[i];
+}
+
+void MergeSort(vector<int>& vec, vector<int> help, int l, int r){
+	if (l < r){
+		int mid = (l + r) / 2;
+		MergeSort(vec, help, l, mid);
+		MergeSort(vec, help, mid + 1, r);
+		merge(vec, help, l, mid, r);
 	}
-	while (p2 >=mid+1){
-		help[i--] = A[p2--];
-	}
-	//将help数组，拷贝会A
-	for (int i = L; i <= R; i++)
-		A[i] = help[i];
-
-	return res;
 }
-int merge_sort(int A[], int L, int R){ //思想:分而治之
-	if (L == R)
-		return 0;
-	int mid = (L + R) / 2; 
-	//      左边子数组的逆序对   +      右边子数组的逆序对      +  统计左右子数组间的逆序对
-	return merge_sort(A, L, mid) + merge_sort(A, mid + 1, R) + merge(A, L, mid, R);
-}
-
-void test(){
-	int A[] = { 10,2,5,6,4,1};
-	int len = sizeof(A) / sizeof(A[0]) - 1;	
-	int ret = merge_sort(A, 0, len); //求逆序对
-	printf("逆序对个数=%d\n", ret);
-}
-
 int main(){
-	test();
+	vector<int> vec = { 7,5,6,4 };
+	vector<int> help(vec.size());
+	MergeSort(vec, help, 0, vec.size() - 1);
+	cout << "归并排序: ";
+	for (int i = 0; i<vec.size(); i++)
+		printf("%d ", vec[i]);
+	cout << "\n逆序对" << endl;
+	for (auto node : ret)
+		printf("    [%d, %d]", node.first, node.second);
 	system("pause");
 }
+
+
+
