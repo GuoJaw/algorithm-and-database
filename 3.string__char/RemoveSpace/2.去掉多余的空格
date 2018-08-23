@@ -1,0 +1,26 @@
+双指针
+
+//当且仅当
+      str[i]不是空格 || str[i]是空格&&str[i]的前一个字符不是空格
+      --->才将str[i]的值赋给str[index],index++,i++
+
+否则的话，
+      --->不赋值，index不变，只是i++
+      
+结论：只有赋值的时候index才++，否则只是i++
+
+if (1)str[i]!=' ' || (2)str[i]==' ' && str[i-1]!=' '
+    str[index++]=str[i++];
+else
+    i++;
+
+void deleteSpace(char* str){
+	int index = 0;
+	for (int i = 0; str[i] != '\0'; i++){
+		if ((str[i] != ' ') ||  //当前字符不是空格
+			(str[i] == ' ' && str[i - 1] != ' ')//当前字符是空格&&但前一个字符不是空格
+			) 
+			str[index++] = str[i];
+	}
+	str[index] = '\0'; // 字符串结束
+}
