@@ -1,4 +1,6 @@
 
+二路归并：mid=(l+r)/2
+辅助数组：help
 
 void merge(vector<int>& vec, vector<int> help, int l, int mid, int r){ //两个有序的数组合并
 	int i = l, j = mid + 1;
