@@ -1,0 +1,37 @@
+
+
+void merge(vector<int>& vec, vector<int> help, int l, int mid, int r){ //两个有序的数组合并
+	int i = l, j = mid + 1;
+	int k = l;
+	while (i <= mid && j <= r){
+		if (vec[i] < vec[j])
+			help[k++] = vec[i++];
+		else
+			help[k++] = vec[j++];
+	}
+	while (i <= mid){
+		help[k++] = vec[i++];
+	}
+	while (j <= r){
+		help[k++] = vec[j++];
+	}
+	for (int i = l; i <= r; i++){
+		vec[i] = help[i];
+	}
+}
+void MergeSort(vector<int>& vec, vector<int> help, int l, int r){
+	if (l < r){
+		int mid = (l + r) / 2;
+		MergeSort(vec, help, l, mid);
+		MergeSort(vec, help, mid + 1, r);
+		merge(vec, help, l, mid, r);
+	}
+}
+int main(){
+	vector<int> vec = { 50, 10, 20, 30, 70, 40, 80, 60, 1, 2, 3, 4, 6, 5, 8, 9, 0 };
+	vector<int> help(vec.size());
+	MergeSort(vec, help, 0, vec.size() - 1);
+	for (int i = 0; i<vec.size(); i++)
+		printf("%d ", vec[i]);
+	system("pause");
+}
