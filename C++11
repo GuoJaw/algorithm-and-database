@@ -1,0 +1,46 @@
+=======C++11=======
+0.修饰虚函数：overide || final
+      overide	防止写错函数，将虚函数覆盖
+      final	防止虚函数被重写
+      
+1.auto自动推导类型
+
+2.STL：无序关联容器 || for循环 || 反向迭代器
+      新的STL容器：无序关联容器
+      基于for的循环
+      cbegin和cend：反向迭代器方法
+      
+3.右值引用&&  move  forward
+      使用控制权转移---->减少内存的拷贝
+      move：将左值转换成右值
+      forward：将左值转换成右值
+      
+4.lambad表达式 （匿名函数）
+      [capture list] (形参列表) ->返回值类型{函数体}
+      sort(vec.begin(), vec.end(), [](int a, int b)->bool{return a > b; });
+
+      for_each(vec.begin(), vec.end(), [](int val){cout << val << "  "; });
+      
+      auto fun = [](int a, int b)->bool{ return a > b; };
+      sort(vec.begin(), vec.end(), fun);
+
+5. **四种智能指针auto_ptr|unique_ptr|share_ptr| weak_ptr
+
+什么是智能指针？	
+1.是一个类，类中有个指针成员，指向动态分配的堆
+2.能够自动销毁动态分配的对象，防止内存泄漏
+3.使用引用计数实现：(1)创建对象时，引用计数设为1 (2)拷贝构造函数时，引用计数+1 (3)operator=时，左操作数引用计数-1，右操作数引用计数+1
+1. auto_ptr独占
+    一块动态内存智能由一个智能指针独享===》在拷贝构造或赋值时都会发生拥有权转移的过程。
+2. unique_ptr独占所有权（对比auto_ptr的优点）  
+    可以返回unique_ptr
+    不能拷贝/赋值	没有copy构造函数，不支持普通的拷贝和赋值操作
+    能用move使unique_ptr作为容器元素：vec.push_back(std::move(sp1)); //正确: move
+    移动控制权move
+          unique_ptr<int> pInt2 = std::move(pInt); //移动控制权（移动赋值操作）
+3. share_ptr
+    基于引用计数的智能指针，可随意赋值，直到引用计数为0时，内存才释放
+4. weak_ptr：循环引用
+    weak_ptr只可以从一个shared_ptr或另一个weak_ptr对象构造
+    weak_ptr的构造和析构不会引起引用记数的增加或减少.
+
