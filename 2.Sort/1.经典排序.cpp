@@ -44,7 +44,7 @@ int binary_search(int A[], int n, int key){//二分查找
 	int l = 0, r = n - 1;
 	while (l <= r){
 		int mid = (l + r) / 2;
-		if (A[mid] = key)
+		if (A[mid] == key)
 			return mid;
 		else if (A[mid] > key)
 			r = mid - 1;
