@@ -1,4 +1,7 @@
-//排序
+冒泡
+选择
+快速
+归并
 
 #include<iostream>
 #include<time.h>
@@ -9,7 +12,7 @@ void printA(int A[], int n){
 	cout << endl;
 }
 void swap(int* data, int i, int j){ //交换数组中的两个元素
-	if (i == j) 
+	if (i == j)
 		return;
 	data[i] ^= data[j];
 	data[j] ^= data[i];
@@ -53,63 +56,7 @@ int binary_search(int A[], int n, int key){//二分查找
 	}
 	return -1; //没查找到
 }
-void insert_sort(int A[], int n){
-	int j;
-	for (int i = 1; i < n; i++){//待插元素[1,n-1]
-		if (A[i] < A[i - 1]){ //将A[i]插入到(有序的[0,i-1]中)
-			int tmp = A[i]; //记录A[i]
-			for (j = i - 1; j >= 0 && A[j]>tmp; j--)//寻找插入位置，并后移
-				A[j + 1] = A[j];
-			//查找到插入位置为j+1
-			A[j + 1] = tmp;
-		}
-	}
-}
-void insert_sort(int A[], int N){
-	int j;
-	for (int i = 1; i < N; i++){ //待插元素[1,n-1]
-		int tmp = A[i]; //保存待插入元素 
-		for (j = i - 1; j >= 0; j--){ //寻找插入位置，并后移
-			if (A[j] > tmp)
-				A[j + 1] = A[j]; 
-			else
-				break;
-		}
-		A[j + 1] = tmp; //插入
-	}
-}
-void binary_insert_sort(int A[], int n){
-	for (int i = 1; i < n; i++){//待插元素[1,n-1]
-		//查找插入位置:l
-		int l = 0, r = i - 1;
-		while (l <= r){
-			int mid = (l + r) / 2;
-			if (A[mid]<A[i])
-				l = mid + 1;
-			else
-				r = mid - 1;
-		}
-		//保存带插入元素
-		int tmp = A[i];
-		for (int j = i - 1; j >= l; j--)//后移
-			A[j + 1] = A[j];
-		A[l] = tmp;
-	}
-}
-//快速排序：长期期望
-/*时间复杂度分析：
-	最差情况O(N*N)：有序
-	最好情况O(N*logN)：每次patition，基准都划分在中间
-空间复杂度：
-	最差情况O(N)：有序
-	最好情况O(logN)
-*/
-
-快速排序：
-	设立基准pivot=A[l]
-	用A[r]和A[l]与基准pivot进行比较
-	A[l]=pivot; return l;
-
+ 
 int partition(int A[], int l, int r){
 	int pivot = A[l]; //将第一个元素设为基准
 	while (l < r){
@@ -135,7 +82,7 @@ void rand_quick_sort(int A[], int l, int r){ //随机快速排序
 	if (l < r){
 		//随机获取基准下标
 		srand(time(NULL)); //1.获取[l,r]中的随机数k
-		int k = rand() % (r - l + 1) + l; 
+		int k = rand() % (r - l + 1) + l;
 		swap(A, l, k); //2.将A[k]与A[l]交换
 
 		//快速排序
@@ -146,9 +93,9 @@ void rand_quick_sort(int A[], int l, int r){ //随机快速排序
 }
 //归并排序
 /*时间复杂度分析：T[n]  =  2T[n/2] + O(n)；
-	最好情况O(N*logN)
+最好情况O(N*logN)
 空间复杂度：临时的数组
-	最差情况O(N)：有序
+最差情况O(N)：有序
 */
 void merge(int Arr[], int L, int mid, int R){
 	int* help = new int[R - L + 1]; //辅助数组
@@ -185,7 +132,7 @@ void test01(){//归并排序
 	printA(A, len);
 }
 void test02(){//随机快速排序
-	int A[] = { 1,3,5,6,2,4,9,10 };
+	int A[] = { 1, 3, 5, 6, 2, 4, 9, 10 };
 	int len = sizeof(A) / sizeof(A[0]);
 	rand_quick_sort(A, 0, len - 1);
 	printA(A, len);
