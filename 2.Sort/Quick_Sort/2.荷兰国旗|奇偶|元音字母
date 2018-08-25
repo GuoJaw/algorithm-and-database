@@ -21,6 +21,14 @@ void HeLanFlag(int A[], int N){
 		}
 	}
 }
+int main(){
+	int A[] = { 1,1,2,0,1,0,0,1,1,2,2,0,1,2,0,2};
+	int len = sizeof(A) / sizeof(A[0]);
+	HeLanFlag(A, len);
+	for (int i = 0; i < len; i++)
+		cout << A[i] << endl;
+	system("pause");
+}
 
 //奇数移动到偶数前面
       void move(int A[], int N){
