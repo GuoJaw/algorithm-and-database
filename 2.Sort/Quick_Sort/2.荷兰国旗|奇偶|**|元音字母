@@ -1,9 +1,12 @@
-//荷兰国旗
-    A[i],l,r
-        0: swap(A[l++],A[i++])
-        1: i++
-        2: swap(A[i],A[r--])
-//荷兰国旗问题
+荷兰国旗
+奇数移动到偶数前面（快排）
+将*移动到最前面
+有序数组去重
+
+
+
+
+【1】荷兰国旗问题
 //  0   1  2
 void HeLanFlag(int A[], int N){
 	int l = 0, r = N - 1;
@@ -29,8 +32,8 @@ int main(){
 		cout << A[i] << endl;
 	system("pause");
 }
-重点：快排思想，一定不要忘记判断l<r
-//奇数移动到偶数前面
+
+【2.1】奇数移动到偶数前面----->重点：快排思想，一定不要忘记判断l<r
       void move(int A[], int N){
       int l = 0, r = N - 1;
       while (l < r){
@@ -41,7 +44,7 @@ int main(){
         swap(A, l, r);
       }
     }
-//反转字符串的元音字母
+【2.2】字符串的元音字母移动到前面
     unordered_set<char> asets = { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' }; //哈希表中存放着元音字母
     void reverseVowels(string& str){
       int l = 0, r = str.length() - 1;
@@ -53,3 +56,46 @@ int main(){
         swap(str[l++], str[r--]);
       }
     }
+【3】将*移动到最前面
+void move(char* str){
+	int i = 0, j=0;
+	for (int j = 0; j < strlen(str);){
+		if (str[j] != '*')
+			j++;
+		else
+			swap(str[i++], str[j]);
+	}
+}
+int main(){
+	int A[] = { 1,1,2,0,1,0,0,1,1,2,2,0,1,2,0,2};
+	int len = sizeof(A) / sizeof(A[0]);
+	char str[] = "12*3*2*1****5****";
+	move(str);
+	cout << str << endl;
+	system("pause");
+}
+【4】有序数组去重
+int moveEqual(int A[], int N){
+	if (N < 0)
+		return -1;
+	if (N <= 0)
+		return 0;
+	if (N == 1)
+		return 1;
+	int i = 0, j = 1;
+	while (j < N){
+		if (A[i] == A[j])
+			j++;
+		else
+			A[++i] = A[j];
+	}
+	return i + 1;
+}
+int main(){
+	int A[] = { 1,1,1,2,2,3,3,4,5,5,6,7};
+	int len = sizeof(A) / sizeof(A[0]);
+	int ret = moveEqual(A, len);
+	for (int i = 0; i < ret;i++)
+		cout << A[i] << "  ";
+	system("pause");
+}
