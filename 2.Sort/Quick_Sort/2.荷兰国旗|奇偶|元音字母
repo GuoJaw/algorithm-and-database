@@ -29,7 +29,7 @@ int main(){
 		cout << A[i] << endl;
 	system("pause");
 }
-
+重点：快排思想，一定不要忘记判断l<r
 //奇数移动到偶数前面
       void move(int A[], int N){
       int l = 0, r = N - 1;
