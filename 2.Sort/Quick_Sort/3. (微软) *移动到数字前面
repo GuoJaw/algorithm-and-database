@@ -18,7 +18,7 @@
       }
     }
 
-    解题方法2：快排的partition——数字的相对位置会改变
+    解题方法2：快排的partition——数字的相对位置会改变（不稳定）
     void patition(string& str){
       int l = 0, r = str.length() - 1;
       while (l < r){
