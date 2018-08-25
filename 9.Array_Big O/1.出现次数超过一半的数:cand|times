@@ -10,10 +10,12 @@ int MoreHalfNum(int A[], int N){
 			cand = A[i];//设置当前A[i]为候选者cand
 			times = 1; //同时A[i]出现的次数times设为1
 		}
-		else if (A[i] == cand)//2. 如果A[i]等于候选者cand
-			times++; //times加1
-		else //3. 如果A[i]不等于候选者
-			times--;  //times减1，times减到0后，表示没有候选者，会进入if(times==0)重新选择候选者
+		else {
+			if (A[i] == cand)//2. 如果A[i]等于候选者cand
+				times++; //times加1
+			else //3. 如果A[i]不等于候选者
+				times--;  //times减1，times减到0后，表示没有候选者，会进入if(times==0)重新选择候选者
+		}
 	}
 	//4.遍历完成后，如果存在出现次数大于1/2的数，那一定是cand
 	//因此，遍历一遍数组，统计值等于cand出现的次数
