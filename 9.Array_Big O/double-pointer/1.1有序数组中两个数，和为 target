@@ -1,0 +1,29 @@
+
+在[有序]数组中所有的两个数，使它们的和为 target
+
+void getSum(int A[], int N, int sum){
+	int l = 0, r = N - 1;
+	while (l < r){
+		if (A[l] + A[r] == sum)
+		{
+			cout << A[l] << "  " << A[r] << endl;
+			l++; r--;
+		}
+
+		else if (A[l] + A[r] < sum)
+			l++;
+		else
+			r--;
+	}
+}
+int main(){
+	int A[] = { 1,2,3,4,5,6,7,8};
+	int len = sizeof(A) / sizeof(A[0]);
+	getSum(A, len, 9);
+	system("pause");
+}
+
+1  8
+2  7
+3  6
+4  5
