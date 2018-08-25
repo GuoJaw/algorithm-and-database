@@ -24,7 +24,7 @@ int MoreHalfNum(int A[], int N){
 		}
 	}
 	//5.判断cand出现的次数cnt是否大于数组长度的1/2
-	if (cand > N/2)
+	if (cnt > N/2)
 		return cand;
 	else
 		return -1; //没有找到大于1/2的数
