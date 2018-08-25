@@ -1,0 +1,33 @@
+
+
+在一个区间中，每次拿中间数的平方来试验：
+    如果大了，就再试左区间的中间数；
+    如果小了，就再拿右区间的中间数来试。
+    
+int mySqrt(int num) {
+	if (num<0)
+		return -1;
+	int l = 0, r = num;
+	while (l <= r){
+		cout << l << "  " << r << endl;
+		int mid = (l + r) / 2;
+		if (mid*mid <= num && (mid + 1)*(mid+1)>num)
+			return mid;
+		else if (mid*mid > num)
+			r = mid - 1;
+		else
+			l = mid + 1;
+	}
+	return -1;
+}
+int main(){
+	int ret = mySqrt(32);
+	cout << "结果 = " << ret << endl;
+	system("pause");
+}
+
+0  32
+0  15
+0  6
+4  6
+结果 = 5
