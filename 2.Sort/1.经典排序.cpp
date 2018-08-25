@@ -65,6 +65,19 @@ void insert_sort(int A[], int n){
 		}
 	}
 }
+void insert_sort(int A[], int N){
+	int j;
+	for (int i = 1; i < N; i++){ //待插元素[1,n-1]
+		int tmp = A[i]; //保存待插入元素 
+		for (j = i - 1; j >= 0; j--){ //寻找插入位置，并后移
+			if (A[j] > tmp)
+				A[j + 1] = A[j]; 
+			else
+				break;
+		}
+		A[j + 1] = tmp; //插入
+	}
+}
 void binary_insert_sort(int A[], int n){
 	for (int i = 1; i < n; i++){//待插元素[1,n-1]
 		//查找插入位置:l
