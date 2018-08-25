@@ -1,4 +1,60 @@
 
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <assert.h>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <numeric>  
+using namespace std;
+
+void printA(int A[], int n){
+	for (int i = 0; i < n; i++)
+		cout << A[i] << "   ";
+	cout << endl;
+}
+vector<pair<int, int>> ret;
+void merge(int A[], int B[], int l, int mid, int r){
+	int k = l;
+	int i = l, j = mid + 1;
+	while (i <= mid && j <= r){ //找到逆序点j,{ vec[i], vec[m+1,j] }
+		if (A[i] > A[j]){
+			for (int pos = mid + 1; pos <= j; pos++)
+				ret.emplace_back(A[i], A[pos]);
+		}
+		B[k++] = A[i] < A[j] ? A[i++] : A[j++];
+	}
+	while (i <= mid)
+		B[k++] = A[i++];
+	while (j <= r)
+		B[k++] = A[j++];
+	for (int i = l; i <= r; i++)
+		A[i] = B[i];
+}
+void merge_sort(int A[],int B[], int l, int r){
+	if (l < r){
+		int mid = (l + r) / 2;
+		merge_sort(A, B, l, mid);
+		merge_sort(A, B, mid + 1, r);
+		merge(A, B, l, mid, r);
+	}
+}
+int main(){
+	int A[] = { 7, 5, 6, 4 };
+	int len = sizeof(A) / sizeof(A[0]);
+	int *B = new int[len + 1];
+	merge_sort(A, B,0,len-1);
+	cout << "逆序对" << endl;
+	for (auto node : ret)
+		cout << "  " << node.first << ", " << node.second << endl;
+
+	system("pause");
+}
+
+
+=================================
+
 vector<pair<int, int>> ret;
 void merge(vector<int>& vec, vector<int> help, int l, int m, int r){
 	int i = l, j = m + 1, k = l;
@@ -38,5 +94,4 @@ int main(){
 	system("pause");
 }
 
-
-
+==========================
