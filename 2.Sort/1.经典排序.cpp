@@ -91,6 +91,12 @@ void binary_insert_sort(int A[], int n){
 	最差情况O(N)：有序
 	最好情况O(logN)
 */
+
+快速排序：
+	设立基准pivot=A[l]
+	用A[r]和A[l]与基准pivot进行比较
+	A[l]=pivot; return l;
+
 int partition(int A[], int l, int r){
 	int pivot = A[l]; //将第一个元素设为基准
 	while (l < r){
