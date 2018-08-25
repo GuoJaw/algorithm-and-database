@@ -3,6 +3,24 @@
         0: swap(A[l++],A[i++])
         1: i++
         2: swap(A[i],A[r--])
+//荷兰国旗问题
+//  0   1  2
+void HeLanFlag(int A[], int N){
+	int l = 0, r = N - 1;
+	for (int i = 0; i <= r;){  //代码终止条件，当i<=r
+		switch (A[i]){
+		case 0:
+			swap(A[l++], A[i++]);
+			break;
+		case 1:
+			i++;
+			break;
+		case 2:
+			swap(A[r], A[i]);
+			r--;
+		}
+	}
+}
 
 //奇数移动到偶数前面
       void move(int A[], int N){
