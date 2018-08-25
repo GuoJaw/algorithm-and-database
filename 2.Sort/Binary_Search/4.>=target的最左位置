@@ -1,0 +1,20 @@
+有序的数组A和target, 要求找出A中>=target的最小数字的位置 
+
+举例：
+  0  1  1  4 ---> 1
+
+int nextGreatestLetter(int A[], int N, char target){
+	int l = 0, r = N - 1;
+	int ret = 0;
+	while (l <= r){
+		int mid = (l + r) / 2;
+		if (A[mid] >= target){
+			ret = mid; //记录
+			r = mid - 1; //r指向mid的前面
+		}
+		else{
+			l = mid + 1;
+		}
+	}
+	return A[ret];
+}
