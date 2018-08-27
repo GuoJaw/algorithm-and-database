@@ -2,9 +2,9 @@
   建立大小为K的小根堆
   
 方法2：快速排序,时间复杂度O(N)
-M=pos-l+1;
-if M+1=K:
-  return A[pos];
+M=pos-l+1; //M表示[L,R]区间，pos处于第几个数
+if K+1==M:
+  return pos;
 else if M+1>K:
   searchKthMin(Arr,l,pos-1,K);
 else:
