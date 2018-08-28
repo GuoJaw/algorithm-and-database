@@ -4,7 +4,6 @@
 	(3)最后输出堆中的所有的元素，即为最小的前K个数
 
 方法2：快速排序,时间复杂度O(N)
-
 int partition(int A[], int l, int r){
 	int pivot = A[l];
 	while (l < r){
