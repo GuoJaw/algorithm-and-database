@@ -1,0 +1,42 @@
+   已知一个"几乎有序"的数组,"几乎有序"是指，如果把数组排好序的话，每个元素移动的距离不超过K，
+并且K相对于数组长度来说很小。
+请问：
+    选择什么方法对其排序比较好。
+分析：
+    因为每个数排好序移动的距离不超过K，因此在0~K-1中必然存在最小值
+答案：
+    (1)先将前K个数，创建一个小根堆
+    (2)从第K+1到第N个数依次与小根堆的堆顶元素交换，将堆顶元素弹出并打印，直到第N个数插入到堆中，循环结束
+    (3)对剩下的堆进行逐个弹出堆顶
+
+#include<iostream>
+#include<queue>
+#include<functional>
+using namespace std;
+
+void sortArr(int A[], int N, int K){
+	priority_queue<int, vector<int>, greater<int>> PQ; //创建一个小根堆
+	for (int i = 0; i < K; i++)
+		PQ.push(A[i]);
+	for (int j = K, M = 0; j < N; j++){
+		//将堆顶元素弹出并打印
+		A[M++] = PQ.top(); PQ.pop();
+		//将A[j]添加到堆中
+		PQ.push(A[j]);
+	}
+	int M = K;
+	while (!PQ.empty()){ //将剩余的堆中的K个元素依次打印
+		A[M++] = PQ.top();
+		PQ.pop();
+	}
+}
+
+int main(){
+	int A[] = { 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 11, 12, 14, 13, 12 };
+	int N = sizeof(A) / sizeof(A[0]);
+	int K = 3;
+	sortArr(A, N, K);
+	for (int i = 0; i < N; i++)
+		cout << A[i] << "   ";
+	system("pause");
+}
