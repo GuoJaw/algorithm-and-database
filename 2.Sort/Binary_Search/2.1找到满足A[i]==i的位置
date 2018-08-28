@@ -1,5 +1,5 @@
 
-有一个有序数组arr，其中不含有重复元素，请找到满足arr[i] == i条件的位置
+有一个有序数组arr，[相邻运算不重复]，请找到满足arr[i] == i条件的一个位置
 
 举例：
 下标  i    0  1  [2]  3  4  5
@@ -21,4 +21,47 @@ int findAi_i(int A[], int N){
 			r = mid - 1;
 	}
 	return -1;
+}
+扩展：[有序][相邻运算不重复]的数组，找到满足A[i]==i的所有的位置
+解：先找到满足A[i]==i的一个位置；然后从位置i向左或向右发散判断
+vector<int> getPos(int A[], int N){
+	vector<int> ret;
+	int l = 0, r = N - 1, mid;
+	while (l <= r){
+		mid = (l + r) / 2;
+		if (A[mid] == mid){ //找到中间点mid
+			ret.push_back(mid); //放入
+			break; //跳出循环
+		}
+		else if (A[mid] < mid)
+			l = mid + 1;
+		else
+			r = mid - 1;
+	}
+	
+	// [l,mid]
+	int jr = mid + 1;
+	while (jr <= r){
+		if (A[jr] == jr)
+			ret.push_back(jr++);
+		else
+			break;
+	}
+	// [mid,r]
+	int jl = mid - 1;
+	while (jl >= l){
+		if (A[jl] == jl)
+			ret.push_back(jl--);
+		else
+			break;
+	}
+	return ret;
+}
+
+int main(){
+	int A[] = { -1, 1, 2, 3, 4,5,6,8,9 };
+	int N = sizeof(A) / sizeof(A[0]);
+	vector<int> ret = getPos(A, N);
+	for (auto node : ret)
+		cout << node << endl;
 }
