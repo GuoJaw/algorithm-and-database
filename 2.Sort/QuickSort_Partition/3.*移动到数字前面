@@ -1,12 +1,11 @@
 方法1：快速排序的partition思想——但是由于快排的partition是不稳定的，会改变相同元素的前后位置
 
 方法2：双指针：i   j
-  始终保持j在前
       A[j]=="*"   swap(A[i++],A[j++])
       A[j]!="*"   j++
   
 void move(char* str){
-	int i = 0, j = 0;
+	int i = 0, j = 0; //初始时，i和j指向0
 	for (int j = 0; j < strlen(str);){
 		if (str[j] != '*')
 			j++;
