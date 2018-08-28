@@ -1,1 +1,23 @@
 
+10 ^ 75
+= 10 ^ 1001011(75的二进制)
+= 10 ^ 64 * 10 ^ 8 * 10 ^ 2 * 10 ^ 1
+10 ^ 1-- > 10 ^ 2-- > 10 ^ 4-- > 10 ^ 8-- > 10 ^ 16-- > 10 ^ 32-- > 10 ^ 64
+
+int Mypow(int base,int k){
+	if (k == 0)
+		return 1;
+	int ret = 1;
+	while (k){
+		if (k & 1 == 1)
+			ret *= base;
+		k >>= 1;
+		base = base*base;
+	}
+	return ret;
+}
+
+int main(){
+	int ret = Mypow(2, 4);
+}
+ 
