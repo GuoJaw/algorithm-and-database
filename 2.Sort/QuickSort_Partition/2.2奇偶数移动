@@ -1,1 +1,13 @@
 
+奇数移动到偶数前面----->重点：快排思想，一定不要忘记判断l<r
+
+      void move(int A[], int N){
+      int l = 0, r = N - 1;
+      while (l < r){
+        while (l < r && A[l] % 2 != 0) //奇数
+          l++;
+        while (l < r && A[r] % 2 == 0) //偶数
+          r--;
+        swap(A, l, r);
+      }
+    }
