@@ -4,18 +4,11 @@
 	(3)最后输出堆中的所有的元素，即为最小的前K个数
 
 方法2：快速排序,时间复杂度O(N)
-(1)利用快速排序的partition思想，每次求出一个基准pivot的位置pos，那么区间分割成[l,pos-1], pos, [pos+1,r]
-(2)int M=pos-l+1,对比M和K的大小
-      M==K: return A[pos]
-      M>K: 在[l,pos-1]区间内，查找第K个元素
-      M<K: 在[pos+1,r]区间内，查找第K-M个元素
-
-找到第K大的下标ret后，此时输出A[0]~A[ret]即为结果
 
 int partition(int A[], int l, int r){
 	int pivot = A[l];
 	while (l < r){
-		while (l<r && A[r]>=pivot)
+		while (l < r && A[r] >= pivot)
 			r--;
 		A[l] = A[r];
 		while (l < r && A[l] <= pivot)
@@ -25,24 +18,28 @@ int partition(int A[], int l, int r){
 	A[l] = pivot;
 	return l;
 }
-int getTop(int A[], int l, int r, int K){
-	if (l < r){
+int search_min_K(int A[], int l, int r, int K){ //返回的是第K小的数的下标
+	if(l < r){
 		int pos = partition(A, l, r);
-		int M = pos - l + 1;
-		if (M == K)
+		int m = pos - l + 1;    
+		if (m == K)  
 			return pos;
-		else if (M>K)
-			return getTop(A, l, pos - 1, K);
-		else
-			return getTop(A, pos + 1, r, K - M);
+		else if (m > K)  
+			return search_min_K(A, l, pos - 1, K);
+		else  
+			return search_min_K(A, pos + 1, r, K - m);
 	}
 }
-int main(){
-	int A[] = { 1,3,2,0,4,3,9 };
-	int N = sizeof(A) / sizeof(A[0]);
-	int K = 5;
-	int ret = getTop(A, 0, N - 1, K);
+void getTopK(int A[], int N, int Kth){
+	int ret = search_min_K(A, 0, N - 1, Kth);
+	cout << "第" << Kth << "th小的数 = " << A[ret] << endl;
+	cout << "前" << Kth << "th小的数 = " << endl;;
 	for (int i = 0; i <= ret; i++)
-		cout << A[i] << endl;
-	system("pause");
+		cout << "              " << A[i] << endl;
+}
+int main(){
+	int A[] = { 14, 13, 12, 11, 1, 3, 2, 4, 6, 5, 7, 9, 8, 10 };
+	int N = sizeof(A) / sizeof(A[0]);
+	int Kth = 9;
+	getTopK(A, N, Kth);
 }
