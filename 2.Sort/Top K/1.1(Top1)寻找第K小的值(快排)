@@ -8,20 +8,20 @@
       M>K: 在[l,pos-1]区间内，查找第K个元素
       M<K: 在[pos+1,r]区间内，查找第K-M个元素
       
-int partition(int A[],int l, int r){
+int partition(int A[], int l, int r){
 	int pivot = A[l];
 	while (l < r){
-		while (l<r && A[r]>pivot)
+		while (l<r && A[r]>=pivot)
 			r--;
 		A[l] = A[r];
-		while (l < r && A[l] < pivot)
+		while (l < r && A[l] <= pivot)
 			l++;
 		A[r] = A[l];
 	}
 	A[l] = pivot;
 	return l;
 }
-int getTop(int A[], int l, int r,int K){
+int getTop(int A[], int l, int r, int K){
 	if (l < r){
 		int pos = partition(A, l, r);
 		int M = pos - l + 1;
@@ -34,9 +34,16 @@ int getTop(int A[], int l, int r,int K){
 	}
 }
 int main(){
-	int A[] = { 0,2,5,4,3,8,9,-1};  
+	int A[] = { 0, 2, 5, 4, 3, 8, 9, -1 };
 	int N = sizeof(A) / sizeof(A[0]);
-	int ret = getTop(A, 0, N - 1, 3);
-	cout << ret << endl; // 2
+	int K = 7;
+	int ret = getTop(A, 0, N - 1, K);
+	for (int i = 0; i<N && K>0;i++){
+		if (A[i] <= ret){
+			cout << A[i] << endl;
+			K--;
+		}
+	}
+ 
 	system("pause");
 }
