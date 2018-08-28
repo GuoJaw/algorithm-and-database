@@ -6,68 +6,45 @@
 再输入整数k=5，则打印：
 Top5: 971，845，691，558，538
 
-1.构建一个大小为N的大顶堆。
-2.取出并打印当前堆顶元素，为最大的。并记录当前元素来自哪个数组pArr
-3.如果pArr.size()不是0--->将pArr的下一个元素继续入队
-3.如果pArr.size()是0--->将当前有效数组的个数减一
+核心：PQ中存放的元素pair<int,int>--><元素值, 元素来自哪个数组>
+
+1.构建一个大小为N的大顶堆<元素值，元素来自哪个数组>
+2.取出并打印当前堆顶元素top，必然是最大值，获得top来自哪个数组top.second
+3.1如果vec[top.second].size()!=0--->将vec[top.second]的下一个元素继续入队
+3.2如果vec[top.second]==0,不操作
 4.执行步骤2~3，直到打印前K个。
 
-#include<iostream>
-#include<vector>
-#include<queue>
-#include<functional>
-using namespace std;
-
-class HeapNode{
-public:
-	HeapNode(int ArrNum, vector<int>* ptr, int data) :
-		ArrNum(ArrNum), ptr(ptr), data(data){}
-	bool operator<(const HeapNode another) const{
-		return this->data < another.data;
+vector<int> getTopK(vector<vector<int>> vec,int K){
+	vector<int> ret;
+	priority_queue<pair<int,int>> PQ;
+	//用vec[i].back()建立大根堆PQ
+	for (int i = 0; i < vec.size(); i++){
+		PQ.emplace(vec[i].back(),i);
+		vec[i].pop_back();
 	}
-public:
-	int ArrNum; //当前有效数组的个数
-	vector<int>* ptr; //来自哪一个数组
-	int data;  //值是什么
-};
-
-//N个数组
-vector<int> getTopK(vector<vector<int>> V, int topK){
-	vector<int> Ret;
-
-	int ArrNum = V.size(); //N个数组，就构建大小为N的大根堆
-	priority_queue<HeapNode> PQ; //大根堆
-
-	//1.以每个数组的最后一个元素，建立初始大小为N的大顶堆
-	for (int i = 0; i<ArrNum; i++){
-		//将V[i]中的元素取出来，放入PQ
-		PQ.push(HeapNode(ArrNum, &V[i], V[i].back())); V[i].pop_back();
-	}
-	while (topK-- > 0){
-		if (ArrNum == 0)
-			break;
-		HeapNode elem = PQ.top(); PQ.pop();//2.取出堆顶元素（就是所有数组的最大值）
-		Ret.push_back(elem.data); 
-		
-		vector<int>* ptr = elem.ptr; //从哪个数组取出的元素
-		if (ptr->size() != 0){ //如果该数组不是空
-			PQ.push(HeapNode(ArrNum, ptr, ptr->back())); ptr->pop_back();//将ptr中的元素取出来，放入PQ
+	while(K-- && !PQ.empty()){
+		//取出PQ堆顶元素top
+		pair<int, int> top = PQ.top(); PQ.pop();
+		ret.push_back(top.first);
+		//将top.second数组的末尾元素，加入PQ:需要判断是否为空
+		int index = top.second;
+		if (!vec[index].empty()){
+			PQ.emplace(vec[index].back(), index);
+			vec[index].pop_back();
 		}
-		else //从ptr取走数据后，如果ptr数组变空
-			ArrNum--; //则当前有效数组个数减一
 	}
-	return Ret;
+	return ret;
 }
 
-void func(int data){
-	cout << data << "   ";
-}
+//求K个数组的前K大数
 int main(){
-	vector<vector<int>> V = { { 219, 405, 538, 845, 971 },
-	{ 148, 558 }, { 52, 99, 348, 691 } };
-
-	vector<int> ret = getTopK(V, 433);
-
-	for_each(ret.begin(), ret.end(),func);
+	vector<vector<int>> vec = {
+		{ 2, 5, 6, 6, 8, 10 },
+		{ 1, 5, 6, 9 },
+		{ 1, 4, 7, 7 }
+	};
+	vector<int> ret = getTopK(vec,5);
+	for (auto node : ret)
+		cout << node << endl;
 	system("pause");
 }
