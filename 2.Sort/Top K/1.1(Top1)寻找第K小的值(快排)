@@ -2,10 +2,41 @@
   建立大小为K的小根堆
   
 方法2：快速排序,时间复杂度O(N)
-M=pos-l+1; //M表示[L,R]区间，pos处于第几个数
-if K+1==M:
-  return pos;
-else if M+1>K:
-  searchKthMin(Arr,l,pos-1,K);
-else:
-  searchKthMin(Arr,pos+1,r,K-m);
+(1)利用快速排序的partition思想，每次求出一个基准pivot的位置pos，那么区间分割成[l,pos-1], pos, [pos+1,r]
+(2)int M=pos-l+1,对比M和K的大小
+      M==K: return A[pos]
+      M>K: 在[l,pos-1]区间内，查找第K个元素
+      M<K: 在[pos+1,r]区间内，查找第K-M个元素
+      
+int partition(int A[],int l, int r){
+	int pivot = A[l];
+	while (l < r){
+		while (l<r && A[r]>pivot)
+			r--;
+		A[l] = A[r];
+		while (l < r && A[l] < pivot)
+			l++;
+		A[r] = A[l];
+	}
+	A[l] = pivot;
+	return l;
+}
+int getTop(int A[], int l, int r,int K){
+	if (l < r){
+		int pos = partition(A, l, r);
+		int M = pos - l + 1;
+		if (M == K)
+			return A[pos];
+		else if (M>K)
+			return getTop(A, l, pos - 1, K);
+		else
+			return getTop(A, pos + 1, r, K - M);
+	}
+}
+int main(){
+	int A[] = { 0,2,5,4,3,8,9,-1};  
+	int N = sizeof(A) / sizeof(A[0]);
+	int ret = getTop(A, 0, N - 1, 3);
+	cout << ret << endl; // 2
+	system("pause");
+}
