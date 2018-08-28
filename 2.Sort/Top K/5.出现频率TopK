@@ -1,0 +1,48 @@
+
+   哈希表             红黑树
+unordered_map         map
+<char, int> ----- <int, char>
+ 字符  个数        个数  字符
+ 
+
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <assert.h>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <map> //红黑树
+#include <unordered_map> //哈希表
+#include<functional>
+#include<algorithm>
+using namespace std;
+ 
+vector<int> TopFrence(vector<int> vec, int K){
+	vector<int> Ret;
+	unordered_map<int, int> map1; //哈希表
+	map<int,int> map2; //红黑树
+	for (int i = 0; i < vec.size(); i++){ //词频统计
+		if (map1.find(vec[i]) == map1.end())
+			map1.emplace(vec[i], 1);
+		else
+			map1[vec[i]] = map1[vec[i]] + 1;
+	}
+	for (auto node : map1){
+		map2.emplace(node.second, node.first);
+	}
+	while (K-- && !map2.empty()){
+		auto node = map2.rbegin(); //取出最后一个元素
+		Ret.emplace_back(node->second); //放入结果中
+		map2.erase((++node).base()); //删除
+	}
+	return Ret;
+}
+
+int main(){
+	vector<int> vec = { 1, 1, 1, 2, 2, 3 };
+	vector<int> ret = TopFrence(vec, 2);
+	for (auto node : ret)
+		cout << node << endl;
+}
