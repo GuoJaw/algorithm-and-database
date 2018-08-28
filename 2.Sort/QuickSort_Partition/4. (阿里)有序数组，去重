@@ -1,0 +1,19 @@
+(阿里巴巴面试)一个有序数组，去重，返回去重后的数组长度
+
+int moveEqual(int A[], int N){
+	int i, j;
+	for ( i = 0, j = 1; j < N;){
+		if (A[i] == A[j])
+			j++;
+		else
+			A[++i] = A[j++];  //A[++i] = A[j];
+	}
+	return i + 1;
+}
+int main(){
+	int A[] = { 1,1,1, 1, 2, 2, 2, 3, 4, 4, 5, 6 };
+	int ret = moveEqual(A, sizeof(A) / sizeof(*A));
+	for (int i = 0; i < ret;i++)
+		cout << A[i]<< endl;
+	system("pause");
+}
