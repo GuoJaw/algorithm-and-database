@@ -5,10 +5,6 @@
 
 void* thread_hander(void* arg);
 
-void threadPool_init(threadPool_t* pool, int maxSize);
-void threadPool_destroy(threadPool_t* pool);
-void threadPool_add_task(threadPool_t* pool, Fun run, void* arg);
-
 
 void threadPool_init(threadPool_t* pool, int maxSize){
 	pool = (threadPool_t*)malloc(sizeof(threadPool_t));
