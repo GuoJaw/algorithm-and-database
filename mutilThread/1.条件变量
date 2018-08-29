@@ -1,0 +1,32 @@
+
+注意误区：
+    条件变量本身不包含条件信息，条件的判断不在pthread_cond_wait函数功能种，
+而是在外面进行判断是否满足条件！
+
+1.为什么会引出条件变量？====>避免忙等待（轮询消耗CPU资源）
+场景举例——如果有A/B线程和全局变量val，A必须等到val==100才会执行，B可以修改val
+    A不断的对val进行加锁，轮询判断val是否等于100，当不等于100时会一直
+轮询操作，消耗CPU资源。
+===>因此引出条件变量
+
+2.条件变量pthread_cond_t必须与mutex一起使用，为什么？
+(1)需要用mutex对共享资源进行同步
+(2)与两个函数紧密相关
+pthread_cond_wait: 解锁/阻塞，等待条件/条件到来，不阻塞，再加锁
+      对mutex解锁； //为什么解锁？(1)使得其他线程有机会进入临界区，等待相同的条件(2)使得其他线程有机会进入临界区，对临界资源进行更改
+      解锁之后，自身进入阻塞状态； 
+      阻塞的pthread_cond_wait被pthread_cond_signal唤醒(此时条件满足)，再加锁mutex
+
+3.使用条件变量的万能公式:
+      线程A(等待条件的线程的代码)              线程B(修改条件的线程的代码)
+      pthread_mutex_lock(mutex)              pthread_mutex_lock(mutex)           
+      while(条件不满足){                      修改条件
+          pthread_cond_wait(&cond);          if(条件满足){
+      }                                         pthread_cond_signal(&cond)
+      执行条件满足的操作                       }
+      pthread_mutex_unlock(mutex)            pthread_mutex_unlock(&mutex);
+
+4.为什么等待条件的线程的代码中使用while，而不是if
+      防止被虚假的唤醒，当是虚假的唤醒操作时，由于使用的while，因此需要再判断一次，
+条件不满足时，继续阻塞。
+
