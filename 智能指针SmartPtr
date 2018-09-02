@@ -26,11 +26,11 @@ public:
 		}
 	}
 public:
-	Smartptr(const Smartptr& ano){//拷贝构造函数，用ano构建this
+	Smartptr(const Smartptr& ano){//拷贝构造：ano指向的值++
 		ptr = ano.ptr; //指针
 		cnt = ano.cnt;  ++*cnt; //引用计数
 	}
-	Smartptr& operator=(const Smartptr& ano){ //赋值运算符
+	Smartptr& operator=(const Smartptr& ano){ //赋值运算符：this指向的值--，ano指向的值++
 		if (this == &ano) //1.防止自身拷贝
 			return *this;
 		//2.this的引用计数先--
