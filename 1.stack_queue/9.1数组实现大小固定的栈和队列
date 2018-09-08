@@ -1,51 +1,65 @@
-#include<iostream>
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <assert.h>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <numeric>  
 using namespace std;
-
-//用数组实现一个栈
-class MyStack{
+class Stack{
 public:
-	MyStack(int size){
-		this->size = size;
-		A = new int[this->size];
-		this->top = -1; //栈顶元素的下标
+	Stack(int capacity) :capacity(capacity){
+		data = new int[capacity];
+		size = 0;
+		top = -1;
 	}
-	bool isEmpty(){
-		return this->top == -1;
+	bool empty(){
+		return top == -1 ? true : false;
 	}
-	bool isFull(){
-		return this->top == this->size;
+	bool full(){
+		return top == capacity - 1 ? true : false;
 	}
-
-	void push(int value){
-		if (this->isFull()){
-			printf("the stack is full");
-			return;
+	void push(int val){
+		if (!full()){
+			data[++top] = val;
+			size++;
 		}
-		A[++this->top] = value;
+		else
+			cout << "栈已经满了" << endl;
 	}
 	void pop(){
-		if (this->isEmpty()){
-			printf("the stack is null");
-			return;
+		if (!empty()){
+			cout << data[top] << endl;
+			top--;
+			size--;
 		}
-		this->top--;
+		else
+			cout << "栈是空了" << endl;
 	}
-	int* gettop(){
-		return this->isEmpty() ? NULL : &this->A[this->top];
+	int getTop(){
+		if (!empty()){
+			return data[top];
+		}
+		else
+			cout << "栈是空了" << endl;
 	}
 private:
-	int* A; 
-	int size; //栈的容量
-	int top; //栈顶元素
+	int top;
+	int* data;
+	int size;//有效元素个数
+	int capacity; //容量
 };
-
 int main(){
-	MyStack s(10);
+	Stack s(2);
 	s.push(1);
 	s.push(2);
 	s.push(3);
 	s.pop();
 	s.pop();
-	cout << *s.gettop() << endl;
+	s.pop();
+	cout << s.getTop() << endl;
 	system("pause");
+
+
 }
