@@ -9,24 +9,23 @@ else
 
 return N;
 */
-
-
 // 0~N-1中第一个未出现的数
 int Fun(int A[], int N){
 	for (int i = 0; i < N;){
-		if (A[i] == i )
+		if (A[i] == i)
 			i++;
 		else {
-			if (A[i]<0 || A[i]>N - 1 || A[A[i]] == A[i]) //越界 || 重复出现
-				A[i] = A[--N]; //删除A[i]
-			else 
-				swap(A[i], A[A[i] ]);
+			if (A[i]<0 || A[i]>N - 1 || A[A[i]] == A[i]){ //越界 || 重复出现
+				A[i] = A[N - 1]; N--;//删除A[i]
+			} 
+			else
+				swap(A[i], A[A[i]]);
 		}
 	}
 	return N;
 }
 int main(){
-	int A[] = { 1, 1, 2, 4, 3, 3, 5, 6, 9, 8 };
+	int A[] = { 1, 2, 0, 4, 3, 3, 5, 6, 9, 8 };
 	int N = sizeof(A) / sizeof(A[0]);
-	int ret = Fun(A, N);
+	int ret = Fun(A, N); //7
 }
