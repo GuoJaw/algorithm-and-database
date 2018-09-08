@@ -15,19 +15,14 @@ public:
 		SData.push(data);
 	}
 	int pop(){ //pop永远从SHelp栈中拿
-		if (!SHelp.empty()){
-			int ret = SHelp.top(); SHelp.pop();
-			return ret;			
-		}
-		else{
-			while (SData.size() > 1){
+		if (SHelp.empty()){
+			while (SData.size() > 0){
 				int tmp = SData.top(); SData.pop();
 				SHelp.push(tmp);
 			}
-			int tmp = SData.top(); SData.pop();
-			return tmp;
 		}
-
+		int ret = SHelp.top(); SHelp.pop();
+		return ret;
 	}
 };
 int main(){
@@ -42,4 +37,5 @@ int main(){
 	int r3 = Q.pop();// 3
 	int r4 = Q.pop();// 4
 	int r5 = Q.pop();// 5
+	system("pasue");
 }
