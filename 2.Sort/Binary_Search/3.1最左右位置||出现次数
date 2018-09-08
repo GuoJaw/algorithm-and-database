@@ -19,7 +19,7 @@ int getLeft(int A[], int N ,int Key){ //Key出现的最左位置
 int getRight(int A[], int N,int key){ //Key出现的最右位置
 	int l = 0, r = N - 1;
 	int ret = -1;
-	while (l < r){
+	while (l <= r){
 		int mid = (l + r) / 2;
 		if (A[mid] == key){
 			ret = mid;
