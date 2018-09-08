@@ -1,13 +1,20 @@
-
+双指针：l和r
+/*
+解法：
+    此题解法和将*移动到数字的后边解法一样，只不过在最后加上\0
+*/
 void delspace(char *str){
-	int index = 0;
-	for (int i = 0; i < strlen(str); i++){ //for (int i = 0; str[i]!='\0'; i++)
-		if (str[i] != ' ')
-			str[index++] = str[i];
+	int l = 0;
+	for (int r = 0; r < strlen(str);){
+		if (str[r] == ' ')
+			r++;
+		else{
+			str[l] = str[r]; l++; r++;
+		}
 	}
-	str[index] = '\0';
+	str[l] = '\0';
 }
 int main(){
-	char str[] = "33  33";
+	char str[] = "  33  3  3 ";
 	delspace(str);
 }
