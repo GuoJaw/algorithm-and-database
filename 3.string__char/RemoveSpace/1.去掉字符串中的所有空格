@@ -6,11 +6,11 @@
 void delspace(char *str){
 	int l = 0;
 	for (int r = 0; r < strlen(str);){
-		if (str[r] == ' ')
-			r++;
-		else{
+		if (str[r] != ' '){
 			str[l] = str[r]; l++; r++;
 		}
+		else
+			r++;
 	}
 	str[l] = '\0';
 }
