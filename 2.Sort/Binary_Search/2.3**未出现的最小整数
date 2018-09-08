@@ -3,7 +3,7 @@
 if A[i]==i
      i++;
 else if A[i]<0 || A[i]>N-1 || A[i]==A[A[i]]
-     A[i]=A[--N];
+     A[i]=A[N-1]; N--;
 else
      swap(A[i],A[A[i]]);
 
