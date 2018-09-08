@@ -1,38 +1,39 @@
+使用辅助栈help，将data栈中的元素，逐渐压入help中，直到data为空
+“压入规则”：
+     1.取出data的栈顶元素：top
+     2.与help中的元素进行比较
+         [1]if help栈为空，则将top直接放入help
+	 [2]if help栈不空&&top>help.top()，则将help.top()放入data栈中
+     循环1和2，直到data为空
+
 #include<iostream>
 #include<stack>
 using namespace std;
 
-void sortstackByStack(stack<int>& SData){
-	if (SData.empty())
+void sortByStack(stack<int>& data){
+	if (data.empty())
 		return;
-
-	stack<int> SHelp; //辅助栈，始终是有序的
-
-	//将SData中的元素，根据"压入规则"，依次向SHelp中压入
-	while (!SData.empty()){
-		int cur = SData.top(); SData.pop();
-		while (!SHelp.empty() && cur > SHelp.top()){//将SHelp中的元素压入SData
-			int tmp = SHelp.top(); SHelp.pop();
-			SData.push(tmp);
+	stack<int> help; //辅助栈，始终是有序的
+	//将data中的元素，根据"压入规则"，依次向SHelp中压入
+	while (!data.empty()){
+		int top = data.top(); data.pop();
+		while (!help.empty()&&top>help.top()){ //将help中的元素压入data
+			data.push(help.top()); help.pop();
 		}
-		SHelp.push(cur); //当[SHelp为空 || SData的栈顶元素 <= SHelp的栈顶元素]时
+		help.push(top);
 	}
-	//将SHelp中的元素，导入SData
-	while (!SHelp.empty()){
-		int tmp = SHelp.top(); SHelp.pop();
-		SData.push(tmp);
+	//将help中的元素，导入data
+	while (!help.empty()){
+		data.push(help.top());
+		help.pop();
 	}
 }
-
-void test(){
+int main(){
 	stack<int> S;
 	S.push(1);
 	S.push(5);
 	S.push(4);
 	S.push(3);
 	S.push(2);
-	sortstackByStack(S);
-}
-int main(){
-	test();
+	sortByStack(S);
 }
