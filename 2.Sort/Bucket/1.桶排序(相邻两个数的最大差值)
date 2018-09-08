@@ -1,36 +1,24 @@
-
-桶排序的三大步骤
-（1）初始化桶
-（2）元素入桶  A[i]---->bid = (A[i]-minV)*N/(maxV-minV);
-（3）元素出桶
-
-==============================================
-设元素个数N，桶的数量是R
-空间效率：桶的数量---->O(R)
-时间效率：遍历元素入桶，为O(N)；遍历桶，元素出桶，为O(R)------> O(N+R)
-稳定性：入桶和出桶并不会改变相同元素的前后相对位置---->稳定
-
-
-【年年都考】
 面试题：求一个无序数组，求相邻两个数的最大差值（要求：时间复杂度O(N)，不基于比较的排序）
 
-代码：
-#include<iostream>
-#include<math.h>
-using namespace std;
-
+桶排序的三大步骤
 /*
 int bucket_sort(int A[], int N)
 解题思路：
-(1)创建N+1个桶,并初始化
-(2)求A数组的最小值和最大值:用于求bid = (A[i]-min)*N/(max-min)
-(3)将A[i]元素放入bucket_arr[bid]中，给
-		bucket_arr[bid].min
-		bucket_arr[bid].max
-		bucket_arr[bid].flag
-	赋值
-(4)遍历每个桶，求相邻非空桶的最大差值ret: lastMax  bucket_arr[i].min
+(1)创建N+1个桶，并初始化
+(2)元素A[i]入桶：A[i]===> bid=(A[i]-minV)*N/(maxV-minV) 
+(3)遍历每个桶，求相邻非空桶之间的最大差值
 */
+
+#include <iostream>
+#include <assert.h>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <numeric>  
+using namespace std;
+
+
 
 typedef struct bucket{
 	int min;
