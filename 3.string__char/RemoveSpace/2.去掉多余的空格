@@ -18,6 +18,8 @@ void delspace(char *str){
 	str[l] = '\0';
 }
 
+//还需要去掉“前/后”的空格
+
 int main(){
 	char str[] = "3   3  3  3ko lop";
 	delspace(str);
