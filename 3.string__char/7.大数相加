@@ -1,3 +1,7 @@
+
+“从后向前”，逐位置相加
+
+
 string BigNumberPlus(char * s1, char* s2){
 	if (s1 == NULL || s2 == NULL)
 		return "";
