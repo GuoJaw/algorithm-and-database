@@ -36,19 +36,25 @@ int main(){
 }
 =====================
 //2.循环移位:str=“ABCDE”，i=2 ---> “DEABC”
-void loopMove(char* str, int i){
-	if (str == NULL || strlen(str) == 0 || i > strlen(str))
+void reverse(char* begin,char* end){
+	if (begin == NULL || end == NULL || end-begin<=0)
 		return;
-	int Len = strlen(str);
-	//[0,i]逆序
-	reversePart(str + 0, str + i);
-	//[i+1,Len-1]逆序
-	reversePart(str + i + 1, str + Len - 1);
-	//最后整体逆序
-	reversePart(str, str + Len - 1);
+	char* p = begin;
+	while (begin < end){
+		swap(*begin, *end);
+		begin++; end--;
+	}
+}
+void reverseM(char* str,int i){//循环移位
+	if (str == NULL)
+		return;
+	reverse(str, str + i); //局部逆序
+	reverse(str + i + 1, str + strlen(str) - 1);//局部逆序
+	reverse(str, str + strlen(str) - 1);//整体逆序
 }
 int main(){
-	char A[100] = "ABCDE";
-	loopMove(A,2);
-	cout << A << endl;
+	char str[] = "ABCDE";
+	reverseM(str,2);
+	cout << str << endl;
+	system("pause");
 }
