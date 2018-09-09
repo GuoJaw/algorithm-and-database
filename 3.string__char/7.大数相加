@@ -1,30 +1,31 @@
-
-string BigNumberPlus(char * sa, char* sb){
-	if (sa == NULL || sb == NULL)
+string BigNumberPlus(char * s1, char* s2){
+	if (s1 == NULL || s2 == NULL)
 		return "";
 
 	vector<int> ret;
 
-	char* p1 = sa + strlen(sa) - 1;
-	char* p2 = sb + strlen(sb) - 1;
-	
+	char* p1 = s1 + strlen(s1) - 1;
+	char* p2 = s2 + strlen(s2) - 1;
+
 	int sum = 0, bigBit = 0, smallbit = 0;
 	//从后向前加
-	while (p1 >= sa && p2 >= sb){
+	while (p1 >= s1 && p2 >= s2){
 		sum = bigBit + *(p1--) - '0' + *(p2--) - '0';
 		bigBit = sum / 10; smallbit = sum % 10;
 		ret.emplace_back(smallbit);
 	}
-	while (p1 >= sa){
+	while (p1 >= s1){
 		sum = bigBit + *(p1--) - '0';
 		bigBit = sum / 10; smallbit = sum % 10;
 		ret.emplace_back(smallbit);
 	}
-	while (p2 >= sb){
+	while (p2 >= s2){
 		sum = bigBit + *(p2--) - '0';
 		bigBit = sum / 10; smallbit = sum % 10;
 		ret.emplace_back(smallbit);
 	}
+	if (bigBit != 0)
+		ret.push_back(bigBit);
 	string strRet;
 	for (int i = ret.size() - 1; i >= 0; i--)
 		strRet += ret[i] + '0'; //将数字转换成char
@@ -32,11 +33,7 @@ string BigNumberPlus(char * sa, char* sb){
 }
 
 int main(){
-	char* sa = "12345";
-	char* sb = "1564165165";
-	BigNumberPlus(sa, sb);
+	char* s1 = "9";
+	char* s2 = "9999";
+	BigNumberPlus(s1, s2);
 }
-
-
-
-
