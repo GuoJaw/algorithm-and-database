@@ -1,0 +1,59 @@
+====> strcpy|memcpy|strcat|atoi
+
+//字符串拷贝：strcpy和memcpy
+char* mystrcpy(char* dst, const char* src){
+	assert((dst != NULL) && (src != NULL));
+	char* tmp = dst; //备份dst
+	while ((*dst++ = *src++) != '\0');
+	return tmp; //链式调用
+}
+//注意：形参和返回值都是void*
+void* mymemcpy(void* dst, const void* src, size_t size){
+	assert((dst != NULL) && (src != NULL));
+	//先保存起始指针
+	char* tmp_dst = (char*)dst;
+	char* tmp_src = (char*)src;
+	while (size--){
+		*tmp_dst++ = *tmp_src++;
+	}
+	return dst;
+}
+//strcat
+char* mystrcat(char* dst, const char* src){
+	assert((dst != NULL) && (src != NULL));
+	char* tmp = dst;//备份
+	//查找dst的'\0'位置
+	while (*dst != '\0')
+		dst++;
+	//拼接
+	while ((*dst++ = *src++) != '\0');
+	return tmp;
+}
+
+int myatoi(char* src){
+	assert(src != NULL);
+	char* start = src;
+	char* end = src + strlen(src) - 1;
+	//去除两端的空格
+	while (*start++ == ' '); start--; //查找左边起第一个不为' '的元素位置:需要回退一个start--
+	while (*end-- == ' '); end++;
+	//判断第一个字符是否有符号
+	bool flag; //flag=true表示正数
+	switch (*start){
+	case '-':
+		flag = false; start++; break;
+	case '+':
+		flag = true; start++; break;
+	default:
+		flag = true;
+	}
+	const char* ch = start;
+	int num = 0;
+	while (ch != end + 1){
+		num = num * 10 + (*ch - '0');
+		ch++;
+	}
+	if (flag != true)
+		return -num;
+	return num;
+}
