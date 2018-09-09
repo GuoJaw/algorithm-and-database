@@ -22,7 +22,7 @@ TreeNode* createByPre(){
 	newNode->right = createByPre();
 	return newNode;
 }
-//判断一个树是否包含另外一个树
+//T1中包含T2
 bool judge(TreeNode* T1, TreeNode* T2){
 	if (!T2)
 		return true;
@@ -33,12 +33,12 @@ bool judge(TreeNode* T1, TreeNode* T2){
 bool judgeT1T2(TreeNode* T1, TreeNode* T2){
 	bool ret = false;
 	if (T1 && T2){
-		if (T1->data == T2->data)//2.查找到后
-			ret = judge(T1, T2);//判断T1中是否包含T2
-		if (ret == false)//如果不包含
-			ret = judgeT1T2(T1->left, T2);//递归T->left
+		if (T1->data == T2->data)
+			ret = judge(T1, T2); //根节点T1
 		if (ret == false)
-			ret = judgeT1T2(T1->right, T2);
+			ret = judgeT1T2(T1->left, T2); //左子树T1->left
+		if (ret == false)
+			ret = judgeT1T2(T1->right, T2); //右子树T1->right
 	}
 	return ret;
 }
