@@ -63,6 +63,7 @@ char* mystrcpy(char* dst, const char* src){
 	while ((*dst++ = *src++) != '\0');
 	return tmp; //链式调用
 }
+//注意：形参和返回值都是void*
 void* mymemcpy(void* dst, const void* src, size_t size){
 	assert((dst != NULL) && (src != NULL));
 	//先保存起始指针
