@@ -75,36 +75,3 @@ void main(){
 	Replace(str, substr);
 }
 
-=====================
-
-2.括弧匹配
-给定一个字符串str，判断是不是整体有效的括号字符串
-举例：
-  (),true
-  ()),false  
-最优解：时间复杂度O(N),空间复杂度O(1)
-答案：
-  1.整形变量num，代表在遍历过程中，(出现次数和)出现次数的差值
-  2.遍历过程中，遇到(，则num++
-  3.遍历过程中，遇到)，则num--
-  4.遍历过程中，如果num<0，则说明)多余(，直接返回false
-  5.如果一直没有出现情况4，则一直遍历下去
-  6.遍历完成后，如果num==0，返回true，否则返回false
-
-bool match(string str){
-	if (str == "")
-		return true;
-	int ret = 0;
-	for (int i = 0; i < str.length(); i++){
-		if (str[i] == '(')
-			ret++;
-		else if (str[i] == ')')
-			ret--;
-		if (ret < 0)
-			return false;
-	}
-	if (ret == 0)
-		return true;
-	else
-		return false;
-}
