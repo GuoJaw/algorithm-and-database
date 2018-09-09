@@ -33,7 +33,9 @@ void replaceSpace(char str[]){
 		ptr1--;
 	}
 }
+======================
 
+题目扩展：将空格替换成substr
 #include<assert.h>
 #include<iostream>
 #include<string>
