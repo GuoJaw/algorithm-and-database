@@ -26,7 +26,7 @@ TreeNode* createByPre(){
 bool judge(TreeNode* T1, TreeNode* T2){
 	if (!T2)
 		return true;
-	if (T1&&T2&&T1->data == T2->data)
+	if (T1&&T2&&T1->data == T2->data) //如果当前节点符合条件，则递归向下判断
 		return judge(T1->left, T2->left) && judge(T1->right, T2->right);
 	return false;
 }
