@@ -1,31 +1,40 @@
 【活用{局部逆序函数}的组合】
 //1.I am from shanghai-->shanghai from am I
-void swap(char& a, char& b){
-	a ^= b; b ^= a; a ^= b;
-}
-void reversePart(char* start, char* end){
-	while (start < end){
-		swap(*start++, *end--);
+void reverse(char* begin,char* end){ //字符串反转
+	if (begin == NULL || end == NULL || end-begin<=0)
+		return;
+	char* p = begin;
+	while (begin < end){
+		swap(*begin, *end);
+		begin++; end--;
 	}
 }
-void reverse(char* str){
+void reversePartStr(char* str){ //寻找空格，倒置
 	if (str == NULL)
 		return;
-	reversePart(str, str + strlen(str) - 1); //整体倒置
-
 	char* start = str;
-	char* cur = str;
-	while (*cur != '\0'){
-		if (*cur != ' ')
-			cur++;
-		else{
-			char* end = cur - 1;
-			reversePart(start, end);  //局部倒置
-			cur++;
-			start = cur;
-		}
+	while (*start != '\0'){
+		char* end = start;
+		while (*end != ' ' && *end != '\0')
+			end++;
+		reverse(start, end-1);
+		start = end + 1;
 	}
 }
+void reverseM(char* str){ 
+	if (str == NULL)
+		return;
+	reverse(str, str + strlen(str) - 1); //全局倒置
+	reversePartStr(str); //局部倒置
+}
+
+int main(){
+	char str[] = "I am from shanghai";
+	reverseM(str);
+	cout << str << endl;
+	system("pause");
+}
+=====================
 //2.循环移位:str=“ABCDE”，i=2 ---> “DEABC”
 void loopMove(char* str, int i){
 	if (str == NULL || strlen(str) == 0 || i > strlen(str))
