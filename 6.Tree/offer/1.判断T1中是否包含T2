@@ -1,8 +1,8 @@
 
 思想：
-    1.先寻找T1中，与T2的根节点相同的点
-    2.如果找到，就判断T1是否包含T2
-    3.条件1或条件2有一个不符合，就递归T1的左子树和右子树
+    1.前序遍历，找T1->data==T2->data的节点
+    2.找到T1->data==T2->data的节点后，判断以T1和T2为根的树，是否T1包含T2
+
 #include <iostream>
 using namespace std;
 typedef struct TreeNode{
@@ -22,7 +22,7 @@ TreeNode* createByPre(){
 	newNode->right = createByPre();
 	return newNode;
 }
-//T1中包含T2
+//2.找到T1->data==T2->data的节点后，判断以T1和T2为根的树，是否T1包含T2
 bool judge(TreeNode* T1, TreeNode* T2){
 	if (!T2)
 		return true;
@@ -30,21 +30,20 @@ bool judge(TreeNode* T1, TreeNode* T2){
 		return judge(T1->left, T2->left) && judge(T1->right, T2->right);
 	return false;
 }
-bool judgeT1T2(TreeNode* T1, TreeNode* T2){
+bool T1containT2(TreeNode* T1, TreeNode* T2){ //1.前序遍历，找到T1->data==T2->data的节点
 	bool ret = false;
 	if (T1 && T2){
 		if (T1->data == T2->data)
-			ret = judge(T1, T2); //根节点T1
+			ret = judge(T1, T2); 
 		if (ret == false)
-			ret = judgeT1T2(T1->left, T2); //左子树T1->left
+			ret = T1containT2(T1->left, T2); 
 		if (ret == false)
-			ret = judgeT1T2(T1->right, T2); //右子树T1->right
+			ret = T1containT2(T1->right, T2); 
 	}
 	return ret;
 }
 int main(){
 	TreeNode* T1 = createByPre(); //1 2 4 0 0 0 3 5 0 0 6 0 0 
-	TreeNode* T2 = createByPre(); //3 5 0 0 0
-	bool ret = judgeT1T2(T1, T2);
+	TreeNode* T2 = createByPre(); //3 4 0 0 0
+	bool ret = T1containT2(T1, T2);
 }
-
