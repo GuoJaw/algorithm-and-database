@@ -1,0 +1,35 @@
+
+/*判断是否是平衡二叉树
+(1)每个节点都要收集两个信息:class ReturnValue
+	以该节点为根的树，是否为AVL树:bool flag
+	以该节点为根的树的高度:int height
+(2)列出条件
+	1.if T是空,return new ReturnValue(true,0);
+	2.递归求T->left，判断是否是AVL
+	3.递归求T->right，判断是否是AVL
+	4.if 二者高度差>1: return new ReturnValue(false,-1);
+	5.return new ReturnValue(true,1+max(左H,右R));
+*/
+class ReturnValue{
+public:
+	ReturnValue(bool flag, int height) :flag(flag), height(height){}
+public:
+	bool flag;
+	int height;
+};
+ReturnValue* process(TreeNode* T){
+	if (T == NULL)
+		return new ReturnValue(true, 0);
+	ReturnValue* Lret = process(T->left);
+	if (Lret->flag == false)
+		return new ReturnValue(false, -1);
+	ReturnValue* Rret = process(T->right);
+	if (Rret->flag == false)
+		return new ReturnValue(false, -1);
+	if (abs(Lret->height - Rret->height) > 1)
+		return new ReturnValue(false, -1);
+	return new ReturnValue(true, 1 + max(Lret->height, Rret->height));
+}
+bool isAVL(TreeNode* T){
+	return process(T)->flag;
+}
