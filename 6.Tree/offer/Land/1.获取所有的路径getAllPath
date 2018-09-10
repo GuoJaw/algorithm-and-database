@@ -1,4 +1,14 @@
 
+前序遍历：
+1.当T空时，直接返回
+2.遍历根节点T：
+       将T加入path
+       判断T是否为叶子节点，如果是，打印path中的所有元素
+3.左子树不空，遍历左子树       
+4.右子树不空，遍历右子树
+5.**千万不要忘记，删除path的最后一个元素
+
+
 void getAllPath(TreeNode* T, vector<TreeNode*> path){
 	if (!T)
 		return;
