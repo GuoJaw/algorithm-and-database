@@ -15,27 +15,3 @@ bool isSame(TreeNode* T){
 		return true;
 	return judge(T->left, T->right);
 }
-=========================
-#include <iostream>
-using namespace std;
-typedef struct TreeNode{
-	struct TreeNode* left;
-	struct TreeNode* right;
-	int data;
-}TreeNode;
-//使用前序遍历创建一颗二叉树
-TreeNode* createByPre(){
-	int data;
-	cin >> data;
-	if (data == 0) //输入值为0
-		return NULL;
-	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-	newNode->data = data;
-	newNode->left = createByPre();
-	newNode->right = createByPre();
-	return newNode;
-}
-int main(){
-	TreeNode* T1 = createByPre(); //1 2 4 0 0 0 2 0 4 0 0-->true
-	bool ret = isSame(T1);
-}
