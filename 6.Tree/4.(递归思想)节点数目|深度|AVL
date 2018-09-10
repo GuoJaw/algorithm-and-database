@@ -54,45 +54,6 @@ int minHeight(TreeNode* T){
 	return 1 + (l < r ? l : r); //如果T的左右子树都不是NULL
 }
 
-/*5.判断是否是平衡二叉树
-	(1)每个节点都要收集两个信息:class ReturnValue
-		以该节点为根的树，是否为AVL树:bool flag
-		以该节点为根的树的高度:int height
-	(2)列出条件
-		if T是空
-		else
-			递归求T->left，判断是否是AVL
-			递归求T->right，判断是否是AVL
-			T->left和T->right都平衡
-				if 二者高度差>1:
-				return new ReturnValue(true,1+max(左H,右R))；
-*/
-class ReturnValue{
-public:
-	ReturnValue(bool flag, int height) :flag(flag), height(height){}
-public:
-	bool flag;
-	int height;
-};
-ReturnValue* process(TreeNode* T){
-	if (T == NULL)
-		return new ReturnValue(true, 0);
-	ReturnValue* Lret = process(T->left);
-	if (Lret->flag == false)
-		return new ReturnValue(false, -1);
-	ReturnValue* Rret = process(T->right);
-	if (Rret->flag == false)
-		return new ReturnValue(false, -1);
-
-	//左右子树都平衡
-	if (abs(Lret->height - Rret->height) > 1)
-		return new ReturnValue(false, -1);
-	return new ReturnValue(true, 1 + max(Lret.height, Rret.height));
-}
-bool isAVL(TreeNode* T){
-	return process(T)->flag;
-}
-
 /*6.求完全二叉树的总结点个数:要求时间复杂度"低于"O(N)
 	先求T的左子树和右子树的深度:LHeight RHeight
 	if LHeightRHeight:
