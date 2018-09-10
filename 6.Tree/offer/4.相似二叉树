@@ -1,0 +1,8 @@
+判断两棵二叉树是否相似
+bool isSimilar(TreeNode* T1, TreeNode* T2){
+	if (!T1&&!T2)
+		return true;
+	if (T1 && T2)
+		return isSimilar(T1->left, T2->left) && isSimilar(T1->right, T2->right);
+	return false;
+}
