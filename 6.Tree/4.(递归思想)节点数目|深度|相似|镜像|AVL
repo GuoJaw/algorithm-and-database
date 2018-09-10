@@ -1,4 +1,4 @@
-4.(递归思想)节点数目|深度|相似|镜像
+(递归思想)节点数目|深度
 
 
 主要考察的知识点： 递归思想
@@ -13,8 +13,6 @@
 /*
 1.节点数目:总结点/叶子节点
 2.树深度:最大深度/最小深度
-3.判断两树是否相似 
-4.镜像：交换左右子树
 
 5.判断一棵树是否为AVL树
 6.求完全二叉树的总结点个数
@@ -54,28 +52,6 @@ int minHeight(TreeNode* T){
 	if (l == 0 || r == 0) //如果T的左右子树有一个为NULL
 		return 1 + l + r;
 	return 1 + (l < r ? l : r); //如果T的左右子树都不是NULL
-}
-//3.判断两棵树是否相似
-bool isSimilar(TreeNode* T1, TreeNode*T2){
-	if (T1 == NULL && T2 == NULL) //T1和T2都空
-		return true;
-	if (T1 != NULL && T2 != NULL){ //T1和T2都不是空
-		return (isSimilar(T1->left, T2->left) && isSimilar(T1->right, T2->right));
-	}
-	else //T1和T2一个为空，一个为不空
-		return false;
-}
-//4.交换树的左右子树(二叉树的镜像)
-void swapTree(TreeNode* T){  
-	if (T == NULL)
-		return;
-	//1.再交换T
-	TreeNode* tmp = T->left;
-	T->left = T->right;
-	T->right = tmp;
-	//2.先交换T的左右子树
-	swapTree(T->left);
-	swapTree(T->right);
 }
 
 /*5.判断是否是平衡二叉树
