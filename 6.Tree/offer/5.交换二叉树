@@ -1,0 +1,7 @@
+void swapTree(TreeNode* T){
+	if (!T)
+		return;
+	TreeNode* tmp = T->left; T->left = T->right; T->right = tmp; //交换T的左右子树
+	swapTree(T->left);
+	swapTree(T->right);
+}
