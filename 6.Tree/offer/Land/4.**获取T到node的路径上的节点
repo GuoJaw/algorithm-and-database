@@ -1,0 +1,23 @@
+
+求根节点到树中某一节点node的路径（不包括node）
+
+bool findPath(TreeNode* T, TreeNode* node, vector<TreeNode*>& path){
+	if (T == node)
+		return true;
+	path.push_back(T);
+
+	bool flag = false;
+	if (T->left)
+		flag = findPath(T->left, node, path);
+	if (!flag && T->right)
+		flag = findPath(T->right, node, path);
+
+	if (!flag)
+		path.pop_back();
+	return flag;
+}
+int main(){
+	TreeNode* T = createByPre(); // 1 5 12 0 0 7 0 0 1 0 0
+	vector<TreeNode*> path;
+	findPath(T, T->left->right, path);
+}
