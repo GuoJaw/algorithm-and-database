@@ -6,18 +6,12 @@ bool findPath(TreeNode* T, TreeNode* node, vector<TreeNode*>& path){
 		return true;
 	path.push_back(T);
 
-	bool flag = false;
+	bool ret = false;
 	if (T->left)
-		flag = findPath(T->left, node, path);
-	if (!flag && T->right)
-		flag = findPath(T->right, node, path);
-
-	if (!flag)
+		ret = findPath(T->left, node, path);
+	if (ret == false && T->right)
+		ret = findPath(T->right, node, path);
+	if (ret == false)
 		path.pop_back();
-	return flag;
-}
-int main(){
-	TreeNode* T = createByPre(); // 1 5 12 0 0 7 0 0 1 0 0
-	vector<TreeNode*> path;
-	findPath(T, T->left->right, path);
+	return ret;
 }
