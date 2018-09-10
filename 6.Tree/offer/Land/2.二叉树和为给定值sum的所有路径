@@ -1,0 +1,16 @@
+二叉树和为给定值sum的所有路径
+
+int s = 0;
+void getPathSum(TreeNode* T, vector<TreeNode*>& path, int sum){
+	if (!T)
+		return;
+	
+	path.push_back(T); s += T->data;
+	if (!T->left && !T->right && s == sum)
+		printPath(path);
+	if (T->left)
+		getPathSum(T->left, path, sum);
+	if (T->right)
+		getPathSum(T->right, path, sum);
+	s -= T->data; path.pop_back();
+}
