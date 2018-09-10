@@ -1,4 +1,6 @@
-判断一棵二叉树是否为对称二叉树：
+判断一棵二叉树T是否为对称二叉树：
+   if  T==NULL，则return true；
+   if  T!=NULL，则问题转变为：判断T1->left和T2->right是否是相等二叉树
 
 #include <iostream>
 using namespace std;
