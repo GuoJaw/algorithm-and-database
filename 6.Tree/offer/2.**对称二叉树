@@ -2,6 +2,20 @@
    if  T==NULL，则return true；
    if  T!=NULL，则问题转变为：判断T1->left和T2->right是否是相等二叉树
 
+=========================
+bool judge(TreeNode* T1, TreeNode* T2){
+	if (!T1 && !T2)
+		return true;
+	if (T1&&T2&&T1->data == T2->data)
+		return judge(T1->left, T2->right) && judge(T1->right, T2->left);
+	return false;
+}
+bool isSame(TreeNode* T){
+	if (T == NULL)
+		return true;
+	return judge(T->left, T->right);
+}
+=========================
 #include <iostream>
 using namespace std;
 typedef struct TreeNode{
@@ -20,19 +34,6 @@ TreeNode* createByPre(){
 	newNode->left = createByPre();
 	newNode->right = createByPre();
 	return newNode;
-}
-
-bool judge(TreeNode* T1, TreeNode* T2){
-	if (!T1 && !T2)
-		return true;
-	if (T1&&T2&&T1->data == T2->data)
-		return judge(T1->left, T2->right) && judge(T1->right, T2->left);
-	return false;
-}
-bool isSame(TreeNode* T){
-	if (T == NULL)
-		return true;
-	return judge(T->left, T->right);
 }
 int main(){
 	TreeNode* T1 = createByPre(); //1 2 4 0 0 0 2 0 4 0 0-->true
