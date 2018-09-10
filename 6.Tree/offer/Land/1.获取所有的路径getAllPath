@@ -8,17 +8,18 @@
 4.右子树不空，遍历右子树
 5.**千万不要忘记，删除path的最后一个元素
 
-
-void getAllPath(TreeNode* T, vector<TreeNode*> path){
+void getAllPath(TreeNode* T, vector<TreeNode*>& path){
 	if (!T)
 		return;
+
 	path.push_back(T);
-	if (!T->left && !T->right)
-		//打印path中所有的元素，即为一条路径
+	if (!T->left && !T->right) //T是叶子节点
+		printPath(path);
+
 	if (T->left)
 		getAllPath(T->left, path);
 	if (T->right)
 		getAllPath(T->right, path);
+
 	path.pop_back();
 }
-
