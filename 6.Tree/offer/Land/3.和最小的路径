@@ -1,0 +1,19 @@
+
+
+有一个普通的二叉树，求从根节点到叶子节点的和最小的路径
+
+void minPathSum(TreeNode* T, vector<int> path, int& minSum, int& curSum) {
+	if (!T)
+		return;
+	path.push_back(T->data); curSum += T->data;
+	if (!T->left && !T->right && minSum > curSum)
+		minSum = curSum;
+	
+	if (T->left)
+		minPathSum(T->left, path, minSum, curSum);
+	if (T->right)
+		minPathSum(T->right, path, minSum, curSum);
+
+	curSum -= path.back(); path.pop_back();
+}
+
