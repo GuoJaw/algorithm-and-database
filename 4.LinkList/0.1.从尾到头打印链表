@@ -3,18 +3,10 @@
     依次出栈并打印
 
 方法2：
-void printLink(LinkNode* T){
-	if (T->next != NULL) //当前节点，有后继
-		printLink(T->next); //先打印后继节点
-	
-	cout << T->data << "   "; //打印完后继节点，再打印当前节点
-}
-
-
-void print(vector<int> A,int i){
-	if (i+1 < A.size()){   //如果下一个index的位置没到V.size()，就先打印后面的节点
-		print(A, i + 1);
-	}
-	
-	cout << A[i];  //在输出当前节点
+void travel1(LinkNode* L){
+	if (L == NULL) 
+		return;
+	if (L->next != NULL)
+		travel1(L->next);
+	cout << L->data << endl;
 }
