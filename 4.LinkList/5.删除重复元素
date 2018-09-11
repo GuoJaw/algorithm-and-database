@@ -1,0 +1,20 @@
+LinkNode* removeRep(LinkNode* L){
+	if (L == NULL)
+		return L;
+	set<int> set;
+	LinkNode* cur = L->next; //第一个有效节点
+	LinkNode* pre = L;
+	while (cur){
+		if (set.find(cur->data) == set.end()){//不重复
+			set.emplace(cur->data);
+			pre = pre->next;
+			cur = cur->next;
+		}
+		else{
+			pre->next = pre->next->next; //删除元素
+			free(cur); //释放被删除的元素
+			cur = pre->next; //更新cur
+		}
+	}
+	return L;
+}
