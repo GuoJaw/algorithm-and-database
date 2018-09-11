@@ -17,7 +17,7 @@ LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
 		if (c1->data <= c2->data){
 			p1 = p1->next; c1 = c1->next;
 		}
-		else{//将c2插入L1中
+		else{//将c2插入(p1和c1之间)
 			//1.删除c2
 			p2->next = c2->next;
 			//2.插入
