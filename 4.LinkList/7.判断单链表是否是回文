@@ -1,0 +1,47 @@
+//求中间节点
+LinkNode* getMidNode(LinkNode* L){ 
+	if (L == NULL)
+		return NULL;
+	LinkNode* fast = L;
+	LinkNode* slow = L;
+	while (fast && fast->next){
+		fast = fast->next->next; slow = slow->next;
+	}
+	return slow;
+}
+
+//无头节点的链表逆序，返回逆序后的新的根节点T
+LinkNode* reverse(LinkNode* L){ 
+	if (L == NULL)
+		return L;
+	LinkNode* pre = NULL;
+	LinkNode* cur = L;
+	LinkNode* post = NULL;
+	while (cur){
+		post = cur->next;
+		cur->next = pre;
+		pre = cur; cur = post;
+	}
+	return pre;
+}
+//带头结点
+bool isPlalindrome1(LinkNode* L){
+	if (L == NULL || L->next == NULL)
+		return true;
+	LinkNode* mid = getMidNode(L); //1.求中间节点mid
+	LinkNode* newL = reverse(mid); //2.mid逆序
+	
+	LinkNode* c1 = L->next;
+	LinkNode* c2 = newL;
+	while (c1 && c2){ //对比c1和c2是否完全相等
+		if (c1->data == c2->data){
+			c1 = c1->next; c2 = c2->next;
+		}
+		else{ 
+			reverse(newL);
+			return false;
+		}
+	}
+	reverse(newL);
+	return true;
+}
