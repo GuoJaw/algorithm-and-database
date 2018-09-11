@@ -1,16 +1,13 @@
 
-
 //普通二叉树
 1.判断key是否在T中
 2.查找key到根T的路径
 3.求path1和path2的第一个相交节点
 
-
-//普通二叉树
-
 #include <iostream>
 #include <vector>
 using namespace std;
+
 typedef struct TreeNode{
 	struct TreeNode* left;
 	struct TreeNode* right;
