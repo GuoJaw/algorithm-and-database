@@ -1,0 +1,20 @@
+LinkNode* isLoop(LinkNode* L){
+	if (L == NULL)
+		return false;
+	LinkNode* slow = L;
+	LinkNode* fast = L;
+	while (fast && fast->next){
+		slow = slow->next; fast = fast->next->next;
+		if (slow == fast)
+			break;
+	}
+  
+	if (slow != fast) //不等，则说明无环
+		return NULL;
+  //有环，求第一个入环节点
+	fast = L;
+	while (slow != fast){
+		slow = slow->next; fast = fast->next;
+	}
+	return slow;
+}
