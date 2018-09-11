@@ -1,0 +1,16 @@
+void CommonL1L2(LinkNode* L1, LinkNode* L2){
+	if (L1 == NULL || L2 == NULL)
+		return;
+	LinkNode* c1 = L1;
+	LinkNode* c2 = L2;
+	while (c1 && c2){
+		if (c1->data == c2->data){
+			c1 = c1->next; c2 = c2->next; 
+			cout << c1->data << endl;
+		}
+		else if (c1->data < c2->data)
+			c1 = c1->next;
+		else
+			c2 = c2->next;
+	}
+}
