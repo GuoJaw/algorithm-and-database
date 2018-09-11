@@ -1,0 +1,32 @@
+
+//四个指针完成两个链表的合并
+1.初始化
+    p1和p2指向L1和L2的头节点
+    c1和c2指向第一个有效节点
+2.合并
+    将c2插入到L1中
+
+LinkNode* mergeL1L2(LinkNode* L1, LinkNode* L2){
+	if (!L1)
+		return L2;
+	if (!L2)
+		return L1;
+	LinkNode* p1 = L1; LinkNode* c1 = L1->next;
+	LinkNode* p2 = L2; LinkNode* c2 = L2->next;
+	while (c1&&c2){
+		if (c1->data <= c2->data){
+			p1 = p1->next; c1 = c1->next;
+		}
+		else{//将c2插入L1中
+			//1.删除c2
+			p2->next = c2->next;
+			//2.插入
+			c2->next = c1; p1->next = c2;
+			//3.更新p1,c1,p2,c2
+			p1 = p1->next; c2 = p2->next;
+		}
+	}
+	if (p2 != NULL)
+		p1->next = c2;
+	return L1;
+}
