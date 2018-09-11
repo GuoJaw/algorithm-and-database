@@ -1,1 +1,16 @@
 
+LinkNode* reverse(LinkNode* L){
+	if (L == NULL || L->next == NULL)
+		return L;
+  //初始化pre和cur
+	LinkNode* pre = NULL;
+	LinkNode* cur = L->next; //第一个有效节点
+	LinkNode* post = NULL;
+	while (cur){
+		post = cur->next; //保存后继，防止丢失
+		cur->next = pre; //反指
+		pre = cur; cur = post; //更新pre和cur
+	}
+	L->next = pre; //L指向尾部
+	return L;
+}
