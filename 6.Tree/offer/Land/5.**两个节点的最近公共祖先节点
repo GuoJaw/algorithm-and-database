@@ -1,0 +1,75 @@
+
+#include <iostream>
+#include <vector>
+using namespace std;
+typedef struct TreeNode{
+	struct TreeNode* left;
+	struct TreeNode* right;
+	int data;
+}TreeNode;
+TreeNode* createByPre(){
+	int data;
+	cin >> data;
+	if (data == 0) //输入值为0
+		return NULL;
+	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+	newNode->data = data;
+	newNode->left = createByPre();
+	newNode->right = createByPre();
+	return newNode;
+}
+//在T中查找node：查找到，返回node；查找不到，返回NULL
+TreeNode* searchKey(TreeNode* T, TreeNode* node){
+	if (T == NULL || node == NULL)
+		return NULL;
+	if (T == node)
+		return T;
+	TreeNode* ret = NULL;
+	if (T->left)
+		ret = searchKey(T->left, node);
+	if (ret == NULL && T->right)
+		ret = searchKey(T->right, node);
+	return ret;
+}
+//查询T到node的路径（不包含node）
+bool findPath(TreeNode* T, TreeNode* node, vector<TreeNode*>& path){
+	if (T == node)
+		return true;
+	path.push_back(T);
+	
+	bool ret = false;
+	if (T->left)
+		ret = findPath(T->left, node, path);
+	if (ret == false && T->right)
+		ret = findPath(T->right, node, path);
+	if (ret == false)
+		path.pop_back();
+	return ret;
+}
+//获得no1和no2的最近的祖先节点
+TreeNode* getLastNode(TreeNode* T, TreeNode* no1, TreeNode* no2){
+	if (!T || !no1 || !no2)
+		return NULL;
+	if (!searchKey(T, no1) || !searchKey(T, no2)) //如果no1和no2不在T中，就退出
+		return NULL;
+	vector<TreeNode*> path1;
+	vector<TreeNode*> path2;
+	findPath(T, no1, path1); 
+	findPath(T, no2, path2); 
+	//查询两个单链表的最近公共节点
+	while (path1.size() > path2.size())
+		path1.pop_back();
+	while (path2.size() > path1.size())
+		path2.pop_back();
+	while (path1.size() > 0){
+		if (path1.back() == path2.back())
+			return path1.back();
+		path1.pop_back(); path2.pop_back();
+	}
+}
+int main(){
+	TreeNode* T = createByPre(); //  1 2 0 3 0 0 4 0 5 0 0
+	TreeNode* no1 = T->left->right;
+	TreeNode* no2 = T->right;
+	TreeNode* ret = getLastNode(T, no1, no2);
+}
