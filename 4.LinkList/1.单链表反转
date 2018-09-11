@@ -1,4 +1,5 @@
 
+//1.有头节点
 LinkNode* reverse(LinkNode* L){
 	if (L == NULL || L->next == NULL)
 		return L;
@@ -13,4 +14,18 @@ LinkNode* reverse(LinkNode* L){
 	}
 	L->next = pre; //L指向尾部
 	return L;
+}
+
+
+//2.无头节点
+LinkNode* reverse(LinkNode* L){
+	LinkNode* pre = NULL;
+	LinkNode* cur = L;
+	LinkNode* post = NULL;
+	while (cur){
+		post = cur->next;
+		cur->next = pre;
+		pre = cur; cur = post;
+	}
+	return pre;
 }
