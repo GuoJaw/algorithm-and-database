@@ -1,0 +1,15 @@
+LinkNode* LastKthNode(LinkNode* L,int Kth){
+	if (L == NULL || Kth <= 0)
+		return NULL;
+	LinkNode* p = L;
+	LinkNode* q = L;
+	while (p && Kth--){
+		p = p->next;
+	}
+	if (p == NULL) //如果p到末尾，Kth还不等于0，说明Kth过大
+		return NULL;
+	while (p){
+		q = q->next; p = p->next;
+	}
+	return q;
+}
