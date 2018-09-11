@@ -2,16 +2,19 @@
 求根节点到树中某一节点node的路径（不包括node）
 
 bool findPath(TreeNode* T, TreeNode* node, vector<TreeNode*>& path){
-	if (T == node)
+	if (T == node) //递归终止条件：T==node
 		return true;
+		
 	path.push_back(T);
 
 	bool ret = false;
 	if (T->left)
-		ret = findPath(T->left, node, path);
+		ret = findPath(T->left, node, path); //递归左子树
 	if (ret == false && T->right)
-		ret = findPath(T->right, node, path);
+		ret = findPath(T->right, node, path); //递归右子树
+		
 	if (ret == false)
 		path.pop_back();
+		
 	return ret;
 }
