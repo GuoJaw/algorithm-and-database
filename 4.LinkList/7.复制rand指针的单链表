@@ -1,0 +1,74 @@
+
+
+复制rand指针的单链表
+/*
+	1-->2-->3-->2-->1    1-->2-->2-->1
+	1-->2-->3<--2<--1    1-->2<--2<--1
+*/
+
+
+// head-->1-->2-->3-->4-->null
+// head-->1-->1'-->2-->2'-->3-->3'-->4-->4'-->null
+// [return] 1'-->2'-->3'-->4'-->null
+LinkNode* CopyRandLink(LinkNode* head){
+	if (head == NULL || head->next == NULL)
+		return head;
+	//1.第一次遍历：拷贝每个节点
+	LinkNode* cur = head->next;
+	while (cur != NULL){
+		//(1)创建新节点
+		LinkNode* newNode = (LinkNode*)malloc(sizeof(LinkNode));
+		newNode->data = cur->data; newNode->rand = NULL;
+		//(2)插入新节点
+		newNode->next = cur->next; cur->next = newNode;
+		//(3)后移
+		cur = cur->next->next;
+	}
+	//2.第二次遍历：复制rand指针域
+	cur = head->next;
+	while (cur != NULL){
+		//拷贝rand指针域的指向：注意rand是NULL的情况
+		cur->next->rand = (cur->rand == NULL) ? (NULL) : cur->rand->next;
+		cur = cur->next->next;//向后遍历
+	}
+	//3.第三次遍历：拆分
+	cur = head->next;    LinkNode* ret = cur->next;
+	while (cur != NULL){
+		LinkNode* tmp = cur->next; //保存
+		cur = cur->next->next;
+		tmp->next = (cur == NULL) ? NULL : cur->next;//注意cur==NULL的情况
+	}
+	return ret;
+}
+
+//遍历
+void travel(LinkNode* head){
+	LinkNode* cur = head->next;//cur指向第一个有效节点
+	while (cur){
+		cout << cur->data << "  ";
+		cur = cur->next;
+	}
+	system("pause");
+}
+
+
+void test08(){  //复制带有rand指针的链表
+	LinkNode* head = (LinkNode*)malloc(sizeof(LinkNode));
+	LinkNode* node1 = (LinkNode*)malloc(sizeof(LinkNode));
+	LinkNode* node2 = (LinkNode*)malloc(sizeof(LinkNode));
+	LinkNode* node3 = (LinkNode*)malloc(sizeof(LinkNode));
+	LinkNode* node4 = (LinkNode*)malloc(sizeof(LinkNode));
+	head->next = node1;
+	node1->next = node2; node1->rand = node3; node1->data = 1;
+	node2->next = node3; node2->rand = node1; node2->data = 2;
+	node3->next = node4; node3->rand = node1; node3->data = 3;
+	node4->next = NULL; node4->rand = NULL; node4->data = 4;
+
+	LinkNode* ret = CopyRandLink(head);
+	system("pause");
+}
+
+int main(){
+	test08();
+	system("pause");
+}
