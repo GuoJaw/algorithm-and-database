@@ -1,0 +1,44 @@
+
+#include <iostream>
+#include <vector>
+using namespace std;
+typedef struct TreeNode{
+	struct TreeNode* left;
+	struct TreeNode* right;
+	int data;
+}TreeNode;
+TreeNode* createByPre(){
+	int data;
+	cin >> data;
+	if (data == 0) //输入值为0
+		return NULL;
+	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+	newNode->data = data;
+	newNode->left = createByPre();
+	newNode->right = createByPre();
+	return newNode;
+}
+TreeNode* find(TreeNode* T, TreeNode* no1, TreeNode* no2){
+	if (!T || !no1 || !no2)
+		return NULL;
+	if (T->data < no1->data && T->data > no2->data)
+		return T;
+	else if (T->data > no1->data)
+		return find(T->left, no1, no2);
+	else
+		return find(T->right, no1, no2);
+}
+TreeNode* findLastAncestor(TreeNode* T, TreeNode* no1, TreeNode* no2){
+	if (!T || !no1 || !no2)
+		return NULL;
+	if (no1->data > no2->data)
+		return find(T, no1, no2);
+	else
+		return find(T, no2, no1);
+}
+int main(){
+	TreeNode* T = createByPre(); // 10 7 5 1 0 0 6 0 0 8 0 0 12 0 0
+	TreeNode* no1 = T->left->left;
+	TreeNode* no2 = T->right;
+	TreeNode* ret = findLastAncestor(T, no1, no2);
+}
