@@ -1,0 +1,23 @@
+void reverse_start_end(LinkNode* left, LinkNode* start, LinkNode* end, LinkNode* right){
+	//3.反转局部链表[from,to],要使用四个变量[start,from,to,end]
+	LinkNode* pre = NULL;
+	LinkNode* cur = start;
+	while (cur != right){
+		LinkNode* post = cur->next;
+		cur->next = pre;//反指
+		pre = cur; cur = post;//更新pre和cur，后移
+	}
+	//4.重新连接
+	left->next = end;
+	start->next = right;
+}
+void reversePart(LinkNode*& head, LinkNode* start, LinkNode* end){
+	if (head == NULL || start == NULL || end == NULL || start >= end)
+		return;
+	LinkNode* left = searchPre(head, start);//1.from的前驱
+	if (left == NULL) //如果没找到from，则直接返回，不做任何处理
+		return;
+	LinkNode* right = end->next; //2.end的后继
+	//反转[start,end]
+	reverse_start_end(left, start, end, right);
+}
