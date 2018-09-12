@@ -1,16 +1,5 @@
-遍历每一个字符，
-        if  vec[i]=='(':   //如果是左括弧，就进栈
-              就进栈
-        if  vec[i]==')'    //如果是右括弧
-              if  栈空 || 括弧不匹配：
-                    return false;
-              else
-                    stack.pop();
-                    
-return 栈空？true：false；
-              
 
-
+//栈
 bool isMatch2(vector<char> vec){
 	stack<char> stack;
 	for (int i = 0; i < vec.size(); i++){
@@ -26,7 +15,8 @@ bool isMatch2(vector<char> vec){
 	return stack.empty() ? true : false;
 }
 
-bool match(string str){  //最优解
+//最优解：遍历，左括弧++，右括弧--
+bool match(string str){  
 	if (str == "")
 		return true;
 	int cnt = 0;
