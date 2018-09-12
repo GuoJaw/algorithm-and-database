@@ -1,13 +1,12 @@
-使用辅助栈help，将data栈中的元素，逐渐压入help中，直到data为空
-每个将data的栈顶元素压入help中，压入过程：
+while(!data.empty()){
+每次将data的栈顶元素压入help中，压入过程：
    1.获取data的栈顶元素：int top=data.top(); data.pop();
    2.当符合下面条件top>help.top()时，将help中的元素“转移到”data中
        while(!help.empty() && top>help.top()){
          data.push(help.top());  help.pop();
        }
    3.top压入help中：help.push(top)
-     
-     循环1和2，直到data为空
+} //此时，data为空，data中所有的元素都压入到help中了，help栈有序
 
 #include<iostream>
 #include<stack>
