@@ -30,7 +30,7 @@ void merge_sort(int A[],int B[], int l, int r){
 int main(){
 	int A[] = { 1,5,6,8,1,2,3,6,5,55};
 	int len = sizeof(A) / sizeof(A[0]);
-	int *B = new int[len + 1];
+	int *B = new int[len];
 	merge_sort(A, B,0,len-1);
 	printA(A, len);
 	system("pause");
