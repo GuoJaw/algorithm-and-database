@@ -4,10 +4,8 @@ void reverse(char* begin,char* end){ //字符串反转
 	if (begin == NULL || end == NULL || end-begin<=0)
 		return;
 	char* p = begin;
-	while (begin < end){
-		swap(*begin, *end);
-		begin++; end--;
-	}
+	while (begin < end)
+		swap(*start++, *end--);
 }
 void reversePartStr(char* str){ //寻找空格，倒置
 	if (str == NULL)
