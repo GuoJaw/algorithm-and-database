@@ -6,50 +6,38 @@ QData.pop():
 	(3)将QData和QHelp交换内容
 */
 
-#define _CRT_SECURE_NO_WARNINGS
-#include <iostream>
-#include <assert.h>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <functional>
-#include <numeric>  
-#include <queue>  
-using namespace std;
-
 class Stack{
 private:
 	queue<int> data;
 	queue<int> help;
 public:
+	bool empty(){
+		return data.empty();
+	}
 	void push(int val){
 		data.push(val);//入队列时，只进入data
 	}
 	void pop(){
 		if (!data.empty()){
-			while (data.size() > 1){//1.将QData中的元素（除了最后一个元素外的其他元素）
-				int val = data.front(); data.pop();
-				help.push(val);
+			while (data.size() > 1){//1.将data中的元素（除了最后一个元素外的其他元素）
+				help.push(data.front()); data.pop();
 			}
-			//2.此时,将QData中的最后一个元素pop
+			//2.此时,将data中的最后一个元素pop
 			data.pop();
 			swap(data, help);
 		}
 	}
-	bool empty(){
-		return data.empty();
-	}
 	int top(){
-		if (!data.empty()){
-			int val;
-			while (data.size() > 0){
-				val = data.front(); data.pop();
-				help.push(val);
-			}
-			swap(data, help);
-			return val;
+		if (data.empty())
+			return -1;
+		while (data.size() > 1){//1.将data中的元素（除了最后一个元素外的其他元素）
+			help.push(data.front()); data.pop();
 		}
-		cout << "队列为空" << endl;
+		//2.此时,将data中的最后一个元素保存在ret，并放入help中
+		int ret = data.front(); data.pop();
+		help.push(ret);
+		swap(data, help);
+		return ret;
 	}
 };
 int main(){
