@@ -9,6 +9,6 @@ void move(string& str){
 		if (str[j] != '*')
 			j++;
 		else
-			swap(str[i++], str[j++]);
+			swap(str[i++], str[j++]); //必须j++，反例: ***12
 	}
 }
