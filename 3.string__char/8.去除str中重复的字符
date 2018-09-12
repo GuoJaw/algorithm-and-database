@@ -1,0 +1,13 @@
+
+使用map[256]，去除字符串中重复的字符：
+
+void removeCH(string& str){
+	int map[256]; memset(map, 0, sizeof(map)); //int map[256] = {0};
+	int index = 0;
+	for (int i = 0; i < str.length(); i++){
+		if (map[str[i]] == 0){
+			map[str[i]] = 1; str[index++] = str[i];
+		}
+	}
+	str[index] = '\0';
+}
