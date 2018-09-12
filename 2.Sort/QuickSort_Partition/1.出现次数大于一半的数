@@ -6,7 +6,10 @@
           ---->---->因此，问题转换成求数组中位数
           ---->---->因此，问题又转换成"寻找第Kth大小的数(Kth=A.length/2)" [使用快排]
 
-解法2：cand/times
+解法2：cand/times--->候选者和出现次数
+      1.每次设立候选者cand，用候选者cand去删除其他元素，最后剩下的cand必然是出现次数最多的数
+      2.如果cand的出现次数time大于len/2，那么cand就是出现次数大于一半的数
+      
 int getHalf(int A[], int N){
 	int cand, times = 0;
 	for (int i = 0; i < N;i++){
