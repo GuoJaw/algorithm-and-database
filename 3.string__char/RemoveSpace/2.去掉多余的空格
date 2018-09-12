@@ -8,12 +8,10 @@ else
 
 void delspace(char *str){
 	int l = 0;
-	for (int r = 0; r < strlen(str);){
+	for (int r = 0; r < strlen(str);r++;){
 		if ((str[r] != ' ') || (str[r] == ' ' && str[r - 1] != ' ')){
 			str[l] = str[r]; l++; r++;
 		}
-		else
-			r++;
 	}
 	str[l] = '\0';
 }
