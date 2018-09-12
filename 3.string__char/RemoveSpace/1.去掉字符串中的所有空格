@@ -5,7 +5,7 @@
 */
 void delspace(char *str){
 	int l = 0;
-	for (int r = 0; r < strlen(str);r++;){
+	for (int r = 0; r < strlen(str);r++){
 		if (str[r] != ' '){
 			str[l] = str[r]; l++; 
 		}
