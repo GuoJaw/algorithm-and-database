@@ -1,5 +1,10 @@
 
---> "牺牲一个单元"来区分队空和队满，入队时少用一个队列单元
+ "牺牲一个单元"来区分队空和队满，入队时少用一个队列单元
+	空：rear==front
+	满：(rear+1)%MaxSize==front
+插入：rear后移
+删除：front后移
+size
 
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -21,14 +26,14 @@ public:
 	void push(int val){
 		if (full())
 			return;
-		data[rear] = val;
-		rear = (rear + 1) % MaxSize;
+		data[rear] = val; //插入
+		rear = (rear + 1) % MaxSize; //插入后，rear后移一个位置
 	}
 	bool pop(){
 		if (empty())
 			return false;
 		int ret = data[front];
-		front = (front + 1) % MaxSize;
+		front = (front + 1) % MaxSize;  //删除后，front后移一个位置
 		return true;
 	}
 	int size(){
