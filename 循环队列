@@ -1,0 +1,52 @@
+
+--> "牺牲一个单元"来区分队空和队满，入队时少用一个队列单元
+
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+
+#define MaxSize 3
+//循环队列的操作
+class SqQueue{
+public:
+	SqQueue() :front(0), rear(0){}
+public:
+	bool empty(){
+		return rear == front ? true : false;
+	}
+	bool full(){//队满条件: 队尾元素的下一个位置==对头元素
+		return (rear + 1) % MaxSize == front ? true : false;
+	}
+	void push(int val){
+		if (full())
+			return;
+		data[rear] = val;
+		rear = (rear + 1) % MaxSize;
+	}
+	bool pop(){
+		if (empty())
+			return false;
+		int ret = data[front];
+		front = (front + 1) % MaxSize;
+		return true;
+	}
+	int size(){
+		return (rear - front + MaxSize) % MaxSize;
+	}
+private:
+	int front;
+	int rear;
+	int data[MaxSize];
+};
+int main(){
+	SqQueue sq;
+	bool ret = sq.empty();
+	sq.push(1);
+	sq.push(2);
+	int size = sq.size();
+	sq.push(3);
+	sq.pop(); 
+	size = sq.size();
+}
+ 
