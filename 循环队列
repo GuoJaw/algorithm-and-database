@@ -1,7 +1,8 @@
 
- "牺牲一个单元"来区分队空和队满，入队时少用一个队列单元
-	空：rear==front
-	满：(rear+1)%MaxSize==front
+ 核心："牺牲一个单元"来区分队空和队满
+	    空：rear==front
+	    满：(rear+1)%MaxSize==front
+	
 插入：rear后移
 删除：front后移
 size
