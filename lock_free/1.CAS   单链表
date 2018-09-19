@@ -1,0 +1,41 @@
+// https://blog.csdn.net/fei0724/article/details/18556635
+
+template<class T>
+bool CAS(T* addr, T expected, T newValue){
+	if (*addr == expected){
+		*addr = newValue;
+		return true;
+	}
+	else
+		return false;
+}
+
+typedef struct LNode{
+	struct LNode* next;
+}LNode;
+
+void insert_Node(LNode* tail){
+	LNode* newNode = (LNode*)malloc(sizeof(LNode));
+	newNode->next = NULL;
+
+	LNode* newTail = NULL;
+	do{
+		newTail = tail; //始终保存新的tail指针
+	} while (!CAS(tail->next, NULL, newNode));
+	CAS(tail, newTail, newNode); //设置尾部指针指向新的节点newNode
+}
+/*这里有一个潜在问题：如果thread1在把q加入队列后，更新tail前停止运行了，
+其他线程将进入死循环。为防止这种异常，可以在do - while循环中，直接搜索tail指针*/
+void insert_Node(LNode* tail){
+	LNode* newNode = (LNode*)malloc(sizeof(LNode));
+	newNode->next = NULL;
+
+	LNode* newTail = NULL;
+	LNode* oldTail = NULL;
+	oldTail = newTail = tail;
+	do {
+		while (newTail->next)
+			newTail = newTail->next;
+	} while (!CAS(newTail->next, NULL, newNode));
+	CAS(tail, oldTail, newNode);
+}
