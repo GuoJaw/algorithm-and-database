@@ -1,9 +1,8 @@
 
 
-
 /*
 右值引用的主要目的：移动语义，将b的控制权转交给a
-	避免拷贝过程带来的开销，提高效率
+避免拷贝过程带来的开销，提高效率
 */
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -14,16 +13,16 @@
 using namespace std;
 
 class MyString{
-public: //构造函数  析构函数
+public: 
 	MyString();
 	MyString(int len);
 	MyString(const char* str);
 	~MyString();
 public:
 	MyString(const MyString& another); //默认拷贝构造
-	MyString(MyString&& another); //移动拷贝构造
-public:
 	MyString& operator=(const MyString& another);//默认赋值
+public:
+	MyString(MyString&& another); //移动拷贝构造
 	MyString& operator=(MyString&& ano);//移动赋值
 public://运算符重载
 	MyString operator+(const MyString& another);
@@ -68,21 +67,13 @@ MyString::~MyString(){
 		this->len = 0;
 	}
 }
-//拷贝构造
+
 MyString::MyString(const MyString& another){
 	cout << "默认拷贝构造" << endl;
 	this->len = another.len;
 	this->str = new char[this->len + 1];
 	strcpy(this->str, another.str);
 }
-//拷贝构造
-MyString::MyString(MyString&& another){
-	cout << "移动拷贝构造" << endl;
-	//ano.str的控制权转移给this->str
-	this->str = another.str;
-	another.str = NULL;
-}
-//
 MyString& MyString::operator=(const MyString& another){
 	cout << "默认赋值" << endl;
 	if (this != &another){//判断拷贝自身
@@ -95,24 +86,36 @@ MyString& MyString::operator=(const MyString& another){
 	}
 	return *this;//返回对象本身
 }
+
+MyString::MyString(MyString&& another){
+	cout << "移动拷贝构造" << endl;
+	//ano.str的控制权转移给this->str
+	this->str = another.str;
+	another.str = NULL;
+}
 MyString& MyString::operator=(MyString&& ano){
 	cout << "移动赋值" << endl;
 	if (this != &ano){
 		if (this->str != NULL)
 			delete this->str;
 		//ano.str的控制权转移给this->str
-		this->str = ano.str; 
-		ano.str = NULL; 
+		this->str = ano.str;
+		ano.str = NULL;
 	}
 	return *this;
 }
+
 MyString MyString::operator+(const MyString& another){
-	MyString tmp;
-	tmp.len = this->len + another.len;
-	tmp.str = new char[tmp.len + 1];
-	strcpy(tmp.str, this->str);
-	strcat(tmp.str, another.str);
-	return tmp;
+	char* tmp = this->str; //临时变量指向this
+	this->len += another.len;
+	this->str = new char[this->len + 1];
+	strcpy(this->str, tmp);
+	strcat(this->str, another.str);
+	if (tmp != NULL){
+		delete tmp;
+		tmp = NULL;
+	}
+	return *this;
 }
 MyString& MyString::operator+=(const MyString& another){
 	char* tmp = this->str; //临时变量指向this
@@ -158,36 +161,19 @@ istream& operator>>(istream& cin, MyString& myStr){
 	strcpy(myStr.str, buf);
 	return cin;
 }
-MyString f(){
-	return MyString("111");
-}
-void test00(){
-	//对于临时对象，编译器进行了优化===>不经过拷贝构造过程，直接构造
-	MyString st(MyString("aaa")); //st一次构造，st一次析构
-}
-void test01(){ //等价于test00()
-	MyString st = f(); //st一次构造，st一次析构
+
+void test01(){
+	MyString st1("ABC");
+	MyString st2(st1);
+	MyString st3(std::move(st1));
 }
 void test02(){
-	MyString st("ddd"); //st一次构造
-	st = f(); //用tmp拷贝构造生成st，析构临时对象tmp
-	//st析构
-}
-void test11(){
-	vector<MyString> vec;
-	MyString a("gjw"); 
-	vec.push_back(a); //默认拷贝构造
-	vec.push_back(move(a)); //移动拷贝构造,a=NULL
-	vec.push_back(MyString("gjw"));//移动拷贝构造
-}
-void test12(){
 	MyString a("11");
 	MyString b("22");
-	a = b; //默认赋值
-	a = move(b);//移动赋值，b=NULL
+	a = b;
+	a = std::move(b);
 }
 int main(){
-	test12();
+	test01();
+	test02();
 }
-
-
